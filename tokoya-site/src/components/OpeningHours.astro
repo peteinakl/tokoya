@@ -1,0 +1,40 @@
+---
+import { formatTime, openState, type HoursEntry } from '../lib/hours';
+interface Props { hours: HoursEntry[]; caption?: string; }
+const { hours, caption } = Astro.props;
+const todayIndex = openState(hours).todayIndex;
+const DAY_ORDER = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const today = DAY_ORDER[todayIndex];
+---
+<table class="hours">
+  {caption && <caption class="sr-only">{caption}</caption>}
+  <tbody>
+    {hours.map((h) => (
+      <tr class:list={[h.day === today && 'is-today']}>
+        <th scope="row">{h.day}{h.day === today && <span class="sr-only"> (today)</span>}</th>
+        <td class="num">
+          {h.closed || !h.opens || !h.closes
+            ? 'Closed'
+            : `${formatTime(h.opens)} – ${formatTime(h.closes)}`}
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+<style>
+  .hours { width: 100%; border-collapse: collapse; font-size: var(--step-0); }
+  .hours th, .hours td { padding: 0.55rem 0; border-bottom: 1px solid var(--rule); text-align: left; }
+  .hours th { font-weight: 400; }
+  .hours td { text-align: right; }
+  .hours tr:last-child th, .hours tr:last-child td { border-bottom: 0; }
+  .is-today th, .is-today td { font-weight: 600; }
+  /* The today row is marked by a bronze edge, not by a filled background. */
+  .is-today th { position: relative; padding-left: var(--s-4); }
+  .is-today th::before {
+    content: ''; position: absolute; left: 0; top: 0.75rem; bottom: 0.75rem;
+    width: 3px; background: var(--bronze);
+  }
+  :global(.on-ink) .hours th,
+  :global(.on-ink) .hours td { border-bottom-color: var(--rule-ink); }
+</style>

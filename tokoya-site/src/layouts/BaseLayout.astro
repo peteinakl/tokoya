@@ -1,0 +1,139 @@
+---
+import '@fontsource/anton/latin-400.css';
+import '@fontsource-variable/outfit';
+import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  schema?: object | object[];
+  noindex?: boolean;
+}
+
+const { title, description, image = '/brand/lockup-1200.png', schema, noindex = false } = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL(image, Astro.site).href;
+const blocks = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
+
+// GA4. Replace with the real measurement ID at launch.
+const GA_ID = import.meta.env.PUBLIC_GA_ID ?? '';
+---
+<!doctype html>
+<html lang="en-NZ">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  {noindex && <meta name="robots" content="noindex, follow" />}
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Tokoya Barber & Shop" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:locale" content="en_NZ" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <meta name="theme-color" content="#14100C" />
+  <link rel="icon" href="/brand/mark-120.png" type="image/png" />
+  <link rel="apple-touch-icon" href="/brand/mark-240.png" />
+
+  {blocks.map((b) => (
+    <script type="application/ld+json" set:html={JSON.stringify(b)} />
+  ))}
+
+  {GA_ID && (
+    <script is:inline define:vars={{ GA_ID }}>
+      // Loaded after `load` so it never competes with the LCP image.
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () { window.dataLayer.push(arguments); };
+      window.addEventListener('load', function () {
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+        document.head.appendChild(s);
+        window.gtag('js', new Date());
+        window.gtag('config', GA_ID, { anonymize_ip: true });
+      });
+    </script>
+  )}
+</head>
+
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <SiteHeader />
+  <main id="main">
+    <slot />
+  </main>
+  <SiteFooter />
+
+  <!-- Cloudflare Web Analytics: cookieless, no consent banner required.
+       Add the token at launch. -->
+  <!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js"
+       data-cf-beacon='{"token": "TODO"}'></script> -->
+
+  <script>
+    /**
+     * One delegated listener for every tracked interaction.
+     * Booking and phone links are plain anchors, so they still work if this
+     * script never runs. `booking_click` is the primary conversion.
+     */
+    type G = (...args: unknown[]) => void;
+    const track = (name: string, params: Record<string, unknown>) => {
+      const g = (window as unknown as { gtag?: G }).gtag;
+      if (typeof g === 'function') g('event', name, params);
+    };
+
+    document.addEventListener('click', (e) => {
+      const t = (e.target as HTMLElement | null)?.closest<HTMLElement>(
+        '[data-booking], [data-phone], [data-directions], a[href^="mailto:"]'
+      );
+      if (!t) return;
+
+      if (t.hasAttribute('data-booking')) {
+        track('booking_click', {
+          location: t.dataset.location,
+          provider: t.dataset.provider,
+          service: t.dataset.service || undefined,
+          barber: t.dataset.barber || undefined,
+          placement: t.dataset.placement,
+          page_path: location.pathname,
+        });
+        try { localStorage.setItem('tokoya:shop', t.dataset.location ?? ''); } catch { /* private mode */ }
+      } else if (t.hasAttribute('data-phone')) {
+        track('phone_click', { location: t.dataset.location, page_path: location.pathname });
+      } else if (t.hasAttribute('data-directions')) {
+        track('directions_click', { page_path: location.pathname });
+      } else {
+        track('email_click', { page_path: location.pathname });
+      }
+    });
+
+    /**
+     * Refresh the open/closed state client-side. The server rendered it at
+     * build time, so on a cached page it can be hours stale.
+     */
+    import('../lib/hours').then(({ openState }) => {
+      document.querySelectorAll<HTMLElement>('[data-open-now]').forEach((el) => {
+        try {
+          const hours = JSON.parse(el.dataset.hours ?? '[]');
+          const state = openState(hours);
+          const label = el.querySelector('[data-open-label]');
+          if (label) label.textContent = state.label;
+          const dot = el.querySelector('.now__dot');
+          dot?.classList.toggle('is-open', state.open);
+          dot?.classList.toggle('is-closed', !state.open);
+        } catch { /* leave the server-rendered state in place */ }
+      });
+    });
+  </script>
+</body>
+</html>

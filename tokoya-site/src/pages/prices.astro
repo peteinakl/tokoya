@@ -1,0 +1,89 @@
+---
+/**
+ * The canonical price list. One HTML table per group, generated from the
+ * services collection, so it cannot drift from the location pages or the
+ * JSON-LD. Not an image, not a PDF, not JavaScript-rendered.
+ */
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PriceList from '../components/PriceList.astro';
+import BookingButton from '../components/BookingButton.astro';
+import SectionHead from '../components/SectionHead.astro';
+
+const services = await getCollection('services');
+const ORDER = ['ponsonby', 'remuera'];
+const locations = (await getCollection('locations')).sort(
+  (a, b) => ORDER.indexOf(a.data.slug) - ORDER.indexOf(b.data.slug)
+);
+
+const SITE = 'https://www.tokoya.co.nz';
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'OfferCatalog',
+  name: 'Tokoya Barber & Shop price list',
+  url: `${SITE}/prices/`,
+  itemListElement: services
+    .sort((a, b) => a.data.group.localeCompare(b.data.group) || a.data.order - b.data.order)
+    .map((s, i) => ({
+      '@type': 'Offer',
+      position: i + 1,
+      itemOffered: { '@type': 'Service', name: s.data.title, serviceType: s.data.group },
+      price: String(s.data.price),
+      priceCurrency: 'NZD',
+      availableAtOrFrom: s.data.locations.map((l) => ({ '@id': `${SITE}/${l}/#business` })),
+    })),
+};
+---
+<BaseLayout
+  title="Haircut & Barber Prices | Tokoya Ponsonby & Remuera"
+  description="Full price list for Tokoya Barber & Shop. Men's cuts $50, skin fades $55, hot towel shaves $65, gel manicures $65 at Remuera. Durations for every service."
+  schema={schema}
+>
+  <section class="section on-deep">
+    <div class="wrap">
+      <SectionHead label="Grooming Menu" title="Every service, every price" />
+      <p class="lede">
+        Transparent pricing across both shops. Nails and full waxing are hosted exclusively at our Remuera salon.
+        Every price includes the full dedicated chair time with zero surprises at the counter.
+      </p>
+    </div>
+  </section>
+
+  <section class="section on-ink">
+    <div class="wrap">
+      <div class="price-board-container">
+        <PriceList services={services} groups={['haircuts','shaves','waxing','nails']} />
+      </div>
+      <div class="foot">
+        {locations.map((l) => <BookingButton location={l} placement="inline" />)}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .price-board-container {
+    background: var(--ink-card);
+    border: 1px solid var(--ink-card-border);
+    border-radius: 8px;
+    padding: var(--s-6);
+    box-shadow: var(--shadow-md);
+  }
+  .foot {
+    margin-top: var(--s-7); padding-top: var(--s-5);
+    border-top: 1px solid var(--rule-ink);
+    display: flex; gap: var(--s-3); flex-wrap: wrap;
+  }
+</style>
+
+<script>
+  // price_view fires once the visitor has actually read into the board.
+  const board = document.querySelector('.board');
+  if (board) {
+    new IntersectionObserver(([e], obs) => {
+      if (!e.isIntersecting) return;
+      (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag?.('event', 'price_view', {});
+      obs.disconnect();
+    }, { threshold: 0.5 }).observe(board);
+  }
+</script>

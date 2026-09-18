@@ -1,0 +1,51 @@
+---
+/**
+ * Mobile only. Appears once the hero booking control has scrolled away, so
+ * it never duplicates a button already on screen. Phone sits beside booking
+ * because a large share of barbershop appointments are still made by call.
+ */
+import type { CollectionEntry } from 'astro:content';
+import BookingButton from './BookingButton.astro';
+interface Props { location: CollectionEntry<'locations'>; }
+const { location } = Astro.props;
+const d = location.data;
+---
+<div class="sticky" data-sticky-bar hidden>
+  <BookingButton location={location} placement="sticky" />
+  {d.telephone && (
+    <a class="sticky__tel" href={`tel:${d.telephone}`} data-phone data-location={d.slug}>
+      <span class="sr-only">Call {d.shortName} on </span>{d.telephoneDisplay}
+    </a>
+  )}
+</div>
+
+<style>
+  .sticky {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 40;
+    display: none;
+    gap: var(--s-3);
+    align-items: center;
+    padding: var(--s-3) var(--gutter);
+    padding-bottom: calc(var(--s-3) + env(safe-area-inset-bottom, 0px));
+    background: var(--paper);
+    border-top: 1px solid var(--ink);
+  }
+  .sticky :global(.btn) { flex: 1; justify-content: space-between; }
+  .sticky__tel { font-weight: 600; white-space: nowrap; text-decoration: none; }
+  @media (max-width: 48rem) {
+    .sticky:not([hidden]) { display: flex; }
+  }
+</style>
+
+<script>
+  const bar = document.querySelector<HTMLElement>('[data-sticky-bar]');
+  const anchor = document.querySelector('[data-hero-cta]');
+  if (bar && anchor) {
+    new IntersectionObserver(
+      ([entry]) => { bar.hidden = entry.isIntersecting; },
+      { rootMargin: '0px' }
+    ).observe(anchor);
+  }
+</script>

@@ -1,0 +1,60 @@
+---
+/**
+ * Map loads on interaction, never on page load.
+ *
+ * The reference site eagerly loads TWO full Google Maps iframes on a single
+ * page. That is most of a megabyte and a large chunk of main-thread time for
+ * something most visitors never touch.
+ */
+interface Props { query: string; label: string; }
+const { query, label } = Astro.props;
+const src = `https://maps.google.com/maps?q=${encodeURIComponent(query)}&t=m&z=16&output=embed`;
+const directions = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(query)}`;
+---
+<div class="map" data-map data-src={src}>
+  <button type="button" class="map__load">
+    <span class="disc" aria-hidden="true">
+      <svg viewBox="0 0 16 16" width="14" fill="none" stroke="currentColor" stroke-width="1.6">
+        <path d="M8 1.5c-2.3 0-4.2 1.9-4.2 4.2C3.8 9 8 14.5 8 14.5s4.2-5.5 4.2-8.8c0-2.3-1.9-4.2-4.2-4.2Z"/>
+        <circle cx="8" cy="5.7" r="1.5"/>
+      </svg>
+    </span>
+    <span>Show map</span>
+  </button>
+  <a class="map__dir" href={directions} data-directions rel="noopener">Directions to {label}</a>
+</div>
+
+<style>
+  .map {
+    border: 1px solid var(--rule);
+    background: var(--paper-sunk);
+    aspect-ratio: 16 / 9;
+    display: grid;
+    place-content: center;
+    gap: var(--s-3);
+    justify-items: center;
+    text-align: center;
+    padding: var(--s-5);
+  }
+  .map:has(iframe) { display: block; padding: 0; }
+  .map__load {
+    display: inline-flex; align-items: center; gap: var(--s-3);
+    background: none; border: 0; cursor: pointer;
+    font-weight: 600;
+  }
+  .map__dir { font-size: var(--step--1); color: var(--bronze-text); }
+  .map :global(iframe) { width: 100%; height: 100%; border: 0; display: block; }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-map]').forEach((el) => {
+    el.querySelector('.map__load')?.addEventListener('click', () => {
+      const frame = document.createElement('iframe');
+      frame.src = el.dataset.src ?? '';
+      frame.loading = 'lazy';
+      frame.title = 'Map';
+      frame.referrerPolicy = 'no-referrer-when-downgrade';
+      el.replaceChildren(frame);
+    }, { once: true });
+  });
+</script>

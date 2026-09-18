@@ -1,0 +1,486 @@
+---
+/**
+ * LOCATION PAGE — golden page. Generates /ponsonby/ and /remuera/.
+ *
+ * These are the most important pages on the site and they do not exist in
+ * any form on the current one. Both shops currently share a homepage and a
+ * contact page, so there is nothing for "barber ponsonby" to rank.
+ *
+ * Structure is answer-first: the H1 names the service and the suburb, then
+ * a factual paragraph states what it is, where, from what price, and which
+ * days it opens — in sentences, because that is what search and AI systems
+ * extract. Marketing copy comes after the facts, not before them.
+ */
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BookingButton from '../components/BookingButton.astro';
+import OpenNow from '../components/OpenNow.astro';
+import OpeningHours from '../components/OpeningHours.astro';
+import SectionHead from '../components/SectionHead.astro';
+import PriceList from '../components/PriceList.astro';
+import LazyMap from '../components/LazyMap.astro';
+import StickyBookBar from '../components/StickyBookBar.astro';
+import { toSchema, openDaysSummary, formatTime } from '../lib/hours';
+import { atLocation, priceFrom } from '../lib/prices';
+
+export async function getStaticPaths() {
+  const locations = await getCollection('locations');
+  return locations.map((l) => ({ params: { location: l.data.slug }, props: { location: l } }));
+}
+
+interface Props { location: CollectionEntry<'locations'>; }
+const { location } = Astro.props;
+const d = location.data;
+
+const allServices = await getCollection('services');
+const services = atLocation(allServices, d.slug);
+const haircutFrom = priceFrom(services.filter((s) => s.data.group === 'haircuts'));
+
+const team = (await getCollection('team')).filter(
+  (t) => t.data.confirmed && (t.data.locations as string[]).includes(d.slug)
+);
+
+const isPonsonby = d.slug === 'ponsonby';
+const heroBg = isPonsonby ? '/images/shops/ponsonby-interior.png' : '/images/shops/remuera-salon.png';
+const mapQuery = `${d.streetAddress}, ${d.suburb}, ${d.city}`;
+const daysSummary = openDaysSummary(d.hours);
+
+const heading = isPonsonby
+  ? 'Barber in Ponsonby, Auckland'
+  : 'Barber & Nail Salon in Remuera, Auckland';
+
+const title = `${heading} | ${d.name}`;
+const description = isPonsonby
+  ? `Barbershop at 279 Ponsonby Road, open seven days. Skin fades $55, men's cuts $50, hot towel shaves $65. Book online or call 09 378 4477.`
+  : `Barbering and a dedicated nail salon at 352 Remuera Road, open Wednesday to Sunday. Cuts from $30, gel manicures $65. Book online.`;
+
+const SITE = 'https://www.tokoya.co.nz';
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'HairSalon',
+    '@id': `${SITE}/${d.slug}/#business`,
+    name: d.name,
+    url: `${SITE}/${d.slug}/`,
+    image: `${SITE}/brand/lockup-1200.png`,
+    ...(d.telephone ? { telephone: d.telephone } : {}),
+    ...(d.email ? { email: d.email } : {}),
+    priceRange: '$$',
+    currenciesAccepted: 'NZD',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: d.streetAddress,
+      addressLocality: d.suburb,
+      addressRegion: d.city,
+      ...(d.postalCode ? { postalCode: d.postalCode } : {}),
+      addressCountry: d.country,
+    },
+    // TODO: geo coordinates unknown. See OPEN-QUESTIONS.md Q12.
+    ...(d.latitude && d.longitude
+      ? { geo: { '@type': 'GeoCoordinates', latitude: d.latitude, longitude: d.longitude } }
+      : {}),
+    openingHoursSpecification: toSchema(d.hours),
+    hasMap: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`,
+    sameAs: [
+      'https://www.instagram.com/tokoya_barber_shop/',
+      'https://www.facebook.com/tokoya.barbershop/',
+    ],
+    parentOrganization: { '@id': `${SITE}/#organization` },
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: `Services at ${d.name}`,
+      itemListElement: services.map((s) => ({
+        '@type': 'Offer',
+        itemOffered: { '@type': 'Service', name: s.data.title, serviceType: s.data.group },
+        price: String(s.data.price),
+        priceCurrency: 'NZD',
+      })),
+    },
+    potentialAction: {
+      '@type': 'ReserveAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: d.bookingUrl,
+        actionPlatform: [
+          'https://schema.org/DesktopWebPlatform',
+          'https://schema.org/MobileWebPlatform',
+        ],
+      },
+      result: { '@type': 'Reservation', name: `Book at ${d.name}` },
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+      { '@type': 'ListItem', position: 2, name: d.shortName, item: `${SITE}/${d.slug}/` },
+    ],
+  },
+];
+---
+
+<BaseLayout title={title} description={description} schema={schema}>
+
+  <!-- ==========================================================
+       ANSWER FIRST. Everything a search or AI system needs to
+       state about this shop is in the first 60 words, in sentences.
+       ========================================================== -->
+  <section class="lead on-ink">
+    <div class="lead__bg" style={`background-image: url('${heroBg}');`}></div>
+    <div class="lead__overlay"></div>
+    <div class="wrap lead__grid">
+      <div class="lead__copy">
+        <p class="label">{d.name}</p>
+        <h1 class="display h1">{heading}</h1>
+
+        <p class="lede">
+          {d.name} is a barbershop at {d.streetAddress}, {d.suburb}.
+          {daysSummary}. Haircuts start at ${haircutFrom}
+          {d.offersNails && ', and the Remuera shop has a dedicated nail salon for men and women'}.
+          Book online{d.telephoneDisplay ? ` or call ${d.telephoneDisplay}` : ''}.
+        </p>
+
+        <div class="lead__state">
+          <OpenNow hours={d.hours} />
+        </div>
+
+        <div class="lead__cta" data-hero-cta>
+          <BookingButton location={location} placement="hero" />
+          {d.telephone && (
+            <a class="btn btn--ghost" href={`tel:${d.telephone}`} data-phone data-location={d.slug}>
+              {d.telephoneDisplay}
+            </a>
+          )}
+        </div>
+      </div>
+
+      <aside class="lead__card">
+        <h2 class="label">Opening hours</h2>
+        <OpeningHours hours={d.hours} caption={`Opening hours at ${d.name}`} />
+      </aside>
+    </div>
+  </section>
+
+  <!-- ==========================================================
+       FIND US. Map loads on interaction only.
+       ========================================================== -->
+  <section class="section" aria-labelledby="find">
+    <div class="wrap">
+      <SectionHead n="01" label="Find us" title={`${d.streetAddress}, ${d.suburb}`} id="find" />
+
+      <div class="find">
+        <div class="find__detail stack">
+          <div>
+            <h3 class="label">Address</h3>
+            <address>
+              {d.streetAddress}<br />
+              {d.suburb}, {d.city}{d.postalCode ? ` ${d.postalCode}` : ''}
+            </address>
+          </div>
+
+          <div>
+            <h3 class="label">Contact</h3>
+            {d.telephone
+              ? <p><a href={`tel:${d.telephone}`} data-phone data-location={d.slug}>{d.telephoneDisplay}</a></p>
+              : <p class="todo">Phone number on the reference site is not a valid NZ format. See OPEN-QUESTIONS.md Q3.</p>}
+            {d.email
+              ? <p><a href={`mailto:${d.email}`}>{d.email}</a></p>
+              : <p class="todo">Email unconfirmed. See OPEN-QUESTIONS.md Q4.</p>}
+          </div>
+
+          <div>
+            <h3 class="label">Getting here</h3>
+            {d.gettingHere
+              ? <p>{d.gettingHere}</p>
+              : <p class="todo">
+                  TODO: parking and public transport for {d.streetAddress} are not
+                  documented anywhere on the reference site. This is one of the most
+                  asked pre-booking questions. Do not invent it — see OPEN-QUESTIONS.md Q5.
+                </p>}
+          </div>
+        </div>
+
+        <LazyMap query={mapQuery} label={d.shortName} />
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================
+       THE BOARD. Prices in the initial HTML, not behind a click.
+       ========================================================== -->
+  <section class="section on-sunk" aria-labelledby="prices">
+    <div class="wrap">
+      <SectionHead
+        n="02"
+        label="Price board"
+        title={`What it costs at ${d.shortName}`}
+        id="prices"
+      />
+      <PriceList services={services} groups={d.serviceGroups} locationName={d.name} />
+
+      <div class="board__foot">
+        <BookingButton location={location} placement="inline" />
+        <p class="board__note">
+          All prices in NZD.
+          <!-- TODO: GST inclusive? Required for the Offer schema. See Q6. -->
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================
+       THE TEAM AT THIS SHOP.
+       ========================================================== -->
+  {team.length > 0 && (
+    <section class="section" aria-labelledby="team">
+      <div class="wrap">
+        <SectionHead n="03" label="The chair" title={`Barbers at ${d.shortName}`} id="team" />
+        <ul class="team">
+          {team.map((t) => (
+            <li class="team__item">
+              <div class="team__portrait">
+                {t.data.image
+                  ? <img src={t.data.image} width="320" height="400" alt={`${t.data.name} at ${d.name}`} loading="lazy" />
+                  : <span class="team__placeholder" aria-hidden="true">{t.data.name.charAt(0)}</span>}
+              </div>
+              <h3 class="h3">{t.data.name}</h3>
+              <p class="team__role">{t.data.title}</p>
+              <BookingButton
+                location={location}
+                barber={t.data.name}
+                staffId={t.data.freshaStaffId}
+                placement="card"
+                variant="ghost"
+              />
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  <!-- ==========================================================
+       QUESTIONS. Answer-first, one question per heading, under 60
+       words each. The same set goes into the Google Business
+       Profile Q&A, which is where most of its value is realised.
+       ========================================================== -->
+  <section class="section faq" aria-labelledby="faq">
+    <div class="wrap">
+      <SectionHead n="04" label="Before you book" title={`Questions about ${d.shortName}`} id="faq" />
+
+      <div class="faq__list">
+        <article class="faq__item">
+          <h3 class="h3">Do you take walk-ins, or do I need to book?</h3>
+          <p class="todo">TODO: walk-in policy unconfirmed. See OPEN-QUESTIONS.md. This is
+            the single most asked question for a barbershop and it must be answered.</p>
+        </article>
+
+        <article class="faq__item">
+          <h3 class="h3">Are you open on {isPonsonby ? 'Sundays' : 'weekends'}?</h3>
+          <p>
+            Yes. {d.shortName} is open Sunday
+            {(() => {
+              const sun = d.hours.find((h) => h.day === 'Sunday');
+              return sun && !sun.closed && sun.opens && sun.closes
+                ? ` from ${formatTime(sun.opens)} to ${formatTime(sun.closes)}`
+                : '';
+            })()}.
+            {daysSummary}. Sunday opening is uncommon among Auckland barbers, so it is
+            worth knowing.
+          </p>
+        </article>
+
+        <article class="faq__item">
+          <h3 class="h3">Can I book a specific barber?</h3>
+          <p>
+            Yes. Choose your barber in the {d.bookingProvider} booking system when you
+            book, or use the booking button on a barber's card above.
+          </p>
+        </article>
+
+        <article class="faq__item">
+          <h3 class="h3">What happens if I cancel or don't turn up?</h3>
+          <p>
+            Cancelling within 90 minutes of the booked time is charged at 50% of the
+            service. A no-show without notice is charged at 100%. If it happens more
+            than twice, we are no longer able to take bookings.
+          </p>
+        </article>
+
+        {d.offersNails && (
+          <article class="faq__item">
+            <h3 class="h3">Do you do nails here?</h3>
+            <p>
+              Yes. Remuera has a dedicated nail salon for men and women, alongside full
+              barbering. Gel manicures are $65 and gel pedicures $75, both 45 minutes.
+            </p>
+          </article>
+        )}
+
+        <article class="faq__item">
+          <h3 class="h3">Do you cut women's hair?</h3>
+          <p class="todo">
+            TODO: the reference site says men, women and children are all welcome, but
+            Remuera trades as a salon and Ponsonby as a barbershop. Confirm what is
+            offered where before publishing this answer.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================
+       THE OTHER SHOP. Never strand a visitor on the wrong one.
+       ========================================================== -->
+  <section class="other on-ink">
+    <div class="wrap other__inner">
+      <p class="lede">
+        {isPonsonby
+          ? 'Closer to Remuera? The Remuera shop does barbering and nails, Wednesday to Sunday.'
+          : 'Closer to town? The original Ponsonby shop is open seven days.'}
+      </p>
+      <a class="btn" href={isPonsonby ? '/remuera/' : '/ponsonby/'}>
+        {isPonsonby ? 'Go to Remuera' : 'Go to Ponsonby'}
+      </a>
+    </div>
+  </section>
+
+  <StickyBookBar location={location} />
+</BaseLayout>
+
+<style>
+  /* ---- Lead ---------------------------------------------------------- */
+  .lead {
+    position: relative;
+    padding-block: var(--s-9) var(--s-8);
+    overflow: hidden;
+  }
+  .lead__bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+    transform: scale(1.02);
+  }
+  .lead__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to right,
+      rgba(8, 7, 6, 0.95) 0%,
+      rgba(14, 12, 10, 0.9) 50%,
+      rgba(8, 7, 6, 0.75) 100%
+    );
+    z-index: 2;
+  }
+  .lead__grid {
+    position: relative;
+    z-index: 3;
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+    gap: var(--s-7);
+    align-items: start;
+  }
+  .lead__copy > * + * { margin-top: var(--s-5); }
+  .lead .h1 { max-width: 16ch; }
+  .lead__state { margin-top: var(--s-4); }
+  .lead__cta { display: flex; flex-wrap: wrap; gap: var(--s-3); }
+
+  .lead__card {
+    background: rgba(22, 18, 14, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--ink-card-border);
+    border-radius: 8px;
+    padding: var(--s-6);
+    box-shadow: var(--shadow-md);
+  }
+  .lead__card .label { display: block; margin-bottom: var(--s-4); color: var(--bronze-gold); }
+
+  @media (max-width: 52rem) {
+    .lead__grid { grid-template-columns: 1fr; }
+  }
+
+  /* ---- Find us ------------------------------------------------------- */
+  .find {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    gap: var(--s-6);
+    align-items: start;
+  }
+  .find address { font-style: normal; }
+  .find__detail .label { display: block; margin-bottom: var(--s-2); }
+  @media (max-width: 46rem) { .find { grid-template-columns: 1fr; } }
+
+  /* TODO markers are deliberately loud. They must not survive to launch. */
+  .todo {
+    border-left: 3px solid var(--closed);
+    padding-left: var(--s-3);
+    color: var(--closed);
+    font-size: var(--step--1);
+  }
+
+  /* ---- Board foot ---------------------------------------------------- */
+  .board__foot {
+    margin-top: var(--s-6);
+    padding-top: var(--s-5);
+    border-top: 2px solid var(--ink);
+    display: flex; align-items: center; justify-content: space-between;
+    gap: var(--s-4); flex-wrap: wrap;
+  }
+  .board__note { color: var(--ink-60); font-size: var(--step--1); }
+
+  /* ---- Team ---------------------------------------------------------- */
+  .team {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: var(--s-5);
+  }
+  .team__item {
+    display: flex; flex-direction: column; gap: var(--s-2); align-items: flex-start;
+    background: var(--ink-card);
+    border: 1px solid var(--ink-card-border);
+    border-radius: 8px;
+    padding: var(--s-4);
+    transition: transform 200ms ease, border-color 200ms ease;
+  }
+  .team__item:hover {
+    transform: translateY(-4px);
+    border-color: var(--bronze-bright);
+  }
+  .team__portrait {
+    aspect-ratio: 4 / 5; width: 100%;
+    border-radius: 6px;
+    background: var(--ink-surface);
+    display: grid; place-items: center; overflow: hidden;
+    margin-bottom: var(--s-2);
+  }
+  .team__portrait img { width: 100%; height: 100%; object-fit: cover; transition: transform 300ms ease; }
+  .team__item:hover .team__portrait img { transform: scale(1.05); }
+  .team__placeholder { font-family: var(--font-display); font-size: 3rem; color: var(--ink-40); }
+  .team__role { color: rgba(250, 247, 242, 0.65); font-size: var(--step--1); }
+  .team__item :global(.btn) { margin-top: auto; font-size: var(--step--1); padding: 0.6rem 1rem; width: 100%; }
+
+  /* ---- FAQ ----------------------------------------------------------- */
+  .faq__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    gap: 0;
+    border-top: 1px solid var(--rule);
+  }
+  .faq__item { padding: var(--s-5) 0; border-bottom: 1px solid var(--rule); }
+  .faq__item h3 { margin-bottom: var(--s-2); }
+  @media (min-width: 52rem) {
+    .faq__item:nth-child(odd) { padding-right: var(--s-6); }
+    .faq__item:nth-child(even) { padding-left: var(--s-6); border-left: 1px solid var(--rule); }
+  }
+
+  /* ---- Other shop ---------------------------------------------------- */
+  .other { padding-block: var(--s-7); }
+  .other__inner {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: var(--s-5); flex-wrap: wrap;
+  }
+</style>

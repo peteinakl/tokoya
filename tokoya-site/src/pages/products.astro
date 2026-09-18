@@ -1,0 +1,290 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHead from '../components/SectionHead.astro';
+import BookingButton from '../components/BookingButton.astro';
+import { getCollection } from 'astro:content';
+
+const locations = await getCollection('locations');
+const ponsonby = locations.find((l) => l.data.slug === 'ponsonby')!;
+const remuera = locations.find((l) => l.data.slug === 'remuera')!;
+
+const brands = [
+  {
+    name: 'Layrite Deluxe',
+    tagline: 'Holds like wax, washes out like gel',
+    logo: '/images/brands/layrite.png',
+    origin: 'California, USA',
+    description: 'Created by a passionate barber who wanted a water-soluble pomade that delivered all-day hold without greasy buildup. Layrite provides clean, high-performance styling for classic pompadours, side parts, and textured crops.',
+    products: [
+      { name: 'Original Pomade', desc: 'Medium hold, medium shine. Clean vanilla scent, washes out easily with water.' },
+      { name: 'Superhold Pomade', desc: 'Heavy hold for coarse or curly hair that demands all-day control.' },
+      { name: 'Cement Clay', desc: 'High hold with a clean matte finish. Adds incredible texture and volume.' },
+      { name: 'Grooming Spray', desc: 'Lightweight styling primer for heat protection and pre-blowdry volume.' }
+    ]
+  },
+  {
+    name: 'Uppercut Deluxe',
+    tagline: 'Timeless style, modern edge',
+    logo: '/images/brands/uppercut.png',
+    origin: 'Gold Coast, Australia',
+    description: 'Inspired by the timeless style of 1950s barbershops and spiritual founder Willy "Uppercut" O\'Shea. Engineered without the greasy chemical heaviness of traditional formulas.',
+    products: [
+      { name: 'Matt Pomade', desc: 'Medium hold with a dry matte finish. Perfect for natural, effortless texture.' },
+      { name: 'Monster Hold', desc: 'Sweat-resistant, petroleum-based wax for maximum control and re-workability.' },
+      { name: 'Featherweight', desc: 'Lightweight paste with plenty of grip and natural shine for shorter styles.' },
+      { name: 'Styling Powder', desc: 'Instant lift, reworkable volume, and texture at the roots.' }
+    ]
+  },
+  {
+    name: 'Proraso Firenze',
+    tagline: 'Italian barbering excellence since 1948',
+    logo: '/images/brands/proraso.png',
+    origin: 'Florence, Italy',
+    description: 'The benchmark of Italian wet shaving for four generations. Formulated with natural botanical ingredients, refreshing eucalyptus oil, menthol, and shea butter for the ultimate razor glide.',
+    products: [
+      { name: 'Refreshing Pre-Shave Cream', desc: 'Softens the beard and protects sensitive skin before the blade touches.' },
+      { name: 'Eucalyptus Shaving Cream', desc: 'Rich, thick lather infused with natural menthol for an invigorating shave.' },
+      { name: 'Sandalwood After Shave Balm', desc: 'Soothes, moisturizes, and calms freshly shaved skin with nourishing shea butter.' },
+      { name: 'Beard Wash & Conditioning Balm', desc: 'Gently cleanses beard hair while softening coarse facial whiskers.' }
+    ]
+  },
+  {
+    name: 'Formidable',
+    tagline: 'Artisan men’s grooming formulations',
+    logo: '/images/brands/formidable.png',
+    origin: 'New Zealand',
+    description: 'Hand-crafted male grooming solutions made specifically for Australasian hair textures and conditions. High-performing pastes and balms with subtle, refined cedarwood notes.',
+    products: [
+      { name: 'Matte Sculpting Paste', desc: 'Flexible medium-high hold with pliable reworkability throughout the day.' },
+      { name: 'Sea Salt Texturizing Spray', desc: 'Infuses hair with natural beach-tumbled volume, separation, and body.' },
+      { name: 'Botanical Beard Oil', desc: 'Non-greasy organic argan and jojoba oil blend to eliminate beard itch.' }
+    ]
+  }
+];
+
+const title = "Barbering & Hair Products Stocked | Tokoya Auckland";
+const description = "Authentic grooming products stocked at Tokoya Barber & Shop in Ponsonby and Remuera. Official stockists of Layrite, Uppercut Deluxe, Proraso, and Formidable.";
+---
+
+<BaseLayout title={title} description={description}>
+
+  <!-- Hero -->
+  <section class="products-hero">
+    <div class="products-hero__bg" style="background-image: url('/images/hero/hero-station.png');"></div>
+    <div class="products-hero__overlay"></div>
+    <div class="wrap products-hero__content">
+      <span class="label">Official Stockists &middot; In-Store Collection</span>
+      <h1 class="display products-hero__title">The Grooming Apothecary</h1>
+      <p class="lede products-hero__lede">
+        We test every product in our chairs before offering it on our shelves.
+        World-class pomades, botanical shaving elixirs, and beard treatments available at both Auckland shops.
+      </p>
+    </div>
+  </section>
+
+  <!-- Brands Grid -->
+  <section class="section on-deep">
+    <div class="wrap">
+      <SectionHead label="Curated Essentials" title="Brands We Trust Behind The Chair" />
+
+      <div class="brands-stack">
+        {brands.map((brand) => (
+          <article class="brand-showcase-card">
+            <div class="brand-showcase-header">
+              <div class="brand-logo-frame">
+                <img src={brand.logo} alt={brand.name} loading="lazy" />
+              </div>
+              <div class="brand-meta">
+                <span class="brand-origin">{brand.origin}</span>
+                <h2 class="display brand-name">{brand.name}</h2>
+                <p class="brand-tagline text-gold font-medium">{brand.tagline}</p>
+                <p class="brand-description">{brand.description}</p>
+              </div>
+            </div>
+
+            <div class="brand-products-grid">
+              {brand.products.map((item) => (
+                <div class="product-item">
+                  <h3 class="product-item__name">{item.name}</h3>
+                  <p class="product-item__desc">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- In-Store Purchase Note -->
+  <section class="section on-ink">
+    <div class="wrap">
+      <div class="purchase-callout">
+        <div>
+          <span class="label">In-Store Exclusives</span>
+          <h2 class="display callout-heading">Take The Barbershop Experience Home</h2>
+          <p class="lede">
+            All styling waxes, shaving essentials, and beard care products are available for direct purchase at both our Ponsonby and Remuera counters. Ask your barber during your appointment for personalized product recommendations tailored to your hair texture and face shape.
+          </p>
+        </div>
+        <div class="callout-actions">
+          <BookingButton location={ponsonby} placement="card" />
+          <BookingButton location={remuera} placement="card" variant="ghost" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  .products-hero {
+    position: relative;
+    padding-block: var(--s-9) var(--s-8);
+    overflow: hidden;
+    min-height: 48vh;
+    display: flex;
+    align-items: center;
+  }
+  .products-hero__bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+  }
+  .products-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(8, 7, 6, 0.95) 0%, rgba(14, 12, 10, 0.88) 50%, rgba(8, 7, 6, 0.72) 100%);
+    z-index: 2;
+  }
+  .products-hero__content {
+    position: relative;
+    z-index: 3;
+    max-width: var(--max);
+  }
+  .products-hero__title {
+    font-size: var(--step-4);
+    margin-top: var(--s-2);
+    margin-bottom: var(--s-4);
+  }
+  .products-hero__lede {
+    max-width: 54ch;
+  }
+
+  /* Brands Stack */
+  .brands-stack {
+    display: grid;
+    gap: var(--s-7);
+    margin-top: var(--s-6);
+  }
+  .brand-showcase-card {
+    background: var(--ink-card);
+    border: 1px solid var(--ink-card-border);
+    border-radius: 8px;
+    padding: var(--s-6);
+    box-shadow: var(--shadow-md);
+  }
+  .brand-showcase-header {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: var(--s-6);
+    align-items: center;
+    padding-bottom: var(--s-6);
+    border-bottom: 1px solid var(--ink-card-border);
+  }
+  @media (max-width: 42rem) {
+    .brand-showcase-header { grid-template-columns: 1fr; }
+  }
+  .brand-logo-frame {
+    background: var(--ink-surface);
+    border: 1px solid rgba(201, 169, 135, 0.2);
+    border-radius: 6px;
+    padding: var(--s-4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1;
+  }
+  .brand-logo-frame img {
+    max-width: 100%;
+    max-height: 80px;
+    object-fit: contain;
+    filter: brightness(1.1);
+  }
+  .brand-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  .brand-origin {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(250, 247, 242, 0.5);
+  }
+  .brand-name {
+    font-size: var(--step-3);
+    color: var(--paper);
+    line-height: 1;
+  }
+  .brand-tagline {
+    font-size: var(--step--1);
+  }
+  .brand-description {
+    font-size: var(--step--1);
+    color: rgba(250, 247, 242, 0.78);
+    line-height: 1.6;
+    margin-top: var(--s-2);
+  }
+
+  .brand-products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: var(--s-4);
+    margin-top: var(--s-5);
+  }
+  .product-item {
+    background: var(--ink-surface);
+    border: 1px solid var(--ink-card-border);
+    border-radius: 6px;
+    padding: var(--s-4);
+  }
+  .product-item__name {
+    font-size: var(--step-0);
+    color: var(--bronze-bright);
+    margin-bottom: 0.25rem;
+  }
+  .product-item__desc {
+    font-size: var(--step--1);
+    color: rgba(250, 247, 242, 0.7);
+    line-height: 1.5;
+  }
+
+  /* Callout */
+  .purchase-callout {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--s-6);
+    align-items: center;
+    background: var(--ink-surface);
+    border: 1px solid rgba(201, 169, 135, 0.3);
+    border-radius: 8px;
+    padding: var(--s-7);
+  }
+  @media (max-width: 50rem) {
+    .purchase-callout { grid-template-columns: 1fr; }
+  }
+  .callout-heading {
+    font-size: var(--step-3);
+    margin-top: var(--s-2);
+    margin-bottom: var(--s-3);
+  }
+  .callout-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-3);
+  }
+</style>

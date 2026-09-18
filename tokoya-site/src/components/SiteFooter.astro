@@ -1,0 +1,123 @@
+---
+import { getCollection } from 'astro:content';
+import OpenNow from './OpenNow.astro';
+const ORDER = ['ponsonby', 'remuera'];
+const locations = (await getCollection('locations')).sort(
+  (a, b) => ORDER.indexOf(a.data.slug) - ORDER.indexOf(b.data.slug)
+);
+const year = new Date().getFullYear();
+---
+<footer class="ft on-ink">
+  <div class="wrap">
+    <div class="ft__top">
+      <img class="ft__mark" src="/brand/mark-120.png" width="120" height="164" alt="" loading="lazy" />
+      <p class="display ft__kanji" lang="ja">床屋</p>
+      <p class="ft__gloss">Tokoya. Japanese for barbershop.</p>
+    </div>
+
+    <hr class="rule" />
+
+    <div class="ft__grid">
+      {locations.map((l) => (
+        <section class="ft__loc">
+          <h2 class="h3">{l.data.name}</h2>
+          <address>
+            {l.data.streetAddress}<br />
+            {l.data.suburb}, {l.data.city}{l.data.postalCode ? ` ${l.data.postalCode}` : ''}
+          </address>
+          {l.data.telephone ? (
+            <p><a href={`tel:${l.data.telephone}`} data-phone data-location={l.data.slug}>{l.data.telephoneDisplay}</a></p>
+          ) : (
+            <p class="ft__todo">Phone number unconfirmed — see OPEN-QUESTIONS.md Q3</p>
+          )}
+          {l.data.email ? (
+            <p><a href={`mailto:${l.data.email}`}>{l.data.email}</a></p>
+          ) : (
+            <p class="ft__todo">Email unconfirmed — see OPEN-QUESTIONS.md Q4</p>
+          )}
+          <OpenNow hours={l.data.hours} />
+          <p><a href={`/${l.data.slug}/`}>Visit {l.data.shortName}</a></p>
+        </section>
+      ))}
+
+      <nav class="ft__nav" aria-label="Footer">
+        <h2 class="h3">More</h2>
+        <ul>
+          <li><a href="/prices/">Prices</a></li>
+          <li><a href="/services/">Services</a></li>
+          <li><a href="/barbers/">Barbers</a></li>
+          <li><a href="/gallery/">Gallery</a></li>
+          <li><a href="/products/">Products</a></li>
+          <li><a href="/faq/">FAQ</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="/contact/">Contact</a></li>
+        </ul>
+        <ul class="ft__social">
+          <li><a href="https://www.instagram.com/tokoya_barber_shop/" rel="me noopener">Instagram</a></li>
+          <li><a href="https://www.facebook.com/tokoya.barbershop/" rel="me noopener">Facebook</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="ft__brands">
+      <p class="label">Official Stockists</p>
+      <div class="ft__brand-grid">
+        <div class="ft__brand-item"><img src="/images/brands/layrite.png" alt="Layrite Deluxe" width="120" height="80" loading="lazy" /></div>
+        <div class="ft__brand-item"><img src="/images/brands/uppercut.png" alt="Uppercut Deluxe" width="120" height="80" loading="lazy" /></div>
+        <div class="ft__brand-item"><img src="/images/brands/proraso.png" alt="Proraso Firenze" width="120" height="80" loading="lazy" /></div>
+        <div class="ft__brand-item"><img src="/images/brands/formidable.png" alt="Formidable" width="120" height="80" loading="lazy" /></div>
+      </div>
+    </div>
+
+    <hr class="rule" />
+    <p class="ft__legal">
+      &copy; {year} Tokoya Barber &amp; Shop. Auckland, New Zealand. Logo trademarked, designed by Anna Doria.
+    </p>
+  </div>
+</footer>
+
+<style>
+  .ft { padding-block: var(--s-8) var(--s-6); margin-top: var(--s-9); }
+  .ft__top { display: flex; align-items: center; gap: var(--s-4); margin-bottom: var(--s-6); flex-wrap: wrap; }
+  .ft__mark { width: 60px; height: auto; filter: invert(1); }
+  .ft__kanji { font-size: var(--step-2); letter-spacing: 0.1em; }
+  .ft__gloss { color: rgba(251,250,248,0.65); font-size: var(--step--1); }
+
+  .ft__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: var(--s-6);
+    padding-block: var(--s-6);
+  }
+  .ft__loc address { font-style: normal; }
+  .ft__loc > * + * { margin-top: var(--s-2); }
+  .ft__loc .h3, .ft__nav .h3 { margin-bottom: var(--s-3); }
+  .ft__todo { color: var(--closed-ink); font-size: var(--step--1); }
+
+  .ft__nav ul { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--s-2); }
+  .ft__brands {
+    padding-block: var(--s-6);
+    border-top: 1px solid var(--rule-ink);
+  }
+  .ft__brands .label { margin-bottom: var(--s-4); }
+  .ft__brand-grid {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-6);
+  }
+  .ft__brand-item img {
+    height: 48px;
+    width: auto;
+    opacity: 0.75;
+    filter: grayscale(1) brightness(1.2);
+    transition: opacity 150ms ease, filter 150ms ease;
+  }
+  .ft__brand-item img:hover {
+    opacity: 1;
+    filter: grayscale(0) brightness(1);
+  }
+
+  .ft__social { margin-top: var(--s-4); }
+  .ft__legal { color: rgba(251,250,248,0.55); font-size: var(--step--1); padding-top: var(--s-5); max-width: none; }
+</style>

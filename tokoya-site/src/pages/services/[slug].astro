@@ -1,0 +1,483 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import BookingButton from '../../components/BookingButton.astro';
+import StickyBookBar from '../../components/StickyBookBar.astro';
+import { GROUP_LABELS, formatPrice, formatDuration, byGroup } from '../../lib/prices';
+
+export async function getStaticPaths() {
+  const allServices = await getCollection('services');
+  return allServices.map((service) => ({
+    params: { slug: service.slug },
+    props: { service },
+  }));
+}
+
+interface Props {
+  service: CollectionEntry<'services'>;
+}
+
+const { service } = Astro.props;
+const { Content } = await service.render();
+const d = service.data;
+
+const allServices = await getCollection('services');
+const locations = await getCollection('locations');
+const ponsonby = locations.find((l) => l.data.slug === 'ponsonby')!;
+const remuera = locations.find((l) => l.data.slug === 'remuera')!;
+
+const related = byGroup(allServices, d.group).filter((s) => s.slug !== service.slug).slice(0, 3);
+
+const SITE = 'https://www.tokoya.co.nz';
+const canonicalUrl = `${SITE}/services/${service.slug}/`;
+
+const availableLocations = d.locations.map((locSlug) =>
+  locSlug === 'ponsonby' ? ponsonby : remuera
+);
+
+const title = `${d.title} in Auckland | Tokoya Barber & Shop`;
+const description = `${d.title} at Tokoya (${availableLocations.map(l => l.data.name).join(' & ')}). ${formatPrice(d)}, ${formatDuration(d)}. ${d.summary} Book online.`;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: d.title,
+  serviceType: d.group,
+  description: d.summary,
+  url: canonicalUrl,
+  provider: d.locations.map((loc) => ({
+    '@type': 'HairSalon',
+    '@id': `${SITE}/${loc}/#business`,
+    name: loc === 'ponsonby' ? ponsonby.data.name : remuera.data.name,
+  })),
+  areaServed: {
+    '@type': 'AdministrativeArea',
+    name: 'Auckland',
+  },
+  offers: {
+    '@type': 'Offer',
+    price: String(d.price),
+    priceCurrency: 'NZD',
+    availability: 'https://schema.org/InStock',
+    availableAtOrFrom: d.locations.map((loc) => ({
+      '@id': `${SITE}/${loc}/#business`,
+    })),
+  },
+};
+---
+
+<BaseLayout title={title} description={description} schema={schema}>
+
+  <!-- Service Hero -->
+  <section class="svc-hero">
+    <div class="svc-hero__bg" style="background-image: url('/images/hero/hero-station.png');"></div>
+    <div class="svc-hero__overlay"></div>
+    <div class="wrap svc-hero__content">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a> &rsaquo;
+        <a href="/services/">Services</a> &rsaquo;
+        <span>{GROUP_LABELS[d.group]}</span>
+      </nav>
+
+      <span class="label">{GROUP_LABELS[d.group]} &middot; Tokoya Auckland</span>
+      <h1 class="display svc-hero__title">{d.title}</h1>
+      <p class="lede svc-hero__lede">{d.summary}</p>
+
+      <div class="svc-stats-bar">
+        <div class="stat-item">
+          <span class="stat-label">Price</span>
+          <span class="stat-value font-anton text-gold">{formatPrice(d)}</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-label">Duration</span>
+          <span class="stat-value num">{formatDuration(d)}</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-label">Available At</span>
+          <span class="stat-value">
+            {d.locations.length === 2 ? 'Ponsonby & Remuera' : (d.locations[0] === 'remuera' ? 'Remuera Only' : 'Ponsonby Only')}
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Service Details & Booking Options -->
+  <section class="section on-deep">
+    <div class="wrap">
+      <div class="svc-grid">
+        <!-- Main Description -->
+        <div class="svc-main">
+          <h2 class="display svc-section-title">What To Expect In The Chair</h2>
+          
+          <div class="prose-content">
+            <p>
+              A {d.title.toLowerCase()} at Tokoya is {formatPrice(d)} and takes {formatDuration(d)}.
+              Available at {availableLocations.map(l => `${l.data.name} (${l.data.streetAddress}, ${l.data.suburb})`).join(' and ')}.
+            </p>
+            <p>
+              {d.summary} Every appointment begins with an attentive consultation to understand your style preferences, hair type, and daily routine. We take pride in punctual chairs—when you book your slot, you sit down on time.
+            </p>
+          </div>
+
+          <div class="standards-box">
+            <h3 class="standards-title">The Tokoya Standard</h3>
+            <ul class="standards-list">
+              <li>
+                <span class="check-icon">&#10003;</span>
+                <div>
+                  <strong>Punctual Service:</strong> Your chair time is reserved solely for you with zero overlap or unnecessary delay.
+                </div>
+              </li>
+              <li>
+                <span class="check-icon">&#10003;</span>
+                <div>
+                  <strong>Immaculate Hygiene:</strong> Every blade is fresh, every comb and clipper guard sterilized between clients.
+                </div>
+              </li>
+              <li>
+                <span class="check-icon">&#10003;</span>
+                <div>
+                  <strong>Premium Products:</strong> Styled using authentic Layrite, Uppercut Deluxe, or Proraso formulations.
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Cancellation Notice -->
+          <div class="policy-note">
+            <p>
+              <strong>Cancellation &amp; Rescheduling:</strong> Please notify us at least 90 minutes in advance if you need to reschedule. Cancellations within 90 minutes incur a 50% fee; missed appointments without notice are charged 100%.
+            </p>
+          </div>
+        </div>
+
+        <!-- Booking Sidebar -->
+        <aside class="svc-sidebar">
+          <div class="booking-card">
+            <h3 class="display booking-card__title">Reserve Your Chair</h3>
+            <p class="booking-card__sub">Select your preferred Auckland location:</p>
+
+            <div class="booking-card__options">
+              {d.locations.includes('ponsonby') && (
+                <div class="loc-book-box">
+                  <div class="loc-book-header">
+                    <h4>Ponsonby Shop</h4>
+                    <span class="loc-status">Open 7 Days</span>
+                  </div>
+                  <address class="loc-book-addr">
+                    279 Ponsonby Road, Ponsonby<br />
+                    <a href="tel:+6493784477">09 378 4477</a>
+                  </address>
+                  <BookingButton location={ponsonby} service={d.title} placement="card" block />
+                </div>
+              )}
+
+              {d.locations.includes('remuera') && (
+                <div class="loc-book-box">
+                  <div class="loc-book-header">
+                    <h4>Remuera Salon</h4>
+                    <span class="loc-status">Wed &ndash; Sun</span>
+                  </div>
+                  <address class="loc-book-addr">
+                    352 Remuera Road, Remuera<br />
+                    <a href="tel:+64266843107">026 684 3107</a>
+                  </address>
+                  <BookingButton location={remuera} service={d.title} placement="card" block variant={d.locations.includes('ponsonby') ? 'ghost' : 'solid'} />
+                </div>
+              )}
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- Related Services -->
+  {related.length > 0 && (
+    <section class="section on-ink" aria-labelledby="related-head">
+      <div class="wrap">
+        <SectionHead label="Related Services" title={`More in ${GROUP_LABELS[d.group]}`} id="related-head" />
+        <div class="related-grid">
+          {related.map((rel) => (
+            <article class="related-card">
+              <div class="related-card__meta">
+                <span class="font-anton text-gold">{formatPrice(rel.data)}</span>
+                <span class="num text-muted text-sm">{formatDuration(rel.data)}</span>
+              </div>
+              <h3 class="related-card__title">
+                <a href={`/services/${rel.slug}/`}>{rel.data.title}</a>
+              </h3>
+              <p class="related-card__desc">{rel.data.summary}</p>
+              <a href={`/services/${rel.slug}/`} class="related-card__link">
+                View service details &rarr;
+              </a>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <StickyBookBar location={availableLocations[0]} />
+
+</BaseLayout>
+
+<style>
+  .svc-hero {
+    position: relative;
+    padding-block: var(--s-9) var(--s-8);
+    overflow: hidden;
+    min-height: 48vh;
+    display: flex;
+    align-items: center;
+  }
+  .svc-hero__bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+  }
+  .svc-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(8, 7, 6, 0.95) 0%, rgba(14, 12, 10, 0.88) 50%, rgba(8, 7, 6, 0.72) 100%);
+    z-index: 2;
+  }
+  .svc-hero__content {
+    position: relative;
+    z-index: 3;
+    max-width: var(--max);
+  }
+  .breadcrumb {
+    font-size: var(--step--1);
+    color: rgba(250, 247, 242, 0.6);
+    margin-bottom: var(--s-3);
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+  }
+  .breadcrumb a {
+    color: var(--bronze-gold);
+    text-decoration: none;
+  }
+  .breadcrumb a:hover {
+    text-decoration: underline;
+  }
+  .svc-hero__title {
+    font-size: var(--step-4);
+    margin-top: var(--s-2);
+    margin-bottom: var(--s-4);
+  }
+  .svc-hero__lede {
+    max-width: 52ch;
+    margin-bottom: var(--s-6);
+  }
+
+  .svc-stats-bar {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-5);
+    background: rgba(20, 16, 12, 0.85);
+    border: 1px solid rgba(201, 169, 135, 0.35);
+    border-radius: 8px;
+    padding: var(--s-4) var(--s-6);
+    backdrop-filter: blur(12px);
+    flex-wrap: wrap;
+  }
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+  .stat-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(250, 247, 242, 0.55);
+  }
+  .stat-value {
+    font-size: var(--step-1);
+    font-weight: 600;
+  }
+  .stat-divider {
+    width: 1px;
+    height: 32px;
+    background: rgba(201, 169, 135, 0.25);
+  }
+
+  /* Grid Layout */
+  .svc-grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: var(--s-7);
+    align-items: start;
+  }
+  @media (max-width: 56rem) {
+    .svc-grid { grid-template-columns: 1fr; }
+  }
+
+  .svc-section-title {
+    font-size: var(--step-2);
+    margin-bottom: var(--s-4);
+  }
+  .prose-content {
+    font-size: var(--step-0);
+    line-height: 1.7;
+    color: rgba(250, 247, 242, 0.85);
+    margin-bottom: var(--s-6);
+  }
+  .prose-content p + p {
+    margin-top: var(--s-3);
+  }
+
+  .standards-box {
+    background: var(--ink-card);
+    border: 1px solid var(--ink-card-border);
+    border-radius: 8px;
+    padding: var(--s-5);
+    margin-bottom: var(--s-6);
+  }
+  .standards-title {
+    font-size: var(--step-1);
+    color: var(--bronze-bright);
+    margin-bottom: var(--s-4);
+  }
+  .standards-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--s-4);
+  }
+  .standards-list li {
+    display: flex;
+    gap: var(--s-3);
+    align-items: flex-start;
+    font-size: var(--step--1);
+    line-height: 1.55;
+  }
+  .check-icon {
+    color: var(--bronze-gold);
+    font-weight: bold;
+    flex: none;
+  }
+
+  .policy-note {
+    background: rgba(201, 169, 135, 0.08);
+    border-left: 3px solid var(--bronze-gold);
+    padding: var(--s-4);
+    border-radius: 0 6px 6px 0;
+    font-size: var(--step--1);
+    color: rgba(250, 247, 242, 0.75);
+    line-height: 1.5;
+  }
+
+  /* Booking Sidebar */
+  .booking-card {
+    background: var(--ink-card);
+    border: 1px solid rgba(201, 169, 135, 0.35);
+    border-radius: 8px;
+    padding: var(--s-6);
+    box-shadow: var(--shadow-md);
+  }
+  .booking-card__title {
+    font-size: var(--step-2);
+    margin-bottom: 0.25rem;
+  }
+  .booking-card__sub {
+    font-size: var(--step--1);
+    color: rgba(250, 247, 242, 0.65);
+    margin-bottom: var(--s-5);
+  }
+  .booking-card__options {
+    display: grid;
+    gap: var(--s-5);
+  }
+  .loc-book-box {
+    background: var(--ink-surface);
+    border: 1px solid var(--ink-card-border);
+    border-radius: 6px;
+    padding: var(--s-4);
+    display: grid;
+    gap: var(--s-3);
+  }
+  .loc-book-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .loc-book-header h4 {
+    font-size: var(--step-0);
+    color: var(--paper);
+  }
+  .loc-status {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--bronze-bright);
+  }
+  .loc-book-addr {
+    font-style: normal;
+    font-size: var(--step--1);
+    color: rgba(250, 247, 242, 0.7);
+    line-height: 1.4;
+  }
+  .loc-book-addr a {
+    color: var(--bronze-gold);
+    text-decoration: none;
+  }
+
+  /* Related Services */
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    gap: var(--s-5);
+    margin-top: var(--s-5);
+  }
+  .related-card {
+    background: var(--ink-card);
+    border: 1px solid var(--ink-card-border);
+    border-radius: 8px;
+    padding: var(--s-5);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--s-3);
+    transition: transform 180ms ease, border-color 180ms ease;
+  }
+  .related-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--bronze-gold);
+  }
+  .related-card__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .related-card__title {
+    font-size: var(--step-1);
+    color: var(--paper);
+  }
+  .related-card__title a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .related-card__desc {
+    font-size: var(--step--1);
+    color: rgba(250, 247, 242, 0.75);
+    line-height: 1.5;
+    flex-grow: 1;
+  }
+  .related-card__link {
+    font-size: var(--step--1);
+    color: var(--bronze-bright);
+    text-decoration: none;
+    font-weight: 500;
+  }
+</style>

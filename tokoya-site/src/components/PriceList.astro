@@ -1,0 +1,136 @@
+---
+/**
+ * The price board.
+ *
+ * Set like a printed barbershop price list: service name, dotted leader,
+ * duration, price, with tabular figures so the column aligns. This is the
+ * page element customers came for, so it gets the typographic attention
+ * rather than being hidden inside a card grid.
+ *
+ * It is a real <table> in the HTML. Price and duration are in the initial
+ * response, which is what makes them retrievable by search and AI systems.
+ */
+import type { CollectionEntry } from 'astro:content';
+import { GROUP_LABELS, formatPrice, formatDuration, byGroup } from '../lib/prices';
+
+interface Props {
+  services: CollectionEntry<'services'>[];
+  groups: string[];
+  locationName?: string;
+}
+const { services, groups, locationName } = Astro.props;
+---
+
+<div class="board">
+  {groups.map((group) => {
+    const rows = byGroup(services, group);
+    if (rows.length === 0) return null;
+    return (
+      <section class="board__group">
+        <h3 class="display board__title">{GROUP_LABELS[group] ?? group}</h3>
+        <table class="board__table">
+          <caption class="sr-only">
+            {GROUP_LABELS[group]} prices{locationName ? ` at ${locationName}` : ''}
+          </caption>
+          <thead class="sr-only">
+            <tr><th scope="col">Service</th><th scope="col">Duration</th><th scope="col">Price</th></tr>
+          </thead>
+          <tbody>
+            {rows.map((s) => (
+              <tr>
+                <th scope="row" class="board__name">
+                  <span class="board__label">
+                    {s.data.hasPage
+                      ? <a href={`/services/${s.slug}/`}>{s.data.title}</a>
+                      : s.data.title}
+                    {s.data.priceNote && <em class="board__note">{s.data.priceNote}</em>}
+                  </span>
+                  <span class="board__leader" aria-hidden="true"></span>
+                </th>
+                <td class="board__dur num">{formatDuration(s.data)}</td>
+                <td class="board__price num">{formatPrice(s.data)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+    );
+  })}
+</div>
+
+<style>
+  .board { display: grid; gap: var(--s-7); }
+
+  .board__title {
+    font-size: var(--step-2);
+    padding-bottom: var(--s-3);
+    border-bottom: 2px solid var(--ink);
+    margin-bottom: var(--s-2);
+  }
+  :global(.on-ink) .board__title { border-bottom-color: var(--paper); }
+
+  .board__table { width: 100%; border-collapse: collapse; }
+
+  .board__table tr { border-bottom: 1px solid var(--rule); }
+  :global(.on-ink) .board__table tr { border-bottom-color: var(--rule-ink); }
+
+  .board__name,
+  .board__dur,
+  .board__price { padding: 0.7rem 0; vertical-align: baseline; }
+
+  .board__name {
+    font-weight: 400;
+    text-align: left;
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    width: 100%;
+  }
+  .board__label { flex: none; max-width: 70%; }
+  .board__label a { text-decoration-color: var(--bronze); }
+
+  /* Dotted leader, the detail that makes this read as a price board
+     rather than a generic table. Drawn, not typed. */
+  .board__leader {
+    flex: 1;
+    align-self: flex-end;
+    margin-bottom: 0.3em;
+    border-bottom: 1px dotted var(--ink-40);
+    min-width: 1rem;
+  }
+
+  .board__note {
+    display: block;
+    font-style: normal;
+    font-size: var(--step--1);
+    color: var(--ink-60);
+  }
+  :global(.on-ink) .board__note { color: rgba(251,250,248,0.6); }
+
+  .board__dur {
+    text-align: right;
+    white-space: nowrap;
+    padding-left: var(--s-4);
+    color: var(--ink-60);
+    font-size: var(--step--1);
+  }
+  :global(.on-ink) .board__dur { color: rgba(251,250,248,0.6); }
+
+  .board__price {
+    text-align: right;
+    white-space: nowrap;
+    padding-left: var(--s-5);
+    font-weight: 600;
+    min-width: 4.5rem;
+  }
+
+  /* On a phone the duration moves under the service name so the price
+     column stays flush right and legible. */
+  @media (max-width: 30rem) {
+    .board__table tr { display: grid; grid-template-columns: 1fr auto; align-items: baseline; }
+    .board__name { grid-column: 1; }
+    .board__leader { display: none; }
+    .board__dur { grid-column: 1; text-align: left; padding: 0 0 0.7rem; }
+    .board__price { grid-column: 2; grid-row: 1; }
+  }
+</style>

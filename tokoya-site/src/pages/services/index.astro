@@ -1,0 +1,418 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import BookingButton from '../../components/BookingButton.astro';
+import { GROUP_LABELS, formatPrice, formatDuration, byGroup } from '../../lib/prices';
+
+const allServices = await getCollection('services');
+const locations = await getCollection('locations');
+const ponsonby = locations.find((l) => l.data.slug === 'ponsonby')!;
+const remuera = locations.find((l) => l.data.slug === 'remuera')!;
+
+const groups = ['haircuts', 'shaves', 'waxing', 'nails'] as const;
+
+const title = "Services & Grooming Menu | Tokoya Barber & Shop Auckland";
+const description = "Complete service menu for Tokoya in Ponsonby and Remuera. Men's haircuts from $30, skin fades $55, hot towel shaves $65, and full nail salon treatments in Remuera.";
+
+const SITE = 'https://www.tokoya.co.nz';
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'OfferCatalog',
+  name: 'Tokoya Barber & Shop Services',
+  url: `${SITE}/services/`,
+  itemListElement: allServices
+    .sort((a, b) => a.data.order - b.data.order)
+    .map((s, i) => ({
+      '@type': 'Offer',
+      position: i + 1,
+      itemOffered: {
+        '@type': 'Service',
+        name: s.data.title,
+        description: s.data.summary,
+        serviceType: s.data.group,
+      },
+      price: String(s.data.price),
+      priceCurrency: 'NZD',
+    })),
+};
+---
+
+<BaseLayout title={title} description={description} schema={schema}>
+
+  <!-- Hero Banner -->
+  <section class="services-hero">
+    <div class="services-hero__bg" style="background-image: url('/images/hero/hero-station.png');"></div>
+    <div class="services-hero__overlay"></div>
+    <div class="wrap services-hero__content">
+      <span class="label">Craft &amp; Discipline &middot; Ponsonby &amp; Remuera</span>
+      <h1 class="display services-hero__title">
+        The Grooming Menu
+      </h1>
+      <p class="lede services-hero__lede">
+        Deliberate technique, meticulous hygiene, and zero guesswork.
+        Every service includes dedicated chair time, hot lather where needed, and clear upfront pricing.
+      </p>
+
+      <!-- Category Filter Pills -->
+      <nav class="category-nav" aria-label="Service categories">
+        {groups.map((g) => (
+          <a href={`#${g}`} class="cat-pill">
+            <span>{GROUP_LABELS[g]}</span>
+            {g === 'nails' && <span class="badge-mini">Remuera</span>}
+          </a>
+        ))}
+      </nav>
+    </div>
+  </section>
+
+  <!-- Service Groups -->
+  <div class="service-sections">
+    {groups.map((groupKey) => {
+      const items = byGroup(allServices, groupKey);
+      const isNails = groupKey === 'nails';
+      return (
+        <section id={groupKey} class={`section ${isNails ? 'on-ink' : 'on-deep'}`}>
+          <div class="wrap">
+            <div class="group-header">
+              <div>
+                <span class="label">Category</span>
+                <h2 class="display group-title">{GROUP_LABELS[groupKey]}</h2>
+              </div>
+              {isNails && (
+                <div class="group-note-pill">
+                  <span class="pulse-dot is-open"></span>
+                  <span>Hosted exclusively at our 352 Remuera Road salon</span>
+                </div>
+              )}
+            </div>
+
+            <div class="services-grid">
+              {items.map((service) => {
+                const isBoth = service.data.locations.includes('ponsonby') && service.data.locations.includes('remuera');
+                const isRemueraOnly = service.data.locations.includes('remuera') && !service.data.locations.includes('ponsonby');
+                const isPonsonbyOnly = service.data.locations.includes('ponsonby') && !service.data.locations.includes('remuera');
+
+                return (
+                  <article class="service-item-card">
+                    <div class="service-item-card__header">
+                      <div class="service-item-card__meta">
+                        <span class="service-price font-anton">{formatPrice(service.data)}</span>
+                        <span class="service-duration num">{formatDuration(service.data)}</span>
+                      </div>
+                      <h3 class="service-title">
+                        <a href={`/services/${service.slug}/`} class="service-title-link">
+                          {service.data.title}
+                        </a>
+                      </h3>
+                      {service.data.priceNote && (
+                        <p class="service-note">{service.data.priceNote}</p>
+                      )}
+                    </div>
+
+                    <p class="service-desc">{service.data.summary}</p>
+
+                    <div class="service-item-card__footer">
+                      <div class="location-tag-row">
+                        {isBoth && (
+                          <span class="loc-tag">Ponsonby &amp; Remuera</span>
+                        )}
+                        {isRemueraOnly && (
+                          <span class="loc-tag loc-tag--highlight">Remuera Only</span>
+                        )}
+                        {isPonsonbyOnly && (
+                          <span class="loc-tag">Ponsonby Only</span>
+                        )}
+                      </div>
+
+                      <div class="service-item-card__actions">
+                        {service.data.locations.includes('ponsonby') && (
+                          <BookingButton location={ponsonby} placement="inline" />
+                        )}
+                        {service.data.locations.includes('remuera') && (
+                          <BookingButton location={remuera} placement="inline" variant={service.data.locations.includes('ponsonby') ? 'ghost' : 'solid'} />
+                        )}
+                        <a href={`/services/${service.slug}/`} class="service-detail-link" aria-label={`Read full details about ${service.data.title}`}>
+                          Details &rarr;
+                        </a>
+                      </div>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      );
+    })}
+  </div>
+
+  <!-- Guarantee & Transparency Callout -->
+  <section class="section on-ink" aria-labelledby="transparency-head">
+    <div class="wrap">
+      <div class="transparency-box">
+        <div class="transparency-content">
+          <span class="label">Honest Barbering</span>
+          <h2 class="display transparency-title" id="transparency-head">
+            All prices GST inclusive. Chair starts on time.
+          </h2>
+          <p class="lede">
+            We value your schedule. If you book for 2:00 PM, you sit in the chair at 2:00 PM.
+            Never any rushed consultations or surprise charges at the register.
+          </p>
+          <div class="transparency-links">
+            <a href="/prices/" class="btn btn--solid">
+              <span>View Compact Price Table</span>
+            </a>
+            <a href="/contact/" class="btn btn--ghost">
+              <span>Cancellation Policy &amp; Terms</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  .services-hero {
+    position: relative;
+    padding-block: var(--s-9) var(--s-8);
+    overflow: hidden;
+    min-height: 50vh;
+    display: flex;
+    align-items: center;
+  }
+  .services-hero__bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+  }
+  .services-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(8, 7, 6, 0.95) 0%, rgba(14, 12, 10, 0.88) 50%, rgba(8, 7, 6, 0.72) 100%);
+    z-index: 2;
+  }
+  .services-hero__content {
+    position: relative;
+    z-index: 3;
+    max-width: var(--max);
+  }
+  .services-hero__title {
+    font-size: var(--step-4);
+    margin-top: var(--s-2);
+    margin-bottom: var(--s-4);
+  }
+  .services-hero__lede {
+    max-width: 52ch;
+    margin-bottom: var(--s-6);
+  }
+
+  /* Category nav pills */
+  .category-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+    margin-top: var(--s-5);
+  }
+  .cat-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.25rem;
+    border-radius: 9999px;
+    background: rgba(20, 16, 12, 0.85);
+    border: 1px solid rgba(201, 169, 135, 0.35);
+    color: var(--paper);
+    text-decoration: none;
+    font-size: var(--step--1);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    backdrop-filter: blur(8px);
+    transition: all 180ms ease;
+  }
+  .cat-pill:hover {
+    background: var(--bronze-gold);
+    color: var(--ink);
+    border-color: var(--bronze-gold);
+    transform: translateY(-1px);
+  }
+  .badge-mini {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    background: var(--bronze-gold);
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .cat-pill:hover .badge-mini {
+    background: var(--ink);
+    color: var(--bronze-bright);
+  }
+
+  /* Group Headers */
+  .group-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+    padding-bottom: var(--s-4);
+    border-bottom: 1px solid var(--ink-card-border);
+    margin-bottom: var(--s-6);
+  }
+  .group-title {
+    font-size: var(--step-3);
+    color: var(--paper);
+    margin-top: 0.25rem;
+  }
+  .group-note-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--step--1);
+    color: var(--bronze-bright);
+    background: rgba(201, 169, 135, 0.1);
+    border: 1px solid rgba(201, 169, 135, 0.25);
+    padding: 0.4rem 0.9rem;
+    border-radius: 9999px;
+  }
+
+  /* Services Grid */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+    gap: var(--s-5);
+  }
+
+  .service-item-card {
+    background: var(--ink-card);
+    border: 1px solid var(--ink-card-border);
+    border-radius: 8px;
+    padding: var(--s-5);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
+    box-shadow: var(--shadow-sm);
+  }
+  .service-item-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--bronze-gold);
+    box-shadow: var(--shadow-md);
+  }
+
+  .service-item-card__header {
+    margin-bottom: var(--s-3);
+  }
+  .service-item-card__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: var(--s-2);
+  }
+  .service-price {
+    font-size: var(--step-2);
+    color: var(--bronze-gold);
+    line-height: 1;
+  }
+  .service-duration {
+    font-size: var(--step--1);
+    color: rgba(250, 247, 242, 0.6);
+  }
+  .service-title {
+    font-size: var(--step-1);
+    font-weight: 600;
+    color: var(--paper);
+    margin-top: var(--s-1);
+  }
+  .service-title-link {
+    color: inherit;
+    text-decoration: none;
+    transition: color 150ms ease;
+  }
+  .service-title-link:hover {
+    color: var(--bronze-bright);
+  }
+  .service-note {
+    font-size: var(--step--1);
+    color: var(--bronze-gold);
+    font-style: italic;
+    margin-top: 0.25rem;
+  }
+
+  .service-desc {
+    font-size: var(--step--1);
+    color: rgba(250, 247, 242, 0.75);
+    line-height: 1.55;
+    margin-bottom: var(--s-5);
+    flex-grow: 1;
+  }
+
+  .service-item-card__footer {
+    border-top: 1px solid rgba(201, 169, 135, 0.12);
+    padding-top: var(--s-3);
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-3);
+  }
+  .location-tag-row {
+    display: flex;
+    align-items: center;
+  }
+  .loc-tag {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(250, 247, 242, 0.6);
+  }
+  .loc-tag--highlight {
+    color: var(--bronze-bright);
+  }
+
+  .service-item-card__actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--s-2);
+  }
+  .service-detail-link {
+    font-size: var(--step--1);
+    color: var(--bronze-bright);
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: auto;
+    transition: transform 150ms ease;
+  }
+  .service-detail-link:hover {
+    transform: translateX(3px);
+  }
+
+  /* Transparency Box */
+  .transparency-box {
+    background: var(--ink-surface);
+    border: 1px solid rgba(201, 169, 135, 0.3);
+    border-radius: 8px;
+    padding: var(--s-7);
+    box-shadow: var(--shadow-md);
+  }
+  .transparency-title {
+    font-size: var(--step-3);
+    margin-top: var(--s-2);
+    margin-bottom: var(--s-3);
+  }
+  .transparency-links {
+    display: flex;
+    gap: var(--s-4);
+    margin-top: var(--s-5);
+    flex-wrap: wrap;
+  }
+</style>

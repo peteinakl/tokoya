@@ -1,0 +1,581 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHead from '../components/SectionHead.astro';
+import BookingButton from '../components/BookingButton.astro';
+import OpenNow from '../components/OpenNow.astro';
+import OpeningHours from '../components/OpeningHours.astro';
+import LazyMap from '../components/LazyMap.astro';
+import { openDaysSummary } from '../lib/hours';
+
+const locations = await getCollection('locations');
+const ponsonby = locations.find((l) => l.data.slug === 'ponsonby')!;
+const remuera = locations.find((l) => l.data.slug === 'remuera')!;
+
+const title = "Contact & Locations | Tokoya Barber & Shop Auckland";
+const description = "Find Tokoya Barber & Shop at 279 Ponsonby Road and Tokoya Barber & Salon at 352 Remuera Road. Opening hours, phone numbers, interactive maps, and booking links.";
+
+const SITE = 'https://www.tokoya.co.nz';
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'HairSalon',
+    '@id': `${SITE}/ponsonby/#business`,
+    name: ponsonby.data.name,
+    url: `${SITE}/ponsonby/`,
+    telephone: ponsonby.data.telephone,
+    email: ponsonby.data.email,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: ponsonby.data.streetAddress,
+      addressLocality: ponsonby.data.suburb,
+      addressRegion: ponsonby.data.city,
+      postalCode: ponsonby.data.postalCode,
+      addressCountry: ponsonby.data.country,
+    },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: ponsonby.data.latitude,
+      longitude: ponsonby.data.longitude,
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'HairSalon',
+    '@id': `${SITE}/remuera/#business`,
+    name: remuera.data.name,
+    url: `${SITE}/remuera/`,
+    telephone: remuera.data.telephone,
+    email: remuera.data.email,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: remuera.data.streetAddress,
+      addressLocality: remuera.data.suburb,
+      addressRegion: remuera.data.city,
+      postalCode: remuera.data.postalCode,
+      addressCountry: remuera.data.country,
+    },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: remuera.data.latitude,
+      longitude: remuera.data.longitude,
+    },
+  },
+];
+---
+
+<BaseLayout title={title} description={description} schema={schema}>
+
+  <!-- Hero Banner -->
+  <section class="contact-hero">
+    <div class="contact-hero__bg" style="background-image: url('/images/hero/hero-chair.png');"></div>
+    <div class="contact-hero__overlay"></div>
+    <div class="wrap contact-hero__content">
+      <span class="label">Two Auckland Locations &middot; Ponsonby &amp; Remuera</span>
+      <h1 class="display contact-hero__title">
+        Visit Tokoya
+      </h1>
+      <p class="lede contact-hero__lede">
+        Walk into an unhurried, immaculately clean space. Book online to reserve your chair, or get in touch directly with either shop.
+      </p>
+    </div>
+  </section>
+
+  <!-- Dual Location Detail Cards -->
+  <section class="section on-deep">
+    <div class="wrap">
+      <SectionHead label="Locations &amp; Hours" title="Ponsonby and Remuera" />
+
+      <div class="contact-shops-grid">
+        <!-- Ponsonby Card -->
+        <article class="shop-contact-card">
+          <div class="shop-contact-card__media">
+            <img src="/images/shops/ponsonby-interior.png" alt="Tokoya Ponsonby interior" loading="lazy" />
+            <div class="shop-media-badge">
+              <OpenNow hours={ponsonby.data.hours} />
+              <span class="shop-suburb-tag">Ponsonby</span>
+            </div>
+          </div>
+
+          <div class="shop-contact-card__body">
+            <h2 class="display shop-contact-title">{ponsonby.data.name}</h2>
+            <p class="shop-contact-tagline">{ponsonby.data.tagline}</p>
+
+            <div class="shop-contact-details">
+              <div class="contact-detail-row">
+                <span class="detail-label">Address</span>
+                <address class="detail-value">
+                  {ponsonby.data.streetAddress}<br />
+                  {ponsonby.data.suburb}, {ponsonby.data.city} {ponsonby.data.postalCode}
+                </address>
+              </div>
+
+              <div class="contact-detail-row">
+                <span class="detail-label">Phone</span>
+                <div class="detail-value">
+                  <a href={`tel:${ponsonby.data.telephone}`} class="phone-link">
+                    {ponsonby.data.telephoneDisplay}
+                  </a>
+                </div>
+              </div>
+
+              <div class="contact-detail-row">
+                <span class="detail-label">Email</span>
+                <div class="detail-value">
+                  <a href={`mailto:${ponsonby.data.email}`} class="email-link">
+                    {ponsonby.data.email}
+                  </a>
+                </div>
+              </div>
+
+              <div class="contact-detail-row">
+                <span class="detail-label">Schedule</span>
+                <div class="detail-value">
+                  <strong>Open 7 Days</strong> &middot; {openDaysSummary(ponsonby.data.hours)}
+                </div>
+              </div>
+            </div>
+
+            <!-- Hours Table -->
+            <div class="shop-hours-dropdown">
+              <h3 class="hours-heading">Weekly Chair Schedule</h3>
+              <OpeningHours hours={ponsonby.data.hours} />
+            </div>
+
+            <!-- Getting Here / Parking -->
+            <div class="getting-here-box">
+              <h4 class="getting-here-title">Parking &amp; Transit</h4>
+              <p class="text-sm text-muted">
+                Metered street parking is available directly along Ponsonby Road, with free 120-minute parking on adjacent side streets (Lincoln Street and Franklin Road). The InnerLink bus stops within a 2-minute walk.
+              </p>
+            </div>
+
+            <!-- Lazy Loaded Interactive Map -->
+            <div class="shop-map-container">
+              <LazyMap query="Tokoya Barber 279 Ponsonby Road Auckland" label="Tokoya Ponsonby" />
+            </div>
+
+            <div class="shop-contact-actions">
+              <BookingButton location={ponsonby} placement="card" block />
+              <a href="/ponsonby/" class="btn btn--ghost w-full">
+                <span>View Ponsonby Full Page</span> &rarr;
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Remuera Card -->
+        <article class="shop-contact-card">
+          <div class="shop-contact-card__media">
+            <img src="/images/shops/remuera-salon.png" alt="Tokoya Remuera salon" loading="lazy" />
+            <div class="shop-media-badge">
+              <OpenNow hours={remuera.data.hours} />
+              <span class="shop-suburb-tag">Remuera</span>
+            </div>
+          </div>
+
+          <div class="shop-contact-card__body">
+            <h2 class="display shop-contact-title">{remuera.data.name}</h2>
+            <p class="shop-contact-tagline">{remuera.data.tagline}</p>
+
+            <div class="shop-contact-details">
+              <div class="contact-detail-row">
+                <span class="detail-label">Address</span>
+                <address class="detail-value">
+                  {remuera.data.streetAddress}<br />
+                  {remuera.data.suburb}, {remuera.data.city} {remuera.data.postalCode}
+                </address>
+              </div>
+
+              <div class="contact-detail-row">
+                <span class="detail-label">Phone</span>
+                <div class="detail-value">
+                  <a href={`tel:${remuera.data.telephone}`} class="phone-link">
+                    {remuera.data.telephoneDisplay}
+                  </a>
+                </div>
+              </div>
+
+              <div class="contact-detail-row">
+                <span class="detail-label">Email</span>
+                <div class="detail-value">
+                  <a href={`mailto:${remuera.data.email}`} class="email-link">
+                    {remuera.data.email}
+                  </a>
+                </div>
+              </div>
+
+              <div class="contact-detail-row">
+                <span class="detail-label">Schedule</span>
+                <div class="detail-value">
+                  <strong>Wednesday &ndash; Sunday</strong> &middot; {openDaysSummary(remuera.data.hours)}
+                </div>
+              </div>
+            </div>
+
+            <!-- Hours Table -->
+            <div class="shop-hours-dropdown">
+              <h3 class="hours-heading">Weekly Chair Schedule</h3>
+              <OpeningHours hours={remuera.data.hours} />
+            </div>
+
+            <!-- Getting Here / Parking -->
+            <div class="getting-here-box">
+              <h4 class="getting-here-title">Parking &amp; Transit</h4>
+              <p class="text-sm text-muted">
+                Convenient parking options include dedicated spaces behind the village shops, Clonbern Road carpark (2-minute walk), and street parking along Remuera Road and Victoria Avenue.
+              </p>
+            </div>
+
+            <!-- Lazy Loaded Interactive Map -->
+            <div class="shop-map-container">
+              <LazyMap query="Tokoya Barber 352 Remuera Road Auckland" label="Tokoya Remuera" />
+            </div>
+
+            <div class="shop-contact-actions">
+              <BookingButton location={remuera} placement="card" block />
+              <a href="/remuera/" class="btn btn--ghost w-full">
+                <span>View Remuera Full Page</span> &rarr;
+              </a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cancellation Policy Callout -->
+  <section class="section on-ink" aria-labelledby="policy-head">
+    <div class="wrap">
+      <div class="policy-card">
+        <span class="label">Appointment Terms &middot; Tokoya Policy</span>
+        <h2 class="display policy-title" id="policy-head">Cancellation &amp; No-Show Policy</h2>
+        <blockquote class="policy-quote">
+          &ldquo;We will charge 50% for the service if you cancel within 90 minutes of the booked time. If you don't show up for your booking without notice, we will charge 100% of the booked services. In addition, if it happens more than twice, we will not be able to take your bookings anymore.&rdquo;
+        </blockquote>
+        <p class="policy-explainer">
+          Because each chair is reserved exclusively for one client at a time, late cancellations prevent other clients from receiving service and impact our barbers' time. We appreciate your respect and prompt communication.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Enquiry Form -->
+  <section class="section on-deep" aria-labelledby="enquiry-head">
+    <div class="wrap">
+      <div class="enquiry-container">
+        <div class="enquiry-header">
+          <SectionHead label="Enquiries" title="Send A Message" id="enquiry-head" />
+          <p class="lede">
+            Have a question about services, styling for events, or specialized nail treatments?
+            Send us a message and our management team will reply promptly.
+          </p>
+        </div>
+
+        <form class="enquiry-form" method="POST" action="/api/contact">
+          <div class="form-group">
+            <label for="location-select" class="form-label">Preferred Location *</label>
+            <select id="location-select" name="location" class="form-input" required>
+              <option value="ponsonby">Tokoya Barber &amp; Shop — Ponsonby (279 Ponsonby Rd)</option>
+              <option value="remuera">Tokoya Barber &amp; Salon — Remuera (352 Remuera Rd)</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="contact-name" class="form-label">Your Name *</label>
+              <input type="text" id="contact-name" name="name" class="form-input" placeholder="e.g. Liam Smith" required />
+            </div>
+
+            <div class="form-group">
+              <label for="contact-phone" class="form-label">Phone Number *</label>
+              <input type="tel" id="contact-phone" name="phone" class="form-input" placeholder="e.g. 021 123 4567" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="contact-email" class="form-label">Email Address *</label>
+            <input type="email" id="contact-email" name="email" class="form-input" placeholder="e.g. liam@example.co.nz" required />
+          </div>
+
+          <div class="form-group">
+            <label for="contact-message" class="form-label">Message *</label>
+            <textarea id="contact-message" name="message" rows="4" class="form-input form-textarea" placeholder="How can we help you?" required></textarea>
+          </div>
+
+          <!-- Honeypot anti-spam field -->
+          <div style="display: none;" aria-hidden="true">
+            <label for="website-check">Leave this empty</label>
+            <input type="text" id="website-check" name="botcheck" tabindex="-1" autocomplete="off" />
+          </div>
+
+          <button type="submit" class="btn btn--solid btn--lg">
+            <span>Send Enquiry Message</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  .contact-hero {
+    position: relative;
+    padding-block: var(--s-9) var(--s-8);
+    overflow: hidden;
+    min-height: 48vh;
+    display: flex;
+    align-items: center;
+  }
+  .contact-hero__bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+  }
+  .contact-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(8, 7, 6, 0.95) 0%, rgba(14, 12, 10, 0.88) 50%, rgba(8, 7, 6, 0.72) 100%);
+    z-index: 2;
+  }
+  .contact-hero__content {
+    position: relative;
+    z-index: 3;
+    max-width: var(--max);
+  }
+  .contact-hero__title {
+    font-size: var(--step-4);
+    margin-top: var(--s-2);
+    margin-bottom: var(--s-4);
+  }
+  .contact-hero__lede {
+    max-width: 52ch;
+  }
+
+  /* Contact Shops Grid */
+  .contact-shops-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
+    gap: var(--s-7);
+    margin-top: var(--s-6);
+  }
+  .shop-contact-card {
+    background: var(--ink-card);
+    border: 1px solid var(--ink-card-border);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    display: flex;
+    flex-direction: column;
+  }
+  .shop-contact-card__media {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+  }
+  .shop-contact-card__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .shop-media-badge {
+    position: absolute;
+    top: var(--s-3);
+    left: var(--s-3);
+    right: var(--s-3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .shop-suburb-tag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    background: rgba(14, 12, 10, 0.9);
+    color: var(--bronze-bright);
+    border: 1px solid rgba(201, 169, 135, 0.3);
+  }
+
+  .shop-contact-card__body {
+    padding: var(--s-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-5);
+    flex-grow: 1;
+  }
+  .shop-contact-title {
+    font-size: var(--step-2);
+    margin-bottom: 0.2rem;
+  }
+  .shop-contact-tagline {
+    font-size: var(--step--1);
+    color: var(--bronze-gold);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .shop-contact-details {
+    display: grid;
+    gap: var(--s-3);
+    border-top: 1px solid var(--ink-card-border);
+    border-bottom: 1px solid var(--ink-card-border);
+    padding-block: var(--s-4);
+  }
+  .contact-detail-row {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: var(--s-3);
+    font-size: var(--step--1);
+  }
+  .detail-label {
+    color: rgba(250, 247, 242, 0.55);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+  .detail-value address {
+    font-style: normal;
+    line-height: 1.45;
+  }
+  .phone-link, .email-link {
+    color: var(--paper);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 150ms ease;
+  }
+  .phone-link:hover, .email-link:hover {
+    color: var(--bronze-bright);
+  }
+
+  .shop-hours-dropdown {
+    background: var(--ink-surface);
+    border: 1px solid var(--ink-card-border);
+    border-radius: 6px;
+    padding: var(--s-4);
+  }
+  .hours-heading {
+    font-size: var(--step--1);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--bronze-bright);
+    margin-bottom: var(--s-3);
+  }
+
+  .getting-here-box {
+    background: rgba(201, 169, 135, 0.06);
+    border: 1px solid rgba(201, 169, 135, 0.18);
+    border-radius: 6px;
+    padding: var(--s-4);
+  }
+  .getting-here-title {
+    font-size: var(--step--1);
+    color: var(--bronze-gold);
+    margin-bottom: var(--s-2);
+  }
+
+  .shop-map-container {
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .shop-contact-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-3);
+    margin-top: auto;
+    padding-top: var(--s-2);
+  }
+
+  /* Policy Card */
+  .policy-card {
+    background: var(--ink-surface);
+    border: 1px solid rgba(201, 169, 135, 0.35);
+    border-radius: 8px;
+    padding: var(--s-7);
+    box-shadow: var(--shadow-md);
+  }
+  .policy-title {
+    font-size: var(--step-3);
+    margin-top: var(--s-2);
+    margin-bottom: var(--s-4);
+  }
+  .policy-quote {
+    font-family: Georgia, serif;
+    font-size: var(--step-0);
+    font-style: italic;
+    line-height: 1.6;
+    color: var(--paper);
+    background: rgba(8, 7, 6, 0.6);
+    border-left: 3px solid var(--bronze-gold);
+    padding: var(--s-5);
+    border-radius: 0 6px 6px 0;
+    margin-bottom: var(--s-4);
+  }
+  .policy-explainer {
+    font-size: var(--step--1);
+    color: rgba(250, 247, 242, 0.75);
+    max-width: 65ch;
+  }
+
+  /* Enquiry Form */
+  .enquiry-container {
+    max-width: 48rem;
+    margin-inline: auto;
+    background: var(--ink-card);
+    border: 1px solid var(--ink-card-border);
+    border-radius: 8px;
+    padding: var(--s-7);
+    box-shadow: var(--shadow-md);
+  }
+  .enquiry-header {
+    margin-bottom: var(--s-6);
+  }
+  .enquiry-form {
+    display: grid;
+    gap: var(--s-5);
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s-4);
+  }
+  @media (max-width: 36rem) {
+    .form-row { grid-template-columns: 1fr; }
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-2);
+  }
+  .form-label {
+    font-size: var(--step--1);
+    font-weight: 500;
+    color: var(--paper);
+    letter-spacing: 0.02em;
+  }
+  .form-input {
+    background: var(--ink-surface);
+    border: 1px solid var(--ink-card-border);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    color: var(--paper);
+    font-family: inherit;
+    font-size: var(--step-0);
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+  }
+  .form-input:focus {
+    outline: none;
+    border-color: var(--bronze-gold);
+    box-shadow: 0 0 0 3px rgba(201, 169, 135, 0.2);
+  }
+  .form-textarea {
+    resize: vertical;
+  }
+</style>

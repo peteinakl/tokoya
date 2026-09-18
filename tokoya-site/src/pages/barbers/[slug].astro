@@ -1,0 +1,300 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import BookingButton from '../../components/BookingButton.astro';
+import StickyBookBar from '../../components/StickyBookBar.astro';
+
+export async function getStaticPaths() {
+  const team = await getCollection('team');
+  return team.filter((t) => t.data.confirmed).map((barber) => ({
+    params: { slug: barber.slug },
+    props: { barber },
+  }));
+}
+
+interface Props {
+  barber: CollectionEntry<'team'>;
+}
+
+const { barber } = Astro.props;
+const d = barber.data;
+
+const locations = await getCollection('locations');
+const ponsonby = locations.find((l) => l.data.slug === 'ponsonby')!;
+const remuera = locations.find((l) => l.data.slug === 'remuera')!;
+
+const bios: Record<string, string> = {
+  "Kris Torcato": "With over two decades of experience in the barbering industry, Kris is passionate about delivering exceptional grooming that enhances each client's personal style.",
+  "Jojo Parido": "Shaping & styling hair for a living is what Jojo loves and cares deeply about, bringing high-detail fades and precision scissors to Remuera.",
+  "Kim Duong": "With 8 years of master barbering experience in Vietnam, Kim is passionate about modern, fashion-forward cuts and traditional razor techniques.",
+  "Justin Park": "Originally from South Korea with a background as a tattoo artist, Justin brings meticulous geometric precision and sharp attention to detail behind the chair.",
+  "James": "A dedicated craftsman at Ponsonby known for attentive consultations, sharp taper fades, and classic gentlemen's scissor cuts.",
+  "Etsuya Kidoguchi": "Specializing in Japanese barbering technique, discipline, clean fades, and restorative hot towel beard treatments."
+};
+
+const bio = bios[d.name] || "Passionate about traditional Japanese discipline, contemporary scissor craft, and punctual chair hospitality.";
+
+const assignedLocations = d.locations.map((loc) =>
+  loc === 'ponsonby' ? ponsonby : remuera
+);
+
+const SITE = 'https://www.tokoya.co.nz';
+const canonicalUrl = `${SITE}/barbers/${barber.slug}/`;
+
+const title = `${d.name}, ${d.title} | Tokoya Auckland`;
+const description = `Book an appointment with ${d.name} (${d.title}) at Tokoya Barber & Shop (${assignedLocations.map(l => l.data.name).join(' / ')}). ${bio}`;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: d.name,
+  jobTitle: d.title,
+  image: d.image ? `${SITE}${d.image}` : undefined,
+  worksFor: d.locations.map((loc) => ({
+    '@type': 'HairSalon',
+    '@id': `${SITE}/${loc}/#business`,
+    name: loc === 'ponsonby' ? ponsonby.data.name : remuera.data.name,
+  })),
+  description: bio,
+};
+---
+
+<BaseLayout title={title} description={description} schema={schema}>
+
+  <!-- Hero / Header -->
+  <section class="barber-hero">
+    <div class="barber-hero__bg" style="background-image: url('/images/hero/hero-craft.png');"></div>
+    <div class="barber-hero__overlay"></div>
+    <div class="wrap barber-hero__content">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a> &rsaquo;
+        <a href="/barbers/">Barbers</a> &rsaquo;
+        <span>{d.name}</span>
+      </nav>
+
+      <span class="label">{d.title} &middot; The Chair</span>
+      <h1 class="display barber-hero__title">{d.name}</h1>
+      <p class="lede barber-hero__lede">{bio}</p>
+    </div>
+  </section>
+
+  <!-- Barber Profile & Booking -->
+  <section class="section on-deep">
+    <div class="wrap">
+      <div class="barber-profile-grid">
+        <!-- Photo Column -->
+        <div class="barber-portrait-wrap">
+          <div class="barber-portrait-frame">
+            <img src={d.image} alt={`${d.name}, ${d.title} at Tokoya`} loading="eager" />
+          </div>
+          <div class="barber-loc-tags">
+            {d.locations.map((loc) => (
+              <span class="loc-badge">{loc === 'ponsonby' ? 'Ponsonby Shop' : 'Remuera Salon'}</span>
+            ))}
+          </div>
+        </div>
+
+        <!-- Details Column -->
+        <div class="barber-info">
+          <div class="barber-bio-section">
+            <span class="label">Craft &amp; Experience</span>
+            <h2 class="display barber-subheading">Dedicated Grooming Excellence</h2>
+            <p class="prose-p">
+              {bio}
+            </p>
+            <p class="prose-p">
+              At Tokoya, every cut is performed with precision clippers, hand-honed shears, and strict Japanese sanitation standards. Book ahead to secure your chair time with {d.name}.
+            </p>
+          </div>
+
+          <!-- Reservation Card -->
+          <div class="barber-reserve-box">
+            <h3 class="display reserve-title">Book Chair With {d.name}</h3>
+            <p class="reserve-sub">Choose your shop to launch direct booking:</p>
+
+            <div class="reserve-actions">
+              {d.locations.includes('ponsonby') && (
+                <div class="reserve-row">
+                  <div>
+                    <strong>Ponsonby Shop</strong>
+                    <p class="text-sm text-muted">279 Ponsonby Road &middot; Kitomba</p>
+                  </div>
+                  <BookingButton location={ponsonby} barber={d.name} placement="inline" />
+                </div>
+              )}
+
+              {d.locations.includes('remuera') && (
+                <div class="reserve-row">
+                  <div>
+                    <strong>Remuera Salon</strong>
+                    <p class="text-sm text-muted">352 Remuera Road &middot; Fresha</p>
+                  </div>
+                  <BookingButton location={remuera} barber={d.name} staffId={d.freshaStaffId} placement="inline" variant={d.locations.includes('ponsonby') ? 'ghost' : 'solid'} />
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div class="back-link-wrap">
+            <a href="/barbers/" class="btn btn--ghost">
+              &larr; <span>View All Craftsmen</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <StickyBookBar location={assignedLocations[0]} />
+
+</BaseLayout>
+
+<style>
+  .barber-hero {
+    position: relative;
+    padding-block: var(--s-9) var(--s-8);
+    overflow: hidden;
+    min-height: 44vh;
+    display: flex;
+    align-items: center;
+  }
+  .barber-hero__bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+  }
+  .barber-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(8, 7, 6, 0.95) 0%, rgba(14, 12, 10, 0.88) 50%, rgba(8, 7, 6, 0.72) 100%);
+    z-index: 2;
+  }
+  .barber-hero__content {
+    position: relative;
+    z-index: 3;
+    max-width: var(--max);
+  }
+  .breadcrumb {
+    font-size: var(--step--1);
+    color: rgba(250, 247, 242, 0.6);
+    margin-bottom: var(--s-3);
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+  }
+  .breadcrumb a {
+    color: var(--bronze-gold);
+    text-decoration: none;
+  }
+  .barber-hero__title {
+    font-size: var(--step-4);
+    margin-top: var(--s-2);
+    margin-bottom: var(--s-4);
+  }
+  .barber-hero__lede {
+    max-width: 52ch;
+  }
+
+  .barber-profile-grid {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: var(--s-7);
+    align-items: start;
+  }
+  @media (max-width: 50rem) {
+    .barber-profile-grid { grid-template-columns: 1fr; }
+  }
+
+  .barber-portrait-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-3);
+  }
+  .barber-portrait-frame {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--ink-card-border);
+    background: var(--ink-card);
+    aspect-ratio: 4 / 5;
+    box-shadow: var(--shadow-md);
+  }
+  .barber-portrait-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .barber-loc-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .loc-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.35rem 0.75rem;
+    border-radius: 9999px;
+    background: rgba(201, 169, 135, 0.12);
+    border: 1px solid rgba(201, 169, 135, 0.3);
+    color: var(--bronze-bright);
+  }
+
+  .barber-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-6);
+  }
+  .barber-subheading {
+    font-size: var(--step-2);
+    margin-top: var(--s-1);
+    margin-bottom: var(--s-4);
+  }
+  .prose-p {
+    font-size: var(--step-0);
+    line-height: 1.65;
+    color: rgba(250, 247, 242, 0.85);
+  }
+  .prose-p + .prose-p {
+    margin-top: var(--s-3);
+  }
+
+  .barber-reserve-box {
+    background: var(--ink-card);
+    border: 1px solid rgba(201, 169, 135, 0.3);
+    border-radius: 8px;
+    padding: var(--s-6);
+    box-shadow: var(--shadow-md);
+  }
+  .reserve-title {
+    font-size: var(--step-2);
+    margin-bottom: 0.25rem;
+  }
+  .reserve-sub {
+    font-size: var(--step--1);
+    color: rgba(250, 247, 242, 0.65);
+    margin-bottom: var(--s-4);
+  }
+  .reserve-actions {
+    display: grid;
+    gap: var(--s-4);
+  }
+  .reserve-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--ink-surface);
+    border: 1px solid var(--ink-card-border);
+    border-radius: 6px;
+    padding: var(--s-4);
+    flex-wrap: wrap;
+    gap: var(--s-3);
+  }
+
+  .back-link-wrap {
+    padding-top: var(--s-2);
+  }
+</style>

@@ -1,0 +1,25 @@
+---
+/**
+ * The site's one recurring structural device: a numbered disc, a tracked
+ * uppercase label, a hairline rule, then the heading. The number is real —
+ * it marks position in a sequence the reader is actually moving through,
+ * so do not use this component for content that is not a sequence.
+ */
+interface Props { n?: string; label: string; title: string; id?: string; }
+const { n, label, title, id } = Astro.props;
+---
+<header class="sh">
+  <div class="sh__meta">
+    {n && <span class="disc" aria-hidden="true">{n}</span>}
+    <span class="label">{label}</span>
+    <hr class="rule sh__rule" />
+  </div>
+  <h2 class="display h2" id={id}>{title}</h2>
+</header>
+
+<style>
+  .sh { margin-bottom: var(--s-6); }
+  .sh__meta { display: flex; align-items: center; gap: var(--s-4); margin-bottom: var(--s-4); }
+  .sh__rule { flex: 1; margin: 0; }
+  .sh .disc { width: 2rem; font-size: 0.8rem; }
+</style>

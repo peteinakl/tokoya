@@ -1,0 +1,30 @@
+{
+  "slug": "remuera",
+  "name": "Tokoya Barber & Salon",
+  "shortName": "Remuera",
+  "tagline": "Barbering and a dedicated nail salon, for men and women.",
+  "streetAddress": "352 Remuera Road",
+  "suburb": "Remuera",
+  "city": "Auckland",
+  "postalCode": "1050",
+  "country": "NZ",
+  "latitude": "-36.8804962",
+  "longitude": "174.7974230",
+  "telephone": "+64266843107",
+  "telephoneDisplay": "026 684 3107",
+  "email": "tokoya.remuera@gmail.com",
+  "bookingUrl": "https://www.fresha.com/book-now/tokoya-barber-and-salon-itn6p8by/all-offer",
+  "bookingProvider": "Fresha",
+  "offersNails": true,
+  "serviceGroups": ["haircuts", "shaves", "waxing", "nails"],
+  "hours": [
+    { "day": "Monday",    "closed": true },
+    { "day": "Tuesday",   "closed": true },
+    { "day": "Wednesday", "opens": "10:00", "closes": "18:00" },
+    { "day": "Thursday",  "opens": "10:00", "closes": "18:00" },
+    { "day": "Friday",    "opens": "10:00", "closes": "18:00" },
+    { "day": "Saturday",  "opens": "09:00", "closes": "16:00" },
+    { "day": "Sunday",    "opens": "09:00", "closes": "16:00" }
+  ],
+  "gettingHere": null
+}

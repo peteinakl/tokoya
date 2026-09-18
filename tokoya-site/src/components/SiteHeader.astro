@@ -1,0 +1,151 @@
+---
+const nav = [
+  { href: '/ponsonby/', label: 'Ponsonby' },
+  { href: '/remuera/', label: 'Remuera' },
+  { href: '/prices/', label: 'Prices' },
+  { href: '/services/', label: 'Services' },
+  { href: '/barbers/', label: 'Barbers' },
+  { href: '/about/', label: 'About' },
+  { href: '/contact/', label: 'Contact' },
+];
+const path = Astro.url.pathname;
+---
+<header class="hd">
+  <div class="wrap hd__inner">
+    <a class="hd__logo" href="/" aria-label="Tokoya Barber &amp; Shop, home">
+      <img src="/brand/lockup-280.png" srcset="/brand/lockup-280.png 280w, /brand/lockup-560.png 560w"
+           sizes="200px" width="280" height="198" alt="" fetchpriority="high" />
+    </a>
+
+    <button class="hd__toggle" type="button" aria-expanded="false" aria-controls="sitenav" data-nav-toggle>
+      <span class="sr-only">Menu</span>
+      <span class="hd__bars" aria-hidden="true"></span>
+    </button>
+
+    <nav class="hd__nav" id="sitenav" aria-label="Main">
+      <ul>
+        {nav.map((n) => (
+          <li>
+            <a href={n.href} aria-current={path === n.href ? 'page' : undefined}>{n.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .hd {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(14, 12, 10, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(201, 169, 135, 0.2);
+    transition: background-color 200ms ease;
+  }
+  .hd__inner {
+    display: flex;
+    align-items: center;
+    gap: var(--s-5);
+    padding-block: var(--s-3);
+    flex-wrap: wrap;
+  }
+  .hd__logo {
+    flex: none;
+    line-height: 0;
+    transition: opacity 150ms ease;
+  }
+  .hd__logo:hover { opacity: 0.85; }
+  .hd__logo img {
+    width: 150px;
+    height: auto;
+    filter: invert(1) brightness(1.1);
+  }
+
+  .hd__nav { margin-left: auto; }
+  .hd__nav ul {
+    display: flex;
+    align-items: center;
+    gap: var(--s-5);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .hd__nav a {
+    text-decoration: none;
+    font-size: var(--step--1);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--paper);
+    padding-block: 0.35rem;
+    border-bottom: 2px solid transparent;
+    transition: color 150ms ease, border-color 150ms ease;
+  }
+  .hd__nav a:hover {
+    color: var(--bronze-bright);
+    border-bottom-color: var(--bronze-bright);
+  }
+  .hd__nav a[aria-current='page'] {
+    color: var(--bronze-gold);
+    border-bottom-color: var(--bronze-gold);
+  }
+
+  .hd__toggle {
+    display: none;
+    margin-left: auto;
+    background: none;
+    border: 0;
+    padding: var(--s-2);
+    cursor: pointer;
+  }
+  .hd__bars, .hd__bars::before, .hd__bars::after {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--paper);
+    content: '';
+    transition: transform 150ms ease, background-color 150ms ease;
+  }
+  .hd__bars::before { transform: translateY(-7px); }
+  .hd__bars::after { transform: translateY(5px); }
+
+  @media (max-width: 56rem) {
+    .hd__toggle { display: block; }
+    .hd__nav {
+      flex-basis: 100%;
+      margin-left: 0;
+      display: none;
+      background: var(--ink-surface);
+      margin-inline: calc(-1 * var(--gutter));
+      padding-inline: var(--gutter);
+      border-bottom: 1px solid var(--ink-card-border);
+    }
+    .hd__nav.is-open { display: block; }
+    .hd__nav ul {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0;
+      padding-block: var(--s-3);
+    }
+    .hd__nav li {
+      width: 100%;
+      border-top: 1px solid rgba(201, 169, 135, 0.12);
+    }
+    .hd__nav a {
+      display: block;
+      padding: var(--s-4) 0;
+    }
+  }
+</style>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('[data-nav-toggle]');
+  const nav = document.getElementById('sitenav');
+  btn?.addEventListener('click', () => {
+    const open = nav?.classList.toggle('is-open') ?? false;
+    btn.setAttribute('aria-expanded', String(open));
+  });
+</script>

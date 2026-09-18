@@ -1,0 +1,75 @@
+---
+/**
+ * The only way a booking link is ever rendered.
+ *
+ * It is a plain <a> with a server-rendered href, so it works with JavaScript
+ * disabled. The analytics event is attached by delegation in BaseLayout.
+ *
+ * The label ALWAYS names the shop. There is no prop that lets a caller
+ * render a bare "Book Now" — that is deliberate. Two shops on two different
+ * booking systems means an unqualified button is a guess the visitor has to
+ * correct after the click.
+ */
+import type { CollectionEntry } from 'astro:content';
+import { bookingUrl, bookingLabel } from '../lib/booking';
+
+interface Props {
+  location: CollectionEntry<'locations'>;
+  service?: string;          // display name, e.g. "a skin fade"
+  serviceId?: string | null;
+  barber?: string;
+  staffId?: string | null;
+  placement: 'hero' | 'sticky' | 'inline' | 'card' | 'nav';
+  variant?: 'solid' | 'ghost';
+  block?: boolean;
+}
+
+const {
+  location, service, serviceId = null, barber, staffId = null,
+  placement, variant = 'solid', block = false,
+} = Astro.props;
+
+const d = location.data;
+
+const href = bookingUrl({
+  locationSlug: d.slug as 'ponsonby' | 'remuera',
+  locationName: d.name,
+  provider: d.bookingProvider,
+  baseUrl: d.bookingUrl,
+  serviceId,
+  staffId,
+});
+
+const label = bookingLabel(d.shortName, service);
+---
+
+<a
+  class:list={['btn', variant === 'ghost' && 'btn--ghost', block && 'btn--block']}
+  href={href}
+  data-booking
+  data-location={d.slug}
+  data-provider={d.bookingProvider.toLowerCase()}
+  data-service={service ?? ''}
+  data-barber={barber ?? ''}
+  data-placement={placement}
+>
+  <span>{label}</span>
+  <span class="btn__arrow" aria-hidden="true">
+    <svg viewBox="0 0 16 16" fill="none" stroke="var(--paper)" stroke-width="2">
+      <path d="M2 8h11M9 4l4 4-4 4" />
+    </svg>
+  </span>
+</a>
+
+<style>
+  .btn--block { width: 100%; justify-content: space-between; }
+  /* The arrow disc inverts with the button, so the stroke has to follow. */
+  .btn__arrow svg { stroke: var(--ink); }
+  :global(.on-ink) .btn:not(.btn--ghost) .btn__arrow svg { stroke: var(--paper); }
+  .btn--ghost .btn__arrow { background: var(--ink); }
+  .btn--ghost .btn__arrow svg { stroke: var(--paper); }
+  .btn--ghost:hover .btn__arrow { background: var(--paper); }
+  .btn--ghost:hover .btn__arrow svg { stroke: var(--ink); }
+  :global(.on-ink) .btn--ghost .btn__arrow { background: var(--paper); }
+  :global(.on-ink) .btn--ghost .btn__arrow svg { stroke: var(--ink); }
+</style>

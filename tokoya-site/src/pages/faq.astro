@@ -1,0 +1,270 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHead from '../components/SectionHead.astro';
+import BookingButton from '../components/BookingButton.astro';
+import { getCollection } from 'astro:content';
+
+const locations = await getCollection('locations');
+const ponsonby = locations.find((l) => l.data.slug === 'ponsonby')!;
+const remuera = locations.find((l) => l.data.slug === 'remuera')!;
+
+const faqs = [
+  {
+    q: "Do you take walk-ins or do I need to book in advance?",
+    a: "We welcome walk-ins whenever a chair is free, but appointments always take priority. To guarantee your time and avoid waiting, we strongly recommend booking online through Kitomba (Ponsonby) or Fresha (Remuera)."
+  },
+  {
+    q: "Are you open on Sundays?",
+    a: "Yes. Both locations open on Sundays from 9:00 AM to 4:00 PM. Ponsonby operates seven days a week, while Remuera opens Wednesday through Sunday. Sunday appointments fill up quickly, so early booking is advised."
+  },
+  {
+    q: "What is your cancellation and late policy?",
+    a: "We charge 50% of the booked service if you cancel within 90 minutes of your appointment. For unnotified no-shows, 100% of the service is charged. If no-shows happen more than twice, we cannot accept future bookings. If you are running late, please call the shop immediately."
+  },
+  {
+    q: "Can I choose or request a specific barber?",
+    a: "Yes. When reserving online or by phone, you can select your preferred craftsman. Explore our Barbers page to view our team's backgrounds, specialisms, and primary shop locations."
+  },
+  {
+    q: "Where can I park near the shops?",
+    a: "At Ponsonby (279 Ponsonby Road): metered parking is available directly on Ponsonby Road, with free 120-minute parking on adjacent side streets like Lincoln St and Franklin Rd. At Remuera (352 Remuera Road): dedicated customer spaces are behind the village shops, plus street parking on Remuera Road and Victoria Avenue."
+  },
+  {
+    q: "Do you offer services for children and women?",
+    a: "Yes. We offer Child Haircuts ($35) for active kids and classic scissor styling for women. In addition, our 352 Remuera Road salon features a dedicated nail studio providing gel manicures, pedicures, builder gel, and nail art."
+  },
+  {
+    q: "What products do you use and can I buy them in the shop?",
+    a: "We exclusively stock Layrite Deluxe, Uppercut Deluxe, Proraso Firenze, and Formidable. Every wax, pomade, shaving soap, and beard oil we use in the chair is available for purchase at our front counters."
+  },
+  {
+    q: "What does 'Tokoya' (床屋) mean?",
+    a: "Tokoya is the traditional Japanese word for 'barbershop'. Founded in 2015 by master barber Kaisei Sarai, the name symbolizes Japanese discipline, punctuality, and the concept of grooming as a calm, respected ritual."
+  }
+];
+
+const title = "Frequently Asked Questions | Tokoya Barber & Shop Auckland";
+const description = "Answers to common questions about Tokoya Barber & Shop in Ponsonby and Remuera. Walk-ins, Sunday hours, cancellation policies, parking, and nail services.";
+
+const SITE = 'https://www.tokoya.co.nz';
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: f.a,
+    },
+  })),
+};
+---
+
+<BaseLayout title={title} description={description} schema={schema}>
+
+  <!-- Hero -->
+  <section class="faq-hero">
+    <div class="faq-hero__bg" style="background-image: url('/images/hero/hero-station.png');"></div>
+    <div class="faq-hero__overlay"></div>
+    <div class="wrap faq-hero__content">
+      <span class="label">Answers &middot; What To Expect</span>
+      <h1 class="display faq-hero__title">Frequently Asked Questions</h1>
+      <p class="lede faq-hero__lede">
+        Everything you need to know about our chairs, appointments, locations, and grooming discipline before your visit.
+      </p>
+    </div>
+  </section>
+
+  <!-- FAQ Accordion List -->
+  <section class="section on-deep">
+    <div class="wrap">
+      <div class="faq-layout">
+        <div class="faq-main">
+          <SectionHead label="Common Enquiries" title="Everything You Need To Know" />
+
+          <div class="faq-accordion-group">
+            {faqs.map((faq, index) => (
+              <details class="faq-item" open={index === 0}>
+                <summary class="faq-item__question">
+                  <span class="faq-q-text">{faq.q}</span>
+                  <span class="faq-toggle-icon" aria-hidden="true">+</span>
+                </summary>
+                <div class="faq-item__answer">
+                  <p>{faq.a}</p>
+                </div>
+              </details>
+            ))}
+          </div>
+        </div>
+
+        <!-- Sidebar Callout -->
+        <aside class="faq-sidebar">
+          <div class="faq-cta-box">
+            <h3 class="display cta-box-title">Still Have Questions?</h3>
+            <p class="cta-box-desc">
+              Feel free to call our shops directly or visit our contact page to message our management team.
+            </p>
+            <div class="cta-box-contacts">
+              <div class="cta-contact-row">
+                <strong>Ponsonby Shop:</strong>
+                <a href="tel:+6493784477">09 378 4477</a>
+              </div>
+              <div class="cta-contact-row">
+                <strong>Remuera Salon:</strong>
+                <a href="tel:+64266843107">026 684 3107</a>
+              </div>
+            </div>
+            <div class="cta-box-buttons">
+              <BookingButton location={ponsonby} placement="card" block />
+              <BookingButton location={remuera} placement="card" block variant="ghost" />
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  .faq-hero {
+    position: relative;
+    padding-block: var(--s-9) var(--s-8);
+    overflow: hidden;
+    min-height: 48vh;
+    display: flex;
+    align-items: center;
+  }
+  .faq-hero__bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+  }
+  .faq-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(8, 7, 6, 0.95) 0%, rgba(14, 12, 10, 0.88) 50%, rgba(8, 7, 6, 0.72) 100%);
+    z-index: 2;
+  }
+  .faq-hero__content {
+    position: relative;
+    z-index: 3;
+    max-width: var(--max);
+  }
+  .faq-hero__title {
+    font-size: var(--step-4);
+    margin-top: var(--s-2);
+    margin-bottom: var(--s-4);
+  }
+  .faq-hero__lede {
+    max-width: 52ch;
+  }
+
+  .faq-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: var(--s-7);
+    align-items: start;
+    margin-top: var(--s-6);
+  }
+  @media (max-width: 56rem) {
+    .faq-layout { grid-template-columns: 1fr; }
+  }
+
+  /* Accordions */
+  .faq-accordion-group {
+    display: grid;
+    gap: var(--s-4);
+    margin-top: var(--s-5);
+  }
+  .faq-item {
+    background: var(--ink-card);
+    border: 1px solid var(--ink-card-border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 150ms ease;
+  }
+  .faq-item[open] {
+    border-color: var(--bronze-gold);
+  }
+  .faq-item__question {
+    padding: var(--s-5);
+    cursor: pointer;
+    font-size: var(--step-0);
+    font-weight: 600;
+    color: var(--paper);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--s-3);
+    list-style: none;
+    user-select: none;
+  }
+  .faq-item__question::-webkit-details-marker {
+    display: none;
+  }
+  .faq-toggle-icon {
+    font-size: 1.5rem;
+    color: var(--bronze-bright);
+    transition: transform 180ms ease;
+    flex: none;
+    line-height: 1;
+  }
+  .faq-item[open] .faq-toggle-icon {
+    transform: rotate(45deg);
+  }
+  .faq-item__answer {
+    padding: 0 var(--s-5) var(--s-5);
+    font-size: var(--step--1);
+    line-height: 1.65;
+    color: rgba(250, 247, 242, 0.8);
+    border-top: 1px solid rgba(201, 169, 135, 0.1);
+    margin-top: 0.25rem;
+    padding-top: var(--s-4);
+  }
+
+  /* Sidebar */
+  .faq-cta-box {
+    background: var(--ink-card);
+    border: 1px solid rgba(201, 169, 135, 0.35);
+    border-radius: 8px;
+    padding: var(--s-6);
+    box-shadow: var(--shadow-md);
+  }
+  .cta-box-title {
+    font-size: var(--step-2);
+    margin-bottom: 0.25rem;
+  }
+  .cta-box-desc {
+    font-size: var(--step--1);
+    color: rgba(250, 247, 242, 0.7);
+    line-height: 1.5;
+    margin-bottom: var(--s-5);
+  }
+  .cta-box-contacts {
+    background: var(--ink-surface);
+    border: 1px solid var(--ink-card-border);
+    border-radius: 6px;
+    padding: var(--s-4);
+    display: grid;
+    gap: var(--s-3);
+    margin-bottom: var(--s-5);
+  }
+  .cta-contact-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--step--1);
+  }
+  .cta-contact-row a {
+    color: var(--bronze-gold);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .cta-box-buttons {
+    display: grid;
+    gap: var(--s-3);
+  }
+</style>

@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout
+  title="Page not found | Tokoya Barber & Shop"
+  description="That page does not exist. Find the Ponsonby and Remuera shops, prices and booking here."
+  noindex
+>
+  <section class="section nf">
+    <div class="wrap">
+      <p class="label">404</p>
+      <h1 class="display h2">That page has moved on</h1>
+      <p class="lede">The old site had a lot of pages that were never really ours. This was probably one of them.</p>
+      <p class="nf__links">
+        <a class="btn" href="/ponsonby/">Ponsonby</a>
+        <a class="btn" href="/remuera/">Remuera</a>
+        <a class="btn btn--ghost" href="/prices/">Prices</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .nf { padding-block: var(--s-9); }
+  .nf > .wrap > * + * { margin-top: var(--s-4); }
+  .nf__links { display: flex; gap: var(--s-3); flex-wrap: wrap; max-width: none; margin-top: var(--s-6); }
+</style>

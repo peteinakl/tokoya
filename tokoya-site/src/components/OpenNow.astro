@@ -1,0 +1,36 @@
+---
+/**
+ * Renders the open/closed state server-side so it is correct without
+ * JavaScript, then refreshes it on the client so a cached page does not
+ * show a stale state. All logic lives in lib/hours.ts.
+ */
+import { openState, type HoursEntry } from '../lib/hours';
+interface Props { hours: HoursEntry[]; }
+const { hours } = Astro.props;
+const state = openState(hours);
+---
+<div class="now-badge" data-open-now data-hours={JSON.stringify(hours)}>
+  <span class:list={['pulse-dot', state.open ? 'is-open' : 'is-closed']} aria-hidden="true"></span>
+  <span data-open-label class="now-label">{state.label}</span>
+</div>
+
+<style>
+  .now-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.75rem;
+    background: rgba(20, 16, 12, 0.7);
+    border: 1px solid rgba(201, 169, 135, 0.2);
+    border-radius: 9999px;
+    backdrop-filter: blur(8px);
+    width: fit-content;
+  }
+  .now-label {
+    font-weight: 600;
+    font-size: var(--step--1);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--paper);
+  }
+</style>

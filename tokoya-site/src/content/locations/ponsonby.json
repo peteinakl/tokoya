@@ -1,0 +1,30 @@
+{
+  "slug": "ponsonby",
+  "name": "Tokoya Barber & Shop",
+  "shortName": "Ponsonby",
+  "tagline": "The original shop. Open seven days.",
+  "streetAddress": "279 Ponsonby Road",
+  "suburb": "Ponsonby",
+  "city": "Auckland",
+  "postalCode": "1011",
+  "country": "NZ",
+  "latitude": "-36.8484017",
+  "longitude": "174.7441078",
+  "telephone": "+6493784477",
+  "telephoneDisplay": "09 378 4477",
+  "email": "barber@tokoya.co.nz",
+  "bookingUrl": "https://apps.kitomba.com/bookings/toyokabarber",
+  "bookingProvider": "Kitomba",
+  "offersNails": false,
+  "serviceGroups": ["haircuts", "shaves", "waxing"],
+  "hours": [
+    { "day": "Monday",    "opens": "08:00", "closes": "17:00" },
+    { "day": "Tuesday",   "opens": "08:00", "closes": "17:00" },
+    { "day": "Wednesday", "opens": "08:00", "closes": "17:00" },
+    { "day": "Thursday",  "opens": "08:00", "closes": "18:00" },
+    { "day": "Friday",    "opens": "08:00", "closes": "18:00" },
+    { "day": "Saturday",  "opens": "08:00", "closes": "16:00" },
+    { "day": "Sunday",    "opens": "09:00", "closes": "16:00" }
+  ],
+  "gettingHere": null
+}
