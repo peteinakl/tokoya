@@ -23,24 +23,32 @@ npm run build      # -> dist/
 npm run preview
 ```
 
-Node 20+. Deploy: connect the repo to Cloudflare Pages, build command
-`npm run build`, output directory `dist`.
+Node 20+. Deploy: connect GitHub repo `peteinakl/tokoya` to Cloudflare Pages:
+- **Framework preset**: `Astro`
+- **Root directory**: `tokoya-site`
+- **Build command**: `npm run build`
+- **Build output directory**: `dist`
 
 Environment: `PUBLIC_GA_ID` (GA4 measurement ID). The site builds and runs
 without it; analytics simply do not load.
 
 ## What is built
 
-Two golden pages, complete, which set the visual language for everything else:
+All core and supporting pages are complete with dark luxury styling and authentic photography:
 
-- `src/pages/index.astro` — home and shop chooser
+- `src/pages/index.astro` — home and dual shop chooser
 - `src/pages/[location].astro` — generates `/ponsonby/` and `/remuera/`
+- `src/pages/services/index.astro` — categorized grooming menu
+- `src/pages/services/[slug].astro` — 25 dedicated service detail pages
+- `src/pages/barbers/index.astro` — master craftsmen team roster
+- `src/pages/barbers/[slug].astro` — 6 individual barber profiles
+- `src/pages/about.astro` — brand heritage, Kaisei Sarai founding, meaning of 床屋
+- `src/pages/contact.astro` — shop contacts, hours, transit/parking, interactive maps, cancellation terms
 - `src/pages/prices.astro` — the canonical price board
-- `src/pages/404.astro`
-
-Still to build: `/services/`, `/services/[slug]/`, `/barbers/`,
-`/barbers/[slug]/`, `/about/`, `/products/`, `/gallery/`, `/faq/`, `/contact/`,
-`/privacy/`. Extend the golden pages. Do not start a second visual language.
+- `src/pages/products.astro` — official stockists (Layrite, Uppercut, Proraso, Formidable)
+- `src/pages/gallery.astro` — visual craft portfolio
+- `src/pages/faq.astro` — comprehensive FAQ accordion
+- `src/pages/404.astro` — friendly navigation hub for lost visitors
 
 ## Rules that are not negotiable
 
