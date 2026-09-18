@@ -46,6 +46,8 @@ const label = bookingLabel(d.shortName, service);
 <a
   class:list={['btn', variant === 'ghost' && 'btn--ghost', block && 'btn--block']}
   href={href}
+  target="_blank"
+  rel="noopener noreferrer"
   data-booking
   data-location={d.slug}
   data-provider={d.bookingProvider.toLowerCase()}

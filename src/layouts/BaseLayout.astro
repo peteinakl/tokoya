@@ -92,7 +92,41 @@ const GA_ID = import.meta.env.PUBLIC_GA_ID ?? '';
       if (typeof g === 'function') g('event', name, params);
     };
 
+    /**
+     * Enforce that all offsite / external links open in a new window/tab safely.
+     */
+    const setOffsiteLinks = () => {
+      document.querySelectorAll<HTMLAnchorElement>('a[href]').forEach((a) => {
+        const href = a.getAttribute('href');
+        if (!href) return;
+        if (href.startsWith('http://') || href.startsWith('https://')) {
+          try {
+            const url = new URL(href, window.location.href);
+            if (url.origin !== window.location.origin) {
+              a.setAttribute('target', '_blank');
+              a.setAttribute('rel', 'noopener noreferrer');
+            }
+          } catch { /* ignore */ }
+        }
+      });
+    };
+    setOffsiteLinks();
+
     document.addEventListener('click', (e) => {
+      const anchor = (e.target as HTMLElement | null)?.closest<HTMLAnchorElement>('a[href]');
+      if (anchor) {
+        const href = anchor.getAttribute('href');
+        if (href && (href.startsWith('http://') || href.startsWith('https://'))) {
+          try {
+            const url = new URL(href, window.location.href);
+            if (url.origin !== window.location.origin) {
+              anchor.setAttribute('target', '_blank');
+              anchor.setAttribute('rel', 'noopener noreferrer');
+            }
+          } catch { /* ignore */ }
+        }
+      }
+
       const t = (e.target as HTMLElement | null)?.closest<HTMLElement>(
         '[data-booking], [data-phone], [data-directions], a[href^="mailto:"]'
       );

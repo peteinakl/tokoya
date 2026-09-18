@@ -37,7 +37,7 @@ const appleMapsUrl = `https://maps.apple.com/?q=${encodeURIComponent(query)}&ll=
   </div>
 
   <div class="map-links-bar">
-    <a href={googleMapsUrl} target="_blank" rel="noopener" class="map-nav-link">
+    <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" class="map-nav-link">
       <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
         <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
         <circle cx="12" cy="9" r="2.5" />
@@ -45,7 +45,7 @@ const appleMapsUrl = `https://maps.apple.com/?q=${encodeURIComponent(query)}&ll=
       <span>Open in Google Maps</span> &nearr;
     </a>
     <span class="map-nav-divider" aria-hidden="true">&bull;</span>
-    <a href={appleMapsUrl} target="_blank" rel="noopener" class="map-nav-link">
+    <a href={appleMapsUrl} target="_blank" rel="noopener noreferrer" class="map-nav-link">
       <span>Apple Maps</span> &nearr;
     </a>
   </div>
