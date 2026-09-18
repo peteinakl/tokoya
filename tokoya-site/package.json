@@ -11,8 +11,11 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.2.1",
-    "@fontsource/anton": "^5.1.0",
     "@fontsource-variable/outfit": "^5.1.0",
+    "@fontsource/anton": "^5.1.0",
     "astro": "^5.1.1"
+  },
+  "devDependencies": {
+    "wrangler": "^4.134.0"
   }
 }
