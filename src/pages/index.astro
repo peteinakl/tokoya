@@ -33,7 +33,7 @@ const remuera = locations.find((l) => l.data.slug === 'remuera')!;
 const from = priceFrom(services.filter((s) => s.data.group === 'haircuts'));
 
 // Six services worth surfacing. The full list lives on /prices/.
-const featured = ['mens-haircut', 'skin-fade', 'hot-towel-shave', 'beard-trim', 'child-haircut', 'gel-manicure']
+const featured = ['mens-haircut', 'skin-fade', 'hot-towel-shave', 'beard-trim', 'child-haircut', 'buzz-cut']
   .map((slug) => services.find((s) => s.slug === slug))
   .filter(Boolean) as typeof services;
 
@@ -323,16 +323,13 @@ const schema = [
               <span class="service-card__price font-anton">{formatPrice(s.data)}</span>
               <span class="service-card__dur num">{formatDuration(s.data)}</span>
             </div>
-            <h3 class="service-card__title">{s.data.title}</h3>
+            <h3 class="service-card__title">
+              <a href={`/services/${s.slug}/`} class="service-title-link">{s.data.title}</a>
+            </h3>
             <p class="service-card__sum">{s.data.summary || 'Expert grooming tailored to your style.'}</p>
             <div class="service-card__foot">
-              {s.data.locations.length === 1 && (
-                <span class="service-card__only">
-                  {s.data.locations[0] === 'remuera' ? 'Remuera only' : 'Ponsonby only'}
-                </span>
-              )}
-              <a class="service-card__book" href="/prices/">
-                View on Price Board &rarr;
+              <a class="service-card__book" href={`/services/${s.slug}/`}>
+                Service details &rarr;
               </a>
             </div>
           </li>
@@ -352,24 +349,6 @@ const schema = [
     </div>
   </section>
 
-  <!-- ==========================================================
-       CLIENT PRAISE / SOCIAL PROOF
-       ========================================================== -->
-  <section class="section on-deep" aria-label="Customer Reviews">
-    <div class="wrap">
-      <div class="review-box">
-        <div class="review-quote-mark">&ldquo;</div>
-        <p class="review-text">
-          Jojo and Kris are great! Love coming here for a haircut. So easy and relaxing.
-          I always enjoy coming back because they remember my cut and know how I like it.
-        </p>
-        <div class="review-author">
-          <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <p class="label">Verified Tokoya Client &middot; Auckland</p>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- ==========================================================
        BOTTOM CALL TO ACTION: Atmospheric Station Backdrop
@@ -753,6 +732,14 @@ const schema = [
     color: var(--paper);
     margin: 0;
   }
+  .service-title-link {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+  .service-title-link:hover {
+    color: var(--bronze-gold);
+  }
   .service-card__sum {
     font-size: var(--step--1);
     color: rgba(250, 247, 242, 0.7);
@@ -790,46 +777,6 @@ const schema = [
     text-align: center;
   }
 
-  /* ---- Review Box ---------------------------------------------------- */
-  .review-box {
-    background: var(--ink-card);
-    border: 1px solid var(--ink-card-border);
-    border-radius: 12px;
-    padding: var(--s-7);
-    text-align: center;
-    max-width: 48rem;
-    margin-inline: auto;
-    position: relative;
-    box-shadow: var(--shadow-lg);
-  }
-  .review-quote-mark {
-    font-family: var(--font-display);
-    font-size: 4rem;
-    line-height: 1;
-    color: var(--bronze-bright);
-    opacity: 0.35;
-    margin-bottom: -1rem;
-  }
-  .review-text {
-    font-size: var(--step-1);
-    line-height: 1.6;
-    color: var(--paper);
-    max-width: 42ch;
-    margin-inline: auto;
-    font-style: italic;
-  }
-  .review-author {
-    margin-top: var(--s-5);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.4rem;
-  }
-  .review-stars {
-    color: var(--bronze-gold);
-    letter-spacing: 0.2em;
-    font-size: 1.1rem;
-  }
 
   /* ---- Bottom CTA ---------------------------------------------------- */
   .bottom-cta {
