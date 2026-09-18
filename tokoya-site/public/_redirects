@@ -4,30 +4,39 @@
 /service/                          /services/                   301
 /product/                          /products/                   301
 /make-booking/                     /                            301
+/booking/                          /                            301
+/book/                             /                            301
+/book-now/                         /                            301
+/about-us/                         /about/                      301
+/contact-us/                       /contact/                    301
+/our-services/                     /services/                   301
 
+# --- Staff and Barbers -------------------------------------------------
+/team/                             /barbers/                    301
+/team/*                            /barbers/                    301
 /barbers/team-kris-torcato/        /barbers/kris-torcato/       301
 /barbers/team-jojo/                /barbers/jojo-parido/        301
 /barbers/team-kim/                 /barbers/kim-duong/          301
 /barbers/team-james/               /barbers/james/              301
 /barbers/team-etsuya-kidoguchi/    /barbers/etsuya-kidoguchi/   301
 
+# --- Services ----------------------------------------------------------
 /services/haircut/                 /services/mens-haircut/      301
 /services/clipper-cut/             /services/mens-haircut/      301
 /services/face-shave/              /services/hot-towel-shave/   301
 /services/moustache-trim/          /services/beard-trim/        301
+/services/coloring/                /services/                   301
+/services/hair-dryer/              /services/                   301
+/services/hair-washing/            /services/                   301
+/services/facial-massage/          /services/                   301
 
-# --- Never real content. Gone, not moved. ------------------------------
-/team/*                            /404                         410
-/services/coloring/                /404                         410
-/services/hair-dryer/              /404                         410
-/services/hair-washing/            /404                         410
-/services/facial-massage/          /404                         410
-/hello-world/                      /404                         410
-/best-tips-for-groom-shaving-for-your-wedding/            /404  410
-/what-are-the-secrets-of-the-haircut-moustache-trim/      /404  410
-/5-most-iconic-mens-hairstyles-of-all-times/              /404  410
-/common-mistakes-that-damage-your-beard/                  /404  410
-/womens-hair-care-routine-for-any-hair-type/              /404  410
-/what-we-need-to-choose-the-fashion-model/                /404  410
-/category/*                        /404                         410
-/author/*                          /404                         410
+# --- Legacy Blog & Demo Content -> mapped to genuine content ----------
+/hello-world/                                            /                       301
+/best-tips-for-groom-shaving-for-your-wedding/          /services/hot-towel-shave/ 301
+/what-are-the-secrets-of-the-haircut-moustache-trim/    /services/beard-trim/   301
+/5-most-iconic-mens-hairstyles-of-all-times/            /services/              301
+/common-mistakes-that-damage-your-beard/                /services/beard-trim/   301
+/womens-hair-care-routine-for-any-hair-type/            /remuera/               301
+/what-we-need-to-choose-the-fashion-model/              /gallery/               301
+/category/*                                              /services/              301
+/author/*                                                /about/                 301

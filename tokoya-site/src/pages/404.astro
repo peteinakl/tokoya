@@ -1,27 +1,168 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHead from '../components/SectionHead.astro';
 ---
+
 <BaseLayout
-  title="Page not found | Tokoya Barber & Shop"
-  description="That page does not exist. Find the Ponsonby and Remuera shops, prices and booking here."
+  title="Page Not Found | Tokoya Barber & Shop"
+  description="The requested page could not be found. Explore Tokoya Barber & Shop in Ponsonby and Remuera, our grooming services, and online booking."
   noindex
 >
-  <section class="section nf">
-    <div class="wrap">
-      <p class="label">404</p>
-      <h1 class="display h2">That page has moved on</h1>
-      <p class="lede">The old site had a lot of pages that were never really ours. This was probably one of them.</p>
-      <p class="nf__links">
-        <a class="btn" href="/ponsonby/">Ponsonby</a>
-        <a class="btn" href="/remuera/">Remuera</a>
-        <a class="btn btn--ghost" href="/prices/">Prices</a>
+  <section class="error-hero">
+    <div class="error-hero__bg" style="background-image: url('/images/hero/hero-station.png');"></div>
+    <div class="error-hero__overlay"></div>
+    <div class="wrap error-hero__content">
+      <span class="label">Error 404 &middot; Tokoya Auckland</span>
+      <h1 class="display error-hero__title">Page Not Found</h1>
+      <p class="lede error-hero__lede">
+        The link you followed is no longer active, but our Auckland chairs are open and running on time.
+        Here are the most popular destinations to get you where you need to go.
       </p>
+    </div>
+  </section>
+
+  <section class="section on-deep">
+    <div class="wrap">
+      <SectionHead label="Quick Navigation" title="Where Would You Like To Go?" />
+
+      <div class="destinations-grid">
+        <a href="/ponsonby/" class="dest-card">
+          <span class="dest-badge">Shop</span>
+          <h2 class="display dest-title">Ponsonby Shop</h2>
+          <p class="dest-desc">279 Ponsonby Road &middot; Open 7 days &middot; Haircuts from $30, fades $55, hot towel shaves.</p>
+          <span class="dest-arrow">Visit Ponsonby &rarr;</span>
+        </a>
+
+        <a href="/remuera/" class="dest-card">
+          <span class="dest-badge">Salon</span>
+          <h2 class="display dest-title">Remuera Salon</h2>
+          <p class="dest-desc">352 Remuera Road &middot; Wed–Sun &middot; Barbering and dedicated nail care salon.</p>
+          <span class="dest-arrow">Visit Remuera &rarr;</span>
+        </a>
+
+        <a href="/services/" class="dest-card">
+          <span class="dest-badge">Menu</span>
+          <h2 class="display dest-title">Grooming Services</h2>
+          <p class="dest-desc">Explore haircuts, beard trims, hot towel shaves, waxing, and nail treatments.</p>
+          <span class="dest-arrow">Browse Services &rarr;</span>
+        </a>
+
+        <a href="/prices/" class="dest-card">
+          <span class="dest-badge">Pricing</span>
+          <h2 class="display dest-title">Complete Price List</h2>
+          <p class="dest-desc">Transparent pricing and exact chair durations across both Auckland locations.</p>
+          <span class="dest-arrow">View Prices &rarr;</span>
+        </a>
+
+        <a href="/barbers/" class="dest-card">
+          <span class="dest-badge">Craftsmen</span>
+          <h2 class="display dest-title">Meet The Barbers</h2>
+          <p class="dest-desc">Decades of international experience behind the shears from Japan, Korea, and NZ.</p>
+          <span class="dest-arrow">View Team &rarr;</span>
+        </a>
+
+        <a href="/contact/" class="dest-card">
+          <span class="dest-badge">Get In Touch</span>
+          <h2 class="display dest-title">Contact &amp; Hours</h2>
+          <p class="dest-desc">Shop schedules, phone numbers, parking directions, and enquiry form.</p>
+          <span class="dest-arrow">Contact Tokoya &rarr;</span>
+        </a>
+      </div>
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .nf { padding-block: var(--s-9); }
-  .nf > .wrap > * + * { margin-top: var(--s-4); }
-  .nf__links { display: flex; gap: var(--s-3); flex-wrap: wrap; max-width: none; margin-top: var(--s-6); }
+  .error-hero {
+    position: relative;
+    padding-block: var(--s-9) var(--s-8);
+    overflow: hidden;
+    min-height: 44vh;
+    display: flex;
+    align-items: center;
+  }
+  .error-hero__bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+  }
+  .error-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(8, 7, 6, 0.95) 0%, rgba(14, 12, 10, 0.88) 50%, rgba(8, 7, 6, 0.72) 100%);
+    z-index: 2;
+  }
+  .error-hero__content {
+    position: relative;
+    z-index: 3;
+    max-width: var(--max);
+  }
+  .error-hero__title {
+    font-size: var(--step-4);
+    margin-top: var(--s-2);
+    margin-bottom: var(--s-4);
+  }
+  .error-hero__lede {
+    max-width: 52ch;
+  }
+
+  .destinations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    gap: var(--s-5);
+    margin-top: var(--s-6);
+  }
+  .dest-card {
+    background: var(--ink-card);
+    border: 1px solid var(--ink-card-border);
+    border-radius: 8px;
+    padding: var(--s-5);
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--s-3);
+    transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    box-shadow: var(--shadow-sm);
+  }
+  .dest-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--bronze-gold);
+    box-shadow: var(--shadow-md);
+  }
+  .dest-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--bronze-bright);
+    background: rgba(201, 169, 135, 0.12);
+    border: 1px solid rgba(201, 169, 135, 0.25);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    align-self: flex-start;
+  }
+  .dest-title {
+    font-size: var(--step-1);
+    color: var(--paper);
+    line-height: 1.1;
+  }
+  .dest-desc {
+    font-size: var(--step--1);
+    color: rgba(250, 247, 242, 0.7);
+    line-height: 1.5;
+    flex-grow: 1;
+  }
+  .dest-arrow {
+    font-size: var(--step--1);
+    color: var(--bronze-gold);
+    font-weight: 600;
+    padding-top: var(--s-2);
+    border-top: 1px solid rgba(201, 169, 135, 0.1);
+  }
+  .dest-card:hover .dest-arrow {
+    color: var(--bronze-bright);
+  }
 </style>
