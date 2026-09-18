@@ -4,7 +4,7 @@
  * Both shops book through a third-party system. The conversion boundary is
  * the click, so two rules hold everywhere:
  *   1. A booking control always names its shop. Never a bare "Book Now".
- *   2. Carry intent across the boundary — deep-link the service and, where
+ *   2. Carry intent across the boundary: deep-link the service and, where
  *      supported, the barber, so the visitor does not re-choose.
  *
  * The deep-link identifiers are NOT KNOWN. See OPEN-QUESTIONS.md Q9.

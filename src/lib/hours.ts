@@ -92,7 +92,7 @@ export function toSchema(hours: HoursEntry[]) {
   });
 }
 
-/** "Open seven days" / "Wednesday to Sunday" — for meta descriptions and copy. */
+/** "Open seven days" / "Wednesday to Sunday", for meta descriptions and copy. */
 export function openDaysSummary(hours: HoursEntry[]): string {
   const open = hours.filter((h) => !h.closed);
   if (open.length === 7) return 'Open seven days';

@@ -1,7 +1,7 @@
 /**
  * Event names and parameter shapes.
  *
- * The reference site has NO analytics of any kind — no GA4, no GTM, no pixel.
+ * The reference site has NO analytics of any kind: no GA4, no GTM, no pixel.
  * Nobody currently knows how many people reach either booking system.
  * `booking_click` is the primary conversion. Mark it as such in GA4.
  */
