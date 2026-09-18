@@ -156,19 +156,30 @@ const GA_ID = import.meta.env.PUBLIC_GA_ID ?? '';
      * Refresh the open/closed state client-side. The server rendered it at
      * build time, so on a cached page it can be hours stale.
      */
-    import('../lib/hours').then(({ openState }) => {
-      document.querySelectorAll<HTMLElement>('[data-open-now]').forEach((el) => {
-        try {
-          const hours = JSON.parse(el.dataset.hours ?? '[]');
-          const state = openState(hours);
-          const label = el.querySelector('[data-open-label]');
-          if (label) label.textContent = state.label;
-          const dot = el.querySelector('.now__dot');
-          dot?.classList.toggle('is-open', state.open);
-          dot?.classList.toggle('is-closed', !state.open);
-        } catch { /* leave the server-rendered state in place */ }
+    const updateOpenStatuses = () => {
+      import('../lib/hours').then(({ openState }) => {
+        document.querySelectorAll<HTMLElement>('[data-open-now]').forEach((el) => {
+          try {
+            const hours = JSON.parse(el.dataset.hours ?? '[]');
+            const state = openState(hours);
+            const label = el.querySelector<HTMLElement>('[data-open-label]');
+            if (label) label.textContent = state.label;
+            const dot = el.querySelector<HTMLElement>('[data-open-dot], .pulse-dot, .now__dot');
+            if (dot) {
+              if (state.open) {
+                dot.classList.remove('is-closed');
+                dot.classList.add('is-open');
+              } else {
+                dot.classList.remove('is-open');
+                dot.classList.add('is-closed');
+              }
+            }
+          } catch { /* leave the server-rendered state in place */ }
+        });
       });
-    });
+    };
+    updateOpenStatuses();
+    setInterval(updateOpenStatuses, 30000);
   </script>
 </body>
 </html>

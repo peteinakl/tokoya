@@ -10,7 +10,7 @@ const { hours } = Astro.props;
 const state = openState(hours);
 ---
 <div class="now-badge" data-open-now data-hours={JSON.stringify(hours)}>
-  <span class:list={['pulse-dot', state.open ? 'is-open' : 'is-closed']} aria-hidden="true"></span>
+  <span data-open-dot class:list={['pulse-dot', state.open ? 'is-open' : 'is-closed']} aria-hidden="true"></span>
   <span data-open-label class="now-label">{state.label}</span>
 </div>
 
