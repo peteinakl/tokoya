@@ -3,3 +3,6 @@ Allow: /
 Disallow: /api/
 
 Sitemap: https://www.tokoya.co.nz/sitemap-index.xml
+# LLMs.txt for AI Search & Answer Engine Optimization
+# https://llmstxt.org/
+# https://www.tokoya.co.nz/llms.txt

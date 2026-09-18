@@ -45,6 +45,7 @@ const GA_ID = import.meta.env.PUBLIC_GA_ID ?? '';
   <meta name="theme-color" content="#14100C" />
   <link rel="icon" href="/brand/mark-120.png" type="image/png" />
   <link rel="apple-touch-icon" href="/brand/mark-240.png" />
+  <link rel="alternate" type="text/markdown" href="/llms.txt" title="LLMs.txt" />
 
   {blocks.map((b) => (
     <script type="application/ld+json" set:html={JSON.stringify(b)} />

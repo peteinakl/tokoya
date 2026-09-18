@@ -1,0 +1,98 @@
+# Tokoya Barber & Shop
+
+> Tokoya Barber & Shop (床屋) is an authentic Japanese-influenced barbershop and salon brand in Auckland, New Zealand. Founded in 2015 by master barber Kaisei Sarai and currently directed by Kaori Sasaki and Roshan Dsouza, Tokoya operates two central Auckland locations: a classic barbershop at 279 Ponsonby Road, Ponsonby, and a barbershop with a dedicated nail salon at 352 Remuera Road, Remuera.
+
+Tokoya unites traditional Japanese barbering discipline (meticulous hygiene, punctual chair reservations, hot towel rituals, straight-razor detailing) with contemporary Western hairdressing techniques. Services range from skin fades and classic scissor cuts to traditional hot towel shaves, beard sculpting, and full nail care.
+
+- Full LLM documentation and extended text corpus: https://www.tokoya.co.nz/llms-full.txt
+- Canonical Website: https://www.tokoya.co.nz/
+
+## Locations & Hours
+
+### Ponsonby Shop
+- Address: 279 Ponsonby Road, Ponsonby, Auckland 1011, New Zealand
+- Phone: +64 9 378 4477 (09 378 4477)
+- Email: contact@tokoya.co.nz
+- Schedule: Monday to Saturday 9:00 AM – 6:00 PM, Sunday 9:00 AM – 4:00 PM (Open 7 Days)
+- Booking Provider: Kitomba (online reservations recommended, walk-ins welcome when space permits)
+- URL: https://www.tokoya.co.nz/ponsonby/
+
+### Remuera Salon
+- Address: 352 Remuera Road, Remuera, Auckland 1050, New Zealand
+- Phone: +64 26 684 3107 (026 684 3107)
+- Email: remuera@tokoya.co.nz
+- Schedule: Wednesday to Saturday 9:00 AM – 6:00 PM, Sunday 9:00 AM – 4:00 PM (Closed Monday & Tuesday)
+- Features: Full master barbering plus a dedicated nail care salon for men and women
+- Booking Provider: Fresha (online reservations recommended, walk-ins welcome when space permits)
+- URL: https://www.tokoya.co.nz/remuera/
+
+## Core Services & Upfront Pricing (NZD, GST Inclusive)
+
+### Haircuts
+- Men's Haircut: $50 (30 min) – Standard scissor and clipper cut, perimeter outline tidy, styled with Layrite or Uppercut Deluxe. Available at Ponsonby and Remuera.
+- Skin Fade: $55 (45 min) – Zero-gap fade blended into skin using foil shavers and straight-razor detailing. Low, mid, or high fade heights. Available at Ponsonby and Remuera.
+- Buzz Cut: $30 (20 min) – Uniform clipper length with clean neck and hairline outline tidy. Available at Ponsonby and Remuera.
+- Child Haircut: $35 (30 min) – Patient, neat cut for young clients and school wear. Available at Ponsonby and Remuera.
+- Student / Senior Haircut: $45 (30 min) – Discounted rate for high school students and seniors 65+. Available at Ponsonby and Remuera.
+- Scissor Cut: $60 (45 min) – Dedicated shear work for medium to long hair. Available at Ponsonby and Remuera.
+
+### Shaves & Beard Sculpting
+- Hot Towel Shave: $65 (45 min) – Steamed eucalyptus towels, Proraso pre-shave cream, warm brush lather, straight-razor shave, cold compress, and aftershave massage. Available at Ponsonby and Remuera.
+- Beard Trim & Shave: $45 (30 min) – Beard shaping with clippers and shears, straight-razor cheek and neckline detailing, finished with Formidable botanical beard oil. Available at Ponsonby and Remuera.
+- Quick Beard Trim: $30 (20 min) – Length and perimeter tidy. Available at Ponsonby and Remuera.
+
+### Nail Salon (Exclusively at Remuera)
+- Gel Manicure: $65 (45 min) – Nail shaping, cuticle care, gel color application, hand massage. Available at Remuera only.
+- Gel Pedicure: $75 (45 min) – Foot soak, nail shaping, cuticle tidy, gel polish, foot massage. Available at Remuera only.
+- Builder Gel Overlay: $75 (60 min) – Strengthening structured gel layer over natural nails. Available at Remuera only.
+- Gel Extensions: $95 (75 min) – Full length extensions with gel overlay. Available at Remuera only.
+- Men's Manicure: $45 (30 min) – Natural nail grooming, cuticle tidy, and buff. Available at Remuera only.
+
+### Waxing (Exclusively at Remuera)
+- Eyebrow Wax: $25 (15 min)
+- Nose Wax: $20 (15 min)
+- Ear Wax: $20 (15 min)
+- Ear & Nose Wax Combo: $35 (20 min)
+- Facial Wax: $45 (30 min)
+
+## Master Craftsmen (Barbers Roster)
+
+- Kris Torcato: Over 20 years of barbering industry experience. Custom consultations and precision scissor craft. Works at Ponsonby and Remuera.
+- Jojo Parido: High-detail fades, sharp tapers, and scissor craft. Primary chair at Remuera.
+- Kim Duong: 8 years of master barbering in Vietnam. Fashion-forward styling and razor techniques. Works at Ponsonby.
+- Justin Park: Background as a tattoo artist in South Korea. Geometric precision, clean fading, and sharp line work. Works at Ponsonby and Remuera.
+- James: Ponsonby craftsman known for attentive consultations, taper fades, and classic gentlemen's cuts.
+- Etsuya Kidoguchi: Japanese barbering discipline, clean graduation, and restorative hot towel beard treatments. Works at Ponsonby.
+
+## Curated Grooming Brands Stocked
+
+Tokoya is an official stockist of imported professional grooming lines. All products applied in the chair are available for purchase at both shop counters:
+- Layrite Deluxe (USA): Original Pomade, Superhold Pomade, Cement Clay, Matte Cream.
+- Uppercut Deluxe (Australia): Matt Pomade, Monster Hold, Styling Powder, Deluxe Pomade.
+- Proraso Firenze (Italy): Eucalyptus and menthol pre-shave creams, refreshing shaving soaps, sandalwood aftershave balms, beard washes.
+- Formidable (New Zealand): Artisan matte sculpting paste, sea salt texturizing spray, organic botanical beard oil.
+
+## Appointment & Cancellation Terms
+
+- Punctuality: Each chair is reserved exclusively for one client at a time; appointments start promptly at the scheduled time.
+- Booking Channels: Kitomba for Ponsonby; Fresha for Remuera.
+- Cancellation Policy: Cancellations within 90 minutes of the appointment incur a 50% fee. Unnotified no-shows incur a 100% fee. More than two no-shows results in suspension of future online booking privileges.
+
+## Brand Identity & Meaning
+
+- 床屋 (Tokoya): Traditional Japanese noun for "barbershop", honoring the concept of grooming as a calm, respected ritual.
+- Trademarked Emblem: Original line-art illustration designed and trademarked by artist Anna Doria, featuring a barber shaving a seated client inside a circular crest, supported by thinning shears bearing handwritten script and the kanji 床屋.
+
+## Key Links
+
+- [Homepage](https://www.tokoya.co.nz/): Overview, shop selection, and service highlights.
+- [Ponsonby Shop](https://www.tokoya.co.nz/ponsonby/): Ponsonby location details, opening hours, and Kitomba booking.
+- [Remuera Salon](https://www.tokoya.co.nz/remuera/): Remuera location details, nail care information, and Fresha booking.
+- [Price Board](https://www.tokoya.co.nz/prices/): Complete price list and durations for all haircut, shave, waxing, and nail treatments.
+- [Grooming Menu](https://www.tokoya.co.nz/services/): Full service menu with details on techniques and in-chair products.
+- [Barbers](https://www.tokoya.co.nz/barbers/): Team roster and individual craftsman bios.
+- [Products Stocked](https://www.tokoya.co.nz/products/): Official stockist catalogue for Layrite, Uppercut, Proraso, and Formidable.
+- [About & Heritage](https://www.tokoya.co.nz/about/): Story of Kaisei Sarai, Kaori Sasaki, Roshan Dsouza, the meaning of 床屋, and Anna Doria's trademarked logo design.
+- [Frequently Asked Questions](https://www.tokoya.co.nz/faq/): Answers to common client questions on walk-ins, Sunday hours, and cancellation terms.
+- [Contact](https://www.tokoya.co.nz/contact/): Addresses, phone numbers, emails, and direct contact forms.
+- [Full Text for LLMs](https://www.tokoya.co.nz/llms-full.txt): Comprehensive text corpus for deep LLM retrieval.

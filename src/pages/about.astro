@@ -77,7 +77,40 @@ const description = "The story of Tokoya Barber & Shop. Founded in 2015 by Kaise
     </div>
   </section>
 
-  <!-- Section 3: Multicultural Craft & Team -->
+  <!-- Section 3: The Trademarked Emblem -->
+  <section class="section on-sunk" aria-labelledby="emblem-head">
+    <div class="wrap">
+      <div class="about-grid about-grid--reverse">
+        <div class="about-copy">
+          <SectionHead label="The Insignia" title="The Trademarked Emblem" id="emblem-head" />
+          <div class="story-text">
+            <p class="lede">
+              A visual dialogue between ancient artisanal heritage and modern refinement, designed and trademarked by artist <strong>Anna Doria</strong>.
+            </p>
+            <p>
+              Anna Doria’s artistic signature is woven into every line of the Tokoya emblem. At its heart is an intricate circular illustration depicting a barber shaving a seated client, grounded by thinning shears that carry a handwritten &ldquo;Tokoya&rdquo; script alongside the traditional kanji <strong>床屋</strong>.
+            </p>
+            <p>
+              The design bridges minimalist geometry with vintage barbering motifs, pairing distressed woodblock aesthetics with sleek contemporary lines. What sets this trademarked mark apart is its quiet dual identity: at once a modern insignia of a premier grooming sanctuary and an enduring tribute to East Asian craft. Doria’s emblem represents more than a business: it encapsulates a philosophy where self-care is treated as an art form, and timeless discipline is always in style.
+            </p>
+          </div>
+        </div>
+
+        <div class="emblem-card">
+          <div class="emblem-card__inner">
+            <img src="/brand/mark-240.png" alt="Tokoya trademarked emblem designed by Anna Doria" width="240" height="240" loading="lazy" />
+            <div class="emblem-card__meta">
+              <span class="label">Trademarked Artwork</span>
+              <p class="emblem-card__artist">Design by Anna Doria</p>
+              <p class="emblem-card__desc">Circular barbering crest with Japanese calligraphy &amp; thinning shears</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Multicultural Craft & Team -->
   <section class="section on-deep">
     <div class="wrap">
       <div class="about-grid about-grid--reverse">
@@ -255,12 +288,58 @@ const description = "The story of Tokoya Barber & Shop. Founded in 2015 by Kaise
     margin-bottom: var(--s-3);
   }
 
+  .emblem-card {
+    background: var(--ink-card);
+    border: 1px solid var(--ink-card-border);
+    border-radius: 12px;
+    padding: var(--s-7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+  }
+  .emblem-card__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--s-4);
+  }
+  .emblem-card img {
+    width: 170px;
+    height: auto;
+    filter: invert(1) brightness(1.1);
+    transition: transform 300ms ease;
+  }
+  .emblem-card:hover img {
+    transform: scale(1.04);
+  }
+  .emblem-card__meta .label {
+    display: block;
+    color: var(--bronze-gold);
+    margin-bottom: 0.25rem;
+  }
+  .emblem-card__artist {
+    font-size: var(--step-0);
+    font-weight: 600;
+    color: var(--paper);
+    margin: 0 0 0.25rem;
+  }
+  .emblem-card__desc {
+    font-size: var(--step--1);
+    color: rgba(250, 247, 242, 0.65);
+    margin: 0;
+    max-width: 28ch;
+    line-height: 1.4;
+  }
+
   @media (max-width: 52rem) {
     .about-grid, .about-grid--reverse {
       grid-template-columns: 1fr;
     }
     .about-grid--reverse .about-copy { order: 1; }
-    .about-grid--reverse .about-image-card { order: 2; }
+    .about-grid--reverse .about-image-card,
+    .about-grid--reverse .emblem-card { order: 2; }
     .kanji-banner {
       grid-template-columns: 1fr;
       text-align: center;
