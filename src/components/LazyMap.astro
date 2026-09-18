@@ -13,8 +13,8 @@ const isRemuera = query.toLowerCase().includes('remuera') || label.toLowerCase()
 const latitude = lat ? Number(lat) : (isRemuera ? -36.8804962 : -36.8484017);
 const longitude = lon ? Number(lon) : (isRemuera ? 174.7974230 : 174.7441078);
 
-const deltaLon = 0.005;
-const deltaLat = 0.0035;
+const deltaLon = 0.0022;
+const deltaLat = 0.0016;
 const minLon = (longitude - deltaLon).toFixed(4);
 const minLat = (latitude - deltaLat).toFixed(4);
 const maxLon = (longitude + deltaLon).toFixed(4);
@@ -26,7 +26,7 @@ const appleMapsUrl = `https://maps.apple.com/?q=${encodeURIComponent(query)}&ll=
 ---
 
 <div class="map-wrapper">
-  <div class="map-frame-box">
+  <div class="map-frame-box" data-map-box>
     <iframe
       src={embedSrc}
       loading="lazy"
@@ -34,6 +34,15 @@ const appleMapsUrl = `https://maps.apple.com/?q=${encodeURIComponent(query)}&ll=
       class="map-iframe"
       referrerpolicy="no-referrer-when-downgrade"
     ></iframe>
+    <div class="map-shield" data-map-shield role="button" tabindex="0" aria-label="Click to interact with map">
+      <span class="map-shield-hint">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
+          <circle cx="12" cy="9" r="2.5" />
+        </svg>
+        <span>Click to explore map</span>
+      </span>
+    </div>
   </div>
 
   <div class="map-links-bar">
@@ -63,15 +72,60 @@ const appleMapsUrl = `https://maps.apple.com/?q=${encodeURIComponent(query)}&ll=
   .map-frame-box {
     aspect-ratio: 16 / 10;
     width: 100%;
-    min-height: 220px;
+    min-height: 240px;
     background: #e5e3df;
     position: relative;
+    overflow: hidden;
   }
   .map-iframe {
     width: 100%;
     height: 100%;
     border: 0;
     display: block;
+    pointer-events: none;
+  }
+  .map-frame-box.is-active .map-iframe {
+    pointer-events: auto;
+  }
+  .map-shield {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: transparent;
+    z-index: 2;
+    touch-action: pan-y;
+    transition: background-color 150ms ease;
+  }
+  .map-frame-box.is-active .map-shield {
+    display: none;
+  }
+  .map-shield-hint {
+    background: rgba(14, 12, 10, 0.9);
+    color: var(--paper, #faf7f2);
+    border: 1px solid var(--bronze-gold, #c9a987);
+    border-radius: 999px;
+    padding: 0.45rem 1rem;
+    font-size: var(--step--1, 0.85rem);
+    font-weight: 500;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 200ms ease, transform 200ms ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    user-select: none;
+  }
+  .map-shield:hover {
+    background: rgba(0, 0, 0, 0.08);
+  }
+  .map-shield:hover .map-shield-hint,
+  .map-shield:focus-visible .map-shield-hint {
+    opacity: 1;
+    transform: translateY(0);
   }
   .map-links-bar {
     display: flex;
@@ -101,3 +155,31 @@ const appleMapsUrl = `https://maps.apple.com/?q=${encodeURIComponent(query)}&ll=
     color: rgba(250, 247, 242, 0.3);
   }
 </style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-map-box]').forEach((box) => {
+    const shield = box.querySelector<HTMLElement>('[data-map-shield]');
+    if (!shield) return;
+
+    shield.addEventListener('click', () => {
+      box.classList.add('is-active');
+    });
+
+    shield.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        box.classList.add('is-active');
+      }
+    });
+
+    box.addEventListener('mouseleave', () => {
+      box.classList.remove('is-active');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!box.contains(e.target as Node)) {
+        box.classList.remove('is-active');
+      }
+    });
+  });
+</script>

@@ -286,26 +286,38 @@ const schema = [
       <ul class="barber-grid">
         {team.map((t) => (
           <li class="barber-card">
-            <div class="barber-card__photo">
-              {t.data.image ? (
-                <img src={t.data.image} width="340" height="420" alt={`${t.data.name}, barber at Tokoya`} loading="lazy" />
-              ) : (
-                <div class="barber-card__placeholder">{t.data.name.charAt(0)}</div>
-              )}
-              <div class="barber-card__gradient"></div>
-              <div class="barber-card__tags">
-                {t.data.locations.map((loc) => (
-                  <span class="barber-location-tag">{loc === 'ponsonby' ? 'Ponsonby' : 'Remuera'}</span>
-                ))}
+            <a href={`/barbers/${t.slug}/`} class="barber-card__link" aria-label={`View profile and book chair with ${t.data.name}`}>
+              <div class="barber-card__photo">
+                {t.data.image ? (
+                  <img src={t.data.image} width="340" height="420" alt={`${t.data.name}, barber at Tokoya`} loading="lazy" />
+                ) : (
+                  <div class="barber-card__placeholder">{t.data.name.charAt(0)}</div>
+                )}
+                <div class="barber-card__gradient"></div>
+                <div class="barber-card__tags">
+                  {t.data.locations.map((loc) => (
+                    <span class="barber-location-tag">{loc === 'ponsonby' ? 'Ponsonby' : 'Remuera'}</span>
+                  ))}
+                </div>
               </div>
-            </div>
-            <div class="barber-card__meta">
-              <h3 class="barber-name">{t.data.name}</h3>
-              <p class="barber-role">{t.data.title}</p>
-            </div>
+              <div class="barber-card__meta">
+                <h3 class="barber-name">{t.data.name}</h3>
+                <p class="barber-role">{t.data.title}</p>
+                <div class="barber-card__action">
+                  <span>View Profile &amp; Book</span>
+                  <span class="barber-action-arrow" aria-hidden="true">&rarr;</span>
+                </div>
+              </div>
+            </a>
           </li>
         ))}
       </ul>
+
+      <div class="team-more-action">
+        <a href="/barbers/" class="btn btn--ghost">
+          <span>Meet All Craftsmen</span> &rarr;
+        </a>
+      </div>
     </div>
   </section>
 
@@ -630,11 +642,23 @@ const schema = [
     border-radius: 8px;
     overflow: hidden;
     box-shadow: var(--shadow-sm);
-    transition: transform 200ms ease, border-color 200ms ease;
+    transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
   }
   .barber-card:hover {
     transform: translateY(-4px);
     border-color: var(--bronze-bright);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  }
+  .barber-card__link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+  }
+  .barber-card__link:focus-visible {
+    outline: 2px solid var(--bronze-bright);
+    outline-offset: -2px;
   }
   .barber-card__photo {
     position: relative;
@@ -677,6 +701,9 @@ const schema = [
   }
   .barber-card__meta {
     padding: var(--s-4);
+    display: flex;
+    flex-direction: column;
+    flex: 1;
   }
   .barber-name {
     font-size: var(--step-0);
@@ -688,6 +715,31 @@ const schema = [
     font-size: var(--step--1);
     color: rgba(250, 247, 242, 0.65);
     margin: 0;
+  }
+  .barber-card__action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: var(--s-3);
+    border-top: 1px solid rgba(201, 169, 135, 0.15);
+    font-size: var(--step--1);
+    font-weight: 500;
+    color: var(--bronze-gold);
+    transition: color 150ms ease;
+  }
+  .barber-card:hover .barber-card__action {
+    color: var(--bronze-bright);
+  }
+  .barber-action-arrow {
+    transition: transform 180ms ease;
+  }
+  .barber-card:hover .barber-action-arrow {
+    transform: translateX(4px);
+  }
+  .team-more-action {
+    margin-top: var(--s-6);
+    text-align: center;
   }
 
   /* ---- Service Cards ------------------------------------------------- */

@@ -281,13 +281,15 @@ const schema = [
         <ul class="team">
           {team.map((t) => (
             <li class="team__item">
-              <div class="team__portrait">
-                {t.data.image
-                  ? <img src={t.data.image} width="320" height="400" alt={`${t.data.name} at ${d.name}`} loading="lazy" />
-                  : <span class="team__placeholder" aria-hidden="true">{t.data.name.charAt(0)}</span>}
-              </div>
-              <h3 class="h3">{t.data.name}</h3>
-              <p class="team__role">{t.data.title}</p>
+              <a href={`/barbers/${t.slug}/`} class="team__link" aria-label={`View ${t.data.name}'s profile`}>
+                <div class="team__portrait">
+                  {t.data.image
+                    ? <img src={t.data.image} width="320" height="400" alt={`${t.data.name} at ${d.name}`} loading="lazy" />
+                    : <span class="team__placeholder" aria-hidden="true">{t.data.name.charAt(0)}</span>}
+                </div>
+                <h3 class="h3">{t.data.name}</h3>
+                <p class="team__role">{t.data.title}</p>
+              </a>
               <BookingButton
                 location={location}
                 barber={t.data.name}
@@ -483,6 +485,17 @@ const schema = [
   .team__item:hover .team__portrait img { transform: scale(1.05); }
   .team__placeholder { font-family: var(--font-display); font-size: 3rem; color: var(--ink-40); }
   .team__role { color: rgba(250, 247, 242, 0.65); font-size: var(--step--1); }
+  .team__link {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-2);
+    width: 100%;
+    text-decoration: none;
+    color: inherit;
+  }
+  .team__link:hover .h3 {
+    color: var(--bronze-bright);
+  }
   .team__item :global(.btn) { margin-top: auto; font-size: var(--step--1); padding: 0.6rem 1rem; width: 100%; }
 
   /* ---- FAQ ----------------------------------------------------------- */
