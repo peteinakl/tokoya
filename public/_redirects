@@ -37,6 +37,10 @@
 /5-most-iconic-mens-hairstyles-of-all-times/            /services/              301
 /common-mistakes-that-damage-your-beard/                /services/beard-trim/   301
 /womens-hair-care-routine-for-any-hair-type/            /remuera/               301
-/what-we-need-to-choose-the-fashion-model/              /gallery/               301
 /category/*                                              /services/              301
 /author/*                                                /about/                 301
+
+# --- Brand & Trademark Aliases --------------------------------------------
+/emblem/                                                 /trademark/             301
+/insignia/                                               /trademark/             301
+/logo/                                                   /trademark/             301

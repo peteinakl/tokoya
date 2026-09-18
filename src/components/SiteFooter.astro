@@ -67,7 +67,7 @@ const year = new Date().getFullYear();
 
     <hr class="rule" />
     <p class="ft__legal">
-      &copy; {year} Tokoya Barber &amp; Shop. Auckland, New Zealand. Logo trademarked, designed by Anna Doria.
+      &copy; {year} Tokoya Barber &amp; Shop. Auckland, New Zealand. <a href="/trademark/" class="ft__trademark-link">Logo trademarked, designed by Anna Doria</a>.
     </p>
   </div>
 </footer>
@@ -115,4 +115,13 @@ const year = new Date().getFullYear();
 
   .ft__social { margin-top: var(--s-4); }
   .ft__legal { color: rgba(251,250,248,0.55); font-size: var(--step--1); padding-top: var(--s-5); max-width: none; }
+  .ft__trademark-link {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 150ms ease;
+  }
+  .ft__trademark-link:hover {
+    color: var(--bronze-gold);
+  }
 </style>

@@ -91,8 +91,9 @@ Tokoya is an official stockist of imported professional grooming lines. All prod
 - [Price Board](https://www.tokoya.co.nz/prices/): Complete price list and durations for all haircut, shave, waxing, and nail treatments.
 - [Grooming Menu](https://www.tokoya.co.nz/services/): Full service menu with details on techniques and in-chair products.
 - [Barbers](https://www.tokoya.co.nz/barbers/): Team roster and individual craftsman bios.
-- [Products Stocked](https://www.tokoya.co.nz/products/): Official stockist catalogue for Layrite, Uppercut, Proraso, and Formidable.
-- [About & Heritage](https://www.tokoya.co.nz/about/): Story of Kaisei Sarai, Kaori Sasaki, Roshan Dsouza, the meaning of 床屋, and Anna Doria's trademarked logo design.
+- [About & Heritage](https://www.tokoya.co.nz/about/): Story of Kaisei Sarai, Kaori Sasaki, Roshan Dsouza, and the meaning of 床屋.
+- [Trademark & Insignia](https://www.tokoya.co.nz/trademark/): Anna Doria's trademarked logo design, crest symbolism, and artist profile.
 - [Frequently Asked Questions](https://www.tokoya.co.nz/faq/): Answers to common client questions on walk-ins, Sunday hours, and cancellation terms.
 - [Contact](https://www.tokoya.co.nz/contact/): Addresses, phone numbers, emails, and direct contact forms.
 - [Full Text for LLMs](https://www.tokoya.co.nz/llms-full.txt): Comprehensive text corpus for deep LLM retrieval.
+

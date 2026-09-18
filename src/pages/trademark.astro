@@ -1,0 +1,395 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHead from '../components/SectionHead.astro';
+import BookingButton from '../components/BookingButton.astro';
+import { getCollection } from 'astro:content';
+
+const ORDER = ['ponsonby', 'remuera'];
+const locations = (await getCollection('locations')).sort(
+  (a, b) => ORDER.indexOf(a.data.slug) - ORDER.indexOf(b.data.slug)
+);
+const ponsonby = locations.find((l) => l.data.slug === 'ponsonby')!;
+const remuera = locations.find((l) => l.data.slug === 'remuera')!;
+
+const title = "The Tokoya Insignia & Trademark | Designed by Anna Doria";
+const description = "The artwork, symbolism, and philosophy behind the trademarked Tokoya emblem, designed by artist Anna Doria for Tokoya Barber & Shop Auckland.";
+---
+
+<BaseLayout title={title} description={description}>
+
+  <!-- Hero Section -->
+  <section class="tm-hero">
+    <div class="tm-hero__bg" style="background-image: url('/images/hero/hero-station.png');"></div>
+    <div class="tm-hero__overlay"></div>
+    <div class="wrap tm-hero__content">
+      <span class="label">Brand Heritage &middot; Intellectual Property</span>
+      <h1 class="display tm-hero__title">
+        The Tokoya Insignia
+      </h1>
+      <p class="lede tm-hero__lede">
+        A visual dialogue between ancient artisanal heritage and modern refinement, designed and trademarked by artist Anna Doria.
+      </p>
+    </div>
+  </section>
+
+  <!-- Section 1: The Artwork & Symbolism -->
+  <section class="section on-deep">
+    <div class="wrap">
+      <div class="tm-grid">
+        <div class="tm-copy">
+          <SectionHead label="The Artwork" title="Symbolism, Kanji & Shears" />
+          <div class="story-text">
+            <p class="lede">
+              The Tokoya emblem is an intricate, circular illustration celebrating the intimacy and discipline of the traditional barbershop.
+            </p>
+            <p>
+              At the heart of the crest is a line-art illustration of a master barber shaving a seated client, rendered inside a solid circle. Grounding the figure are thinning shears that carry a delicate handwritten &ldquo;Tokoya&rdquo; script alongside the traditional kanji <strong>床屋</strong>.
+            </p>
+            <p>
+              The name Tokoya itself, a Japanese term for &ldquo;barbershop&rdquo;, nods to the artisanal heritage and meticulous grooming rituals of East Asia: a space where craft, mindfulness, and hospitality intertwine.
+            </p>
+            <p>
+              The design bridges minimalist geometry with vintage barbering motifs, pairing distressed woodblock aesthetics with sleek contemporary lines. What sets this trademarked mark apart is its quiet dual identity: at once a modern insignia of a premier grooming sanctuary and an enduring tribute to East Asian craft.
+            </p>
+          </div>
+        </div>
+
+        <div class="emblem-showcase">
+          <div class="emblem-card">
+            <img
+              src="/brand/mark-240.png"
+              alt="Tokoya trademarked circular emblem designed by Anna Doria"
+              width="240"
+              height="240"
+              loading="lazy"
+            />
+            <div class="emblem-card__meta">
+              <span class="label">Trademarked Artwork</span>
+              <p class="emblem-card__title">The Tokoya Crest</p>
+              <p class="emblem-card__desc">Circular barbering illustration with Japanese calligraphy &amp; thinning shears</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: The Artist (Anna Doria) -->
+  <section class="section on-ink">
+    <div class="wrap">
+      <div class="tm-grid tm-grid--reverse">
+        <div class="tm-copy">
+          <SectionHead label="The Artist" title="Designed by Anna Doria" />
+          <div class="story-text">
+            <p class="lede">
+              Crafted with cultural depth and understated elegance, the Tokoya visual identity was conceived and trademarked by artist <strong>Anna Doria</strong>.
+            </p>
+            <p>
+              Anna Doria’s artistic signature is woven into every curve and contour of the design. Her thoughtful balance between bold geometry and delicate linework gives the Tokoya brand a confident, timeless voice.
+            </p>
+            <p>
+              Subtle flourishes echo Japanese calligraphy and woodblock printmaking, lending an authentic warmth to a modern aesthetic. Doria’s emblem does not merely represent a business: it encapsulates a philosophy where self-care is treated as an art form, and timeless discipline is always in style.
+            </p>
+            <p>
+              Every chair, blade, and towel at Tokoya operates under the banner of this mark, honoring the high standards of craft that Doria brought to life in her artwork.
+            </p>
+          </div>
+        </div>
+
+        <div class="artist-showcase">
+          <div class="artist-card">
+            <div class="artist-card__frame">
+              <img
+                src="/images/brand/anna-doria.png"
+                alt="Artist Anna Doria, designer of the trademarked Tokoya logo"
+                width="600"
+                height="400"
+                loading="lazy"
+              />
+            </div>
+            <div class="artist-card__meta">
+              <span class="label">The Designer</span>
+              <p class="artist-card__name">Anna Doria</p>
+              <p class="artist-card__role">Artist &amp; Designer of the Tokoya Trademark</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: Legal & Trademark Notice -->
+  <section class="section on-deep">
+    <div class="wrap">
+      <div class="legal-box">
+        <span class="label">Authenticity &amp; Protection</span>
+        <h2 class="display legal-box__title">Registered Trademark Notice</h2>
+        <p class="legal-box__text">
+          The Tokoya circular emblem, wordmarks, and associated brand artwork are trademarked assets created by Anna Doria for Tokoya Barber &amp; Shop and Tokoya Barber &amp; Salon in Auckland, New Zealand. All rights reserved. Unauthorized reproduction, imitation, or redistribution is strictly prohibited.
+        </p>
+        <div class="legal-box__actions">
+          <a href="/about/" class="btn btn--ghost">
+            <span>Read The Tokoya Story</span> &rarr;
+          </a>
+          <a href="/barbers/" class="btn btn--ghost">
+            <span>Meet Our Barbers</span> &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Experience The Craft Behind The Mark -->
+  <section class="section on-ink">
+    <div class="wrap">
+      <div class="cta-box">
+        <span class="label">Visit Our Chairs</span>
+        <h2 class="display cta-box__title">Experience the Craft Behind the Mark</h2>
+        <p class="lede cta-box__lede">
+          Book your cut, fade, hot towel shave, or salon appointment at either of our Auckland shops.
+        </p>
+        <div class="cta-box__actions">
+          <BookingButton location={ponsonby} placement="hero" />
+          <BookingButton location={remuera} placement="hero" variant="ghost" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  .tm-hero {
+    position: relative;
+    padding-block: var(--s-9) var(--s-8);
+    overflow: hidden;
+    min-height: 46vh;
+    display: flex;
+    align-items: center;
+  }
+  .tm-hero__bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+  }
+  .tm-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(8, 7, 6, 0.95) 0%, rgba(14, 12, 10, 0.88) 50%, rgba(8, 7, 6, 0.72) 100%);
+    z-index: 2;
+  }
+  .tm-hero__content {
+    position: relative;
+    z-index: 3;
+    max-width: 48rem;
+  }
+  .tm-hero__title {
+    font-size: var(--step-5);
+    margin-top: var(--s-2);
+    margin-bottom: var(--s-3);
+    color: var(--paper);
+  }
+  .tm-hero__lede {
+    font-size: var(--step-1);
+    color: var(--paper-warm);
+    max-width: 42ch;
+  }
+
+  .tm-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: var(--s-8);
+    align-items: center;
+  }
+  .tm-grid--reverse {
+    grid-template-columns: 1fr 1fr;
+  }
+  .tm-grid--reverse .tm-copy {
+    order: 2;
+  }
+  .tm-grid--reverse .artist-showcase {
+    order: 1;
+  }
+
+  .story-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-4);
+  }
+  .story-text p {
+    font-size: var(--step-0);
+    line-height: 1.7;
+    color: rgba(250, 247, 242, 0.9);
+  }
+  .story-text .lede {
+    color: var(--paper);
+    font-size: var(--step-1);
+    line-height: 1.5;
+    font-weight: 400;
+  }
+  .story-text strong {
+    color: #ffffff;
+    font-weight: 600;
+  }
+
+  /* Emblem Card */
+  .emblem-showcase {
+    display: flex;
+    justify-content: center;
+  }
+  .emblem-card {
+    background: var(--ink-card);
+    border: 1px solid rgba(201, 169, 135, 0.25);
+    border-radius: 12px;
+    padding: var(--s-7);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+    max-width: 380px;
+    width: 100%;
+  }
+  .emblem-card img {
+    width: 190px;
+    height: auto;
+    filter: invert(1) brightness(1.2);
+    transition: transform 300ms ease;
+  }
+  .emblem-card:hover img {
+    transform: scale(1.05);
+  }
+  .emblem-card__meta {
+    margin-top: var(--s-5);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .emblem-card__title {
+    font-size: var(--step-1);
+    font-weight: 600;
+    color: var(--paper);
+    margin: 0;
+  }
+  .emblem-card__desc {
+    font-size: var(--step--1);
+    color: rgba(250, 247, 242, 0.8);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* Artist Card */
+  .artist-showcase {
+    display: flex;
+    justify-content: center;
+  }
+  .artist-card {
+    background: var(--ink-card);
+    border: 1px solid rgba(201, 169, 135, 0.25);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    max-width: 440px;
+    width: 100%;
+  }
+  .artist-card__frame {
+    position: relative;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    background: #0e0c0a;
+  }
+  .artist-card__frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 400ms ease;
+  }
+  .artist-card:hover .artist-card__frame img {
+    transform: scale(1.03);
+  }
+  .artist-card__meta {
+    padding: var(--s-5);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .artist-card__name {
+    font-size: var(--step-1);
+    font-weight: 600;
+    color: var(--paper);
+    margin: 0;
+  }
+  .artist-card__role {
+    font-size: var(--step--1);
+    color: rgba(250, 247, 242, 0.8);
+    margin: 0;
+  }
+
+  /* Legal notice box */
+  .legal-box {
+    background: var(--ink-card);
+    border: 1px solid var(--ink-card-border);
+    border-radius: 12px;
+    padding: var(--s-7);
+    max-width: 52rem;
+    margin-inline: auto;
+    text-align: center;
+  }
+  .legal-box__title {
+    font-size: var(--step-3);
+    margin-top: var(--s-1);
+    margin-bottom: var(--s-3);
+    color: var(--paper);
+  }
+  .legal-box__text {
+    font-size: var(--step-0);
+    line-height: 1.7;
+    color: rgba(250, 247, 242, 0.85);
+    margin-bottom: var(--s-6);
+  }
+  .legal-box__actions {
+    display: flex;
+    justify-content: center;
+    gap: var(--s-4);
+    flex-wrap: wrap;
+  }
+
+  /* CTA Box */
+  .cta-box {
+    text-align: center;
+    max-width: 44rem;
+    margin-inline: auto;
+  }
+  .cta-box__title {
+    font-size: var(--step-3);
+    margin-top: var(--s-1);
+    margin-bottom: var(--s-2);
+    color: var(--paper);
+  }
+  .cta-box__lede {
+    font-size: var(--step-1);
+    color: rgba(250, 247, 242, 0.85);
+    margin-bottom: var(--s-6);
+  }
+  .cta-box__actions {
+    display: flex;
+    justify-content: center;
+    gap: var(--s-4);
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 54rem) {
+    .tm-grid, .tm-grid--reverse {
+      grid-template-columns: 1fr;
+    }
+    .tm-grid--reverse .tm-copy {
+      order: 1;
+    }
+    .tm-grid--reverse .artist-showcase {
+      order: 2;
+    }
+  }
+</style>
