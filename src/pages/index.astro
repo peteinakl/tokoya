@@ -106,7 +106,7 @@ const schema = [
     <div class="hero-cinematic__overlay"></div>
     <div class="wrap hero-cinematic__content">
       <div class="hero-cinematic__badge">
-        <span class="pulse-dot is-open"></span>
+        <span class="badge-dot" aria-hidden="true"></span>
         <span class="label">Est. 2015 &middot; Auckland, NZ</span>
       </div>
 
@@ -436,6 +436,13 @@ const schema = [
     border-radius: 9999px;
     backdrop-filter: blur(8px);
     margin-bottom: var(--s-5);
+  }
+  .badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--bronze-gold);
+    flex-shrink: 0;
   }
   .hero-cinematic__title {
     font-size: var(--step-4);
