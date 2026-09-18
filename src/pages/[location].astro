@@ -189,13 +189,15 @@ const schema = [
             )}
           </div>
 
-          <div>
-            <h3 class="label">Getting here</h3>
-            <p>{d.gettingHere || 'Convenient street and village parking options nearby.'}</p>
-          </div>
+          {d.gettingHere && (
+            <div>
+              <h3 class="label">Getting here</h3>
+              <p>{d.gettingHere}</p>
+            </div>
+          )}
         </div>
 
-        <LazyMap query={mapQuery} label={d.shortName} />
+        <LazyMap query={mapQuery} label={d.shortName} lat={d.latitude} lon={d.longitude} />
       </div>
     </div>
   </section>

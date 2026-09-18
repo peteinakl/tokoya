@@ -1,60 +1,103 @@
 ---
-/**
- * Map loads on interaction, never on page load.
- *
- * The reference site eagerly loads TWO full Google Maps iframes on a single
- * page. That is most of a megabyte and a large chunk of main-thread time for
- * something most visitors never touch.
- */
-interface Props { query: string; label: string; }
-const { query, label } = Astro.props;
-const src = `https://maps.google.com/maps?q=${encodeURIComponent(query)}&t=m&z=16&output=embed`;
-const directions = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(query)}`;
+interface Props {
+  query: string;
+  label: string;
+  lat?: string | number | null;
+  lon?: string | number | null;
+}
+
+const { query, label, lat, lon } = Astro.props;
+
+// Determine coordinates
+const isRemuera = query.toLowerCase().includes('remuera') || label.toLowerCase().includes('remuera');
+const latitude = lat ? Number(lat) : (isRemuera ? -36.8804962 : -36.8484017);
+const longitude = lon ? Number(lon) : (isRemuera ? 174.7974230 : 174.7441078);
+
+const deltaLon = 0.005;
+const deltaLat = 0.0035;
+const minLon = (longitude - deltaLon).toFixed(4);
+const minLat = (latitude - deltaLat).toFixed(4);
+const maxLon = (longitude + deltaLon).toFixed(4);
+const maxLat = (latitude + deltaLat).toFixed(4);
+
+const embedSrc = `https://www.openstreetmap.org/export/embed.html?bbox=${minLon}%2C${minLat}%2C${maxLon}%2C${maxLat}&layer=mapnik&marker=${latitude}%2C${longitude}`;
+const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+const appleMapsUrl = `https://maps.apple.com/?q=${encodeURIComponent(query)}&ll=${latitude},${longitude}`;
 ---
-<div class="map" data-map data-src={src}>
-  <button type="button" class="map__load">
-    <span class="disc" aria-hidden="true">
-      <svg viewBox="0 0 16 16" width="14" fill="none" stroke="currentColor" stroke-width="1.6">
-        <path d="M8 1.5c-2.3 0-4.2 1.9-4.2 4.2C3.8 9 8 14.5 8 14.5s4.2-5.5 4.2-8.8c0-2.3-1.9-4.2-4.2-4.2Z"/>
-        <circle cx="8" cy="5.7" r="1.5"/>
+
+<div class="map-wrapper">
+  <div class="map-frame-box">
+    <iframe
+      src={embedSrc}
+      loading="lazy"
+      title={`Interactive map showing ${label}`}
+      class="map-iframe"
+      referrerpolicy="no-referrer-when-downgrade"
+    ></iframe>
+  </div>
+
+  <div class="map-links-bar">
+    <a href={googleMapsUrl} target="_blank" rel="noopener" class="map-nav-link">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
+        <circle cx="12" cy="9" r="2.5" />
       </svg>
-    </span>
-    <span>Show map</span>
-  </button>
-  <a class="map__dir" href={directions} data-directions rel="noopener">Directions to {label}</a>
+      <span>Open in Google Maps</span> &nearr;
+    </a>
+    <span class="map-nav-divider" aria-hidden="true">&bull;</span>
+    <a href={appleMapsUrl} target="_blank" rel="noopener" class="map-nav-link">
+      <span>Apple Maps</span> &nearr;
+    </a>
+  </div>
 </div>
 
 <style>
-  .map {
-    border: 1px solid var(--rule);
-    background: var(--paper-sunk);
-    aspect-ratio: 16 / 9;
-    display: grid;
-    place-content: center;
-    gap: var(--s-3);
-    justify-items: center;
-    text-align: center;
-    padding: var(--s-5);
+  .map-wrapper {
+    border: 1px solid var(--rule-ink, rgba(201, 169, 135, 0.25));
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--ink-card, #14100c);
+    display: flex;
+    flex-direction: column;
   }
-  .map:has(iframe) { display: block; padding: 0; }
-  .map__load {
-    display: inline-flex; align-items: center; gap: var(--s-3);
-    background: none; border: 0; cursor: pointer;
-    font-weight: 600;
+  .map-frame-box {
+    aspect-ratio: 16 / 10;
+    width: 100%;
+    min-height: 220px;
+    background: #e5e3df;
+    position: relative;
   }
-  .map__dir { font-size: var(--step--1); color: var(--bronze-text); }
-  .map :global(iframe) { width: 100%; height: 100%; border: 0; display: block; }
+  .map-iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+  .map-links-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--s-3, 0.75rem);
+    padding: var(--s-3, 0.6rem) var(--s-4, 1rem);
+    background: rgba(14, 11, 9, 0.95);
+    border-top: 1px solid var(--rule-ink, rgba(201, 169, 135, 0.2));
+    font-size: var(--step--1, 0.85rem);
+    flex-wrap: wrap;
+  }
+  .map-nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--bronze-gold, #c9a987);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.15s ease;
+  }
+  .map-nav-link:hover {
+    color: var(--bronze-bright, #e4caa9);
+    text-decoration: underline;
+  }
+  .map-nav-divider {
+    color: rgba(250, 247, 242, 0.3);
+  }
 </style>
-
-<script>
-  document.querySelectorAll<HTMLElement>('[data-map]').forEach((el) => {
-    el.querySelector('.map__load')?.addEventListener('click', () => {
-      const frame = document.createElement('iframe');
-      frame.src = el.dataset.src ?? '';
-      frame.loading = 'lazy';
-      frame.title = 'Map';
-      frame.referrerPolicy = 'no-referrer-when-downgrade';
-      el.replaceChildren(frame);
-    }, { once: true });
-  });
-</script>
