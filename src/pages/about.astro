@@ -78,7 +78,7 @@ const description = "The story of Tokoya Barber & Shop. Founded in 2015 by Kaise
   </section>
 
   <!-- Section 3: The Trademarked Emblem -->
-  <section class="section on-sunk" aria-labelledby="emblem-head">
+  <section class="section on-deep" aria-labelledby="emblem-head">
     <div class="wrap">
       <div class="about-grid about-grid--reverse">
         <div class="about-copy">
@@ -111,7 +111,7 @@ const description = "The story of Tokoya Barber & Shop. Founded in 2015 by Kaise
   </section>
 
   <!-- Section 4: Multicultural Craft & Team -->
-  <section class="section on-deep">
+  <section class="section on-ink">
     <div class="wrap">
       <div class="about-grid about-grid--reverse">
         <div class="about-copy">
@@ -141,8 +141,8 @@ const description = "The story of Tokoya Barber & Shop. Founded in 2015 by Kaise
     </div>
   </section>
 
-  <!-- Section 4: Remuera Expansion -->
-  <section class="section on-ink">
+  <!-- Section 5: Remuera Expansion -->
+  <section class="section on-deep">
     <div class="wrap">
       <div class="about-grid">
         <div class="about-copy">
@@ -230,8 +230,22 @@ const description = "The story of Tokoya Barber & Shop. Founded in 2015 by Kaise
     display: flex;
     flex-direction: column;
     gap: var(--s-4);
-    color: rgba(250, 247, 242, 0.88);
     font-size: var(--step-0);
+  }
+  .story-text p {
+    color: rgba(250, 247, 242, 0.9);
+    line-height: 1.7;
+    margin: 0;
+  }
+  .story-text .lede {
+    color: var(--paper);
+    font-size: var(--step-1);
+    line-height: 1.5;
+    font-weight: 400;
+  }
+  .story-text strong {
+    color: #ffffff;
+    font-weight: 600;
   }
   .story-text a {
     color: var(--bronze-gold);
@@ -290,7 +304,7 @@ const description = "The story of Tokoya Barber & Shop. Founded in 2015 by Kaise
 
   .emblem-card {
     background: var(--ink-card);
-    border: 1px solid var(--ink-card-border);
+    border: 1px solid rgba(201, 169, 135, 0.25);
     border-radius: 12px;
     padding: var(--s-7);
     display: flex;
@@ -308,7 +322,7 @@ const description = "The story of Tokoya Barber & Shop. Founded in 2015 by Kaise
   .emblem-card img {
     width: 170px;
     height: auto;
-    filter: invert(1) brightness(1.1);
+    filter: invert(1) brightness(1.2);
     transition: transform 300ms ease;
   }
   .emblem-card:hover img {
@@ -327,10 +341,10 @@ const description = "The story of Tokoya Barber & Shop. Founded in 2015 by Kaise
   }
   .emblem-card__desc {
     font-size: var(--step--1);
-    color: rgba(250, 247, 242, 0.65);
+    color: rgba(250, 247, 242, 0.8);
     margin: 0;
-    max-width: 28ch;
-    line-height: 1.4;
+    max-width: 30ch;
+    line-height: 1.5;
   }
 
   @media (max-width: 52rem) {
