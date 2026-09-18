@@ -7,5 +7,5 @@ price: 90
 priceNote: ""
 summary: "Maintenance fill for outgrown builder gel or extensions to restore strength and balance."
 locations: ["remuera"]
-hasPage: false
+hasPage: true
 ---

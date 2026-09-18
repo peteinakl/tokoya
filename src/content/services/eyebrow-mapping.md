@@ -6,5 +6,5 @@ durationMin: 30
 price: 30
 summary: "Precise symmetry mapping and wax shaping tailored to your natural facial contours."
 locations: ["ponsonby", "remuera"]
-hasPage: false
+hasPage: true
 ---

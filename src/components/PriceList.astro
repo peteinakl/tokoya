@@ -40,9 +40,7 @@ const { services, groups, locationName } = Astro.props;
               <tr>
                 <th scope="row" class="board__name">
                   <span class="board__label">
-                    {s.data.hasPage
-                      ? <a href={`/services/${s.slug}/`}>{s.data.title}</a>
-                      : s.data.title}
+                    <a href={`/services/${s.slug}/`}>{s.data.title}</a>
                     {s.data.priceNote && <em class="board__note">{s.data.priceNote}</em>}
                   </span>
                   <span class="board__leader" aria-hidden="true"></span>

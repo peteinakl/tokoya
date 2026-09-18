@@ -6,5 +6,5 @@ durationMin: 15
 price: 15
 summary: "Fast, hygienic nostril waxing to cleanly remove protruding hairs."
 locations: ["ponsonby", "remuera"]
-hasPage: false
+hasPage: true
 ---

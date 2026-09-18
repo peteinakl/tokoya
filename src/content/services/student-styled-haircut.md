@@ -8,5 +8,5 @@ price: 45
 priceMax: 55
 summary: "Modern cut for students with added style and texture. Skin fade, taper or mullet."
 locations: ["ponsonby", "remuera"]
-hasPage: false
+hasPage: true
 ---

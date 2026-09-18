@@ -6,5 +6,5 @@ durationMin: 45
 price: 60
 summary: "Hand-crafted scissor cut with soft texture and movement."
 locations: ["ponsonby", "remuera"]
-hasPage: false
+hasPage: true
 ---

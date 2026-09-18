@@ -6,5 +6,5 @@ durationMin: 15
 price: 30
 summary: "Ultra-short, simple cut using clippers for easy upkeep."
 locations: ["ponsonby", "remuera"]
-hasPage: false
+hasPage: true
 ---

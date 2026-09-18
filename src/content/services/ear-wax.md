@@ -6,5 +6,5 @@ durationMin: 15
 price: 15
 summary: "Quick, gentle wax removal of visible hair from the outer ear and lobe."
 locations: ["ponsonby", "remuera"]
-hasPage: false
+hasPage: true
 ---

@@ -6,5 +6,5 @@ durationMin: 30
 price: 40
 summary: "Classic, low-maintenance cut with natural shape."
 locations: ["ponsonby", "remuera"]
-hasPage: false
+hasPage: true
 ---

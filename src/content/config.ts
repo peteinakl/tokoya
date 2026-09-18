@@ -46,7 +46,7 @@ const services = defineCollection({
     priceNote: z.string().optional(),
     summary: z.string(),           // existing site copy, usable as written
     locations: z.array(z.enum(['ponsonby','remuera'])),
-    hasPage: z.boolean().default(false),
+    hasPage: z.boolean().default(true),
     kitombaServiceId: z.string().nullable().default(null), // OPEN Q9
     freshaServiceId: z.string().nullable().default(null),  // OPEN Q9
   }),

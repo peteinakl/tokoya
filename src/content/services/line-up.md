@@ -6,5 +6,5 @@ durationMin: 15
 price: 20
 summary: "Clean lines on jaw, cheeks, and neckline."
 locations: ["ponsonby", "remuera"]
-hasPage: false
+hasPage: true
 ---

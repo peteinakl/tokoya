@@ -7,5 +7,5 @@ price: 40
 priceNote: ""
 summary: "Thorough nail shaping, cuticle care, hand scrub, and nourishing oil massage."
 locations: ["remuera"]
-hasPage: false
+hasPage: true
 ---
