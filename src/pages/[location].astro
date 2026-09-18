@@ -56,6 +56,41 @@ const description = isPonsonby
 
 const SITE = 'https://www.tokoya.co.nz';
 
+const locationFaqs = [
+  {
+    q: 'Do you take walk-ins, or do I need to book?',
+    a: `Walk-ins are always welcome whenever a chair is free, but appointments take priority. We strongly recommend booking online via ${d.bookingProvider} to guarantee your chair time without waiting.`,
+  },
+  {
+    q: `Are you open on ${isPonsonby ? 'Sundays' : 'weekends'}?`,
+    a: (() => {
+      const sun = d.hours.find((h) => h.day === 'Sunday');
+      const sunTime = sun && !sun.closed && sun.opens && sun.closes
+        ? ` from ${formatTime(sun.opens)} to ${formatTime(sun.closes)}`
+        : '';
+      return `Yes. ${d.shortName} is open Sunday${sunTime}. ${daysSummary}. Sunday opening is uncommon among Auckland barbers, so it is worth knowing.`;
+    })(),
+  },
+  {
+    q: 'Can I book a specific barber?',
+    a: `Yes. Choose your preferred barber in the ${d.bookingProvider} booking system when reserving, or use the booking button on a barber's card above.`,
+  },
+  {
+    q: "What happens if I cancel or don't turn up?",
+    a: 'Cancelling within 90 minutes of the booked time is charged at 50% of the service. A no-show without notice is charged at 100%. If it happens more than twice, we are no longer able to take bookings.',
+  },
+  ...(d.offersNails ? [{
+    q: 'Do you do nails here?',
+    a: 'Yes. Remuera has a dedicated nail salon for men and women alongside full barbering. Gel manicures are $65 and gel pedicures $75, both 45 minutes.',
+  }] : []),
+  {
+    q: "Do you cut women's hair?",
+    a: isPonsonby
+      ? "Yes. Clients of all genders are welcome. At Ponsonby, our craft focuses on classic barbering, short scissor styles, and skin fades."
+      : "Yes. Clients of all genders are welcome. At our Remuera salon, we offer comprehensive hair grooming alongside our dedicated nail studio.",
+  },
+];
+
 const schema = [
   {
     '@context': 'https://schema.org',
@@ -116,6 +151,18 @@ const schema = [
       { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
       { '@type': 'ListItem', position: 2, name: d.shortName, item: `${SITE}/${d.slug}/` },
     ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: locationFaqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: f.a,
+      },
+    })),
   },
 ];
 ---
@@ -257,72 +304,59 @@ const schema = [
 
   <!-- ==========================================================
        QUESTIONS. Answer-first, one question per heading, under 60
-       words each. The same set goes into the Google Business
-       Profile Q&A, which is where most of its value is realised.
+       words each. Clean luxury accordion layout with assistance sidebar.
        ========================================================== -->
-  <section class="section faq" aria-labelledby="faq">
+  <section class="section on-deep faq-section" aria-labelledby="faq">
     <div class="wrap">
-      <SectionHead n="04" label="Before you book" title={`Questions about ${d.shortName}`} id="faq" />
-
-      <div class="faq__list">
-        <article class="faq__item">
-          <h3 class="h3">Do you take walk-ins, or do I need to book?</h3>
-          <p>
-            Walk-ins are always welcome whenever a chair is free, but appointments take priority.
-            We strongly recommend booking online via {d.bookingProvider} to guarantee your chair time without waiting.
-          </p>
-        </article>
-
-        <article class="faq__item">
-          <h3 class="h3">Are you open on {isPonsonby ? 'Sundays' : 'weekends'}?</h3>
-          <p>
-            Yes. {d.shortName} is open Sunday
-            {(() => {
-              const sun = d.hours.find((h) => h.day === 'Sunday');
-              return sun && !sun.closed && sun.opens && sun.closes
-                ? ` from ${formatTime(sun.opens)} to ${formatTime(sun.closes)}`
-                : '';
-            })()}.
-            {daysSummary}. Sunday opening is uncommon among Auckland barbers, so it is
-            worth knowing.
-          </p>
-        </article>
-
-        <article class="faq__item">
-          <h3 class="h3">Can I book a specific barber?</h3>
-          <p>
-            Yes. Choose your barber in the {d.bookingProvider} booking system when you
-            book, or use the booking button on a barber's card above.
-          </p>
-        </article>
-
-        <article class="faq__item">
-          <h3 class="h3">What happens if I cancel or don't turn up?</h3>
-          <p>
-            Cancelling within 90 minutes of the booked time is charged at 50% of the
-            service. A no-show without notice is charged at 100%. If it happens more
-            than twice, we are no longer able to take bookings.
-          </p>
-        </article>
-
-        {d.offersNails && (
-          <article class="faq__item">
-            <h3 class="h3">Do you do nails here?</h3>
-            <p>
-              Yes. Remuera has a dedicated nail salon for men and women, alongside full
-              barbering. Gel manicures are $65 and gel pedicures $75, both 45 minutes.
+      <div class="faq-layout">
+        <div class="faq-main">
+          <SectionHead n="04" label="Before you book" title={`Questions about ${d.shortName}`} id="faq" />
+          <div class="faq-accordion-group">
+            {locationFaqs.map((faq, index) => (
+              <details class="faq-item" open={index < 2}>
+                <summary class="faq-item__question">
+                  <span class="faq-q-text">{faq.q}</span>
+                  <span class="faq-toggle-icon" aria-hidden="true">+</span>
+                </summary>
+                <div class="faq-item__answer">
+                  <p>{faq.a}</p>
+                </div>
+              </details>
+            ))}
+          </div>
+        </div>
+        <aside class="faq-sidebar">
+          <div class="faq-help-card">
+            <span class="label">{d.shortName} Chair</span>
+            <h3 class="display help-card-title">Book or Enquire</h3>
+            <p class="help-card-desc">
+              Have questions about your appointment or need styling advice? Call our team or book online.
             </p>
-          </article>
-        )}
-
-        <article class="faq__item">
-          <h3 class="h3">Do you cut women's hair?</h3>
-          <p>
-            Yes. Clients of all genders are welcome. At Ponsonby, our craft focuses on classic barbering,
-            short scissor styles, and skin fades. At our Remuera salon, we offer comprehensive hair grooming
-            alongside our dedicated nail studio.
-          </p>
-        </article>
+            <div class="help-card-contact">
+              {d.telephone && (
+                <div class="help-contact-row">
+                  <span class="help-contact-label">Phone</span>
+                  <a href={`tel:${d.telephone}`} data-phone data-location={d.slug} class="help-phone-link">
+                    {d.telephoneDisplay}
+                  </a>
+                </div>
+              )}
+              {d.email && (
+                <div class="help-contact-row">
+                  <span class="help-contact-label">Email</span>
+                  <a href={`mailto:${d.email}`} class="help-email-link">
+                    {d.email}
+                  </a>
+                </div>
+              )}
+              <div class="help-contact-row">
+                <span class="help-contact-label">Booking</span>
+                <span class="help-contact-val">{d.bookingProvider}</span>
+              </div>
+            </div>
+            <BookingButton location={location} placement="card" block />
+          </div>
+        </aside>
       </div>
     </div>
   </section>
@@ -452,17 +486,145 @@ const schema = [
   .team__item :global(.btn) { margin-top: auto; font-size: var(--step--1); padding: 0.6rem 1rem; width: 100%; }
 
   /* ---- FAQ ----------------------------------------------------------- */
-  .faq__list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-    gap: 0;
-    border-top: 1px solid var(--rule);
+  .faq-section {
+    position: relative;
   }
-  .faq__item { padding: var(--s-5) 0; border-bottom: 1px solid var(--rule); }
-  .faq__item h3 { margin-bottom: var(--s-2); }
-  @media (min-width: 52rem) {
-    .faq__item:nth-child(odd) { padding-right: var(--s-6); }
-    .faq__item:nth-child(even) { padding-left: var(--s-6); border-left: 1px solid var(--rule); }
+  .faq-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: var(--s-7);
+    align-items: start;
+    margin-top: var(--s-5);
+  }
+  @media (max-width: 58rem) {
+    .faq-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .faq-accordion-group {
+    display: grid;
+    gap: var(--s-4);
+  }
+  .faq-item {
+    background: var(--ink-card);
+    border: 1px solid var(--ink-card-border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+  }
+  .faq-item[open] {
+    border-color: rgba(201, 169, 135, 0.45);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  }
+  .faq-item__question {
+    padding: var(--s-4) var(--s-5);
+    cursor: pointer;
+    font-size: var(--step-0);
+    font-weight: 600;
+    color: var(--paper);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--s-3);
+    list-style: none;
+    user-select: none;
+  }
+  .faq-item__question::-webkit-details-marker {
+    display: none;
+  }
+  .faq-q-text {
+    flex: 1;
+    letter-spacing: -0.01em;
+  }
+  .faq-toggle-icon {
+    font-size: 1.5rem;
+    color: var(--bronze-bright);
+    transition: transform 200ms ease;
+    flex: none;
+    line-height: 1;
+    font-family: monospace;
+    font-weight: 300;
+  }
+  .faq-item[open] .faq-toggle-icon {
+    transform: rotate(45deg);
+  }
+  .faq-item__answer {
+    padding: 0 var(--s-5) var(--s-5);
+    font-size: var(--step--1);
+    line-height: 1.7;
+    color: rgba(250, 247, 242, 0.82);
+    border-top: 1px solid rgba(201, 169, 135, 0.12);
+    margin-top: 0.25rem;
+    padding-top: var(--s-4);
+  }
+  .faq-item__answer p {
+    margin: 0;
+  }
+
+  /* FAQ Sidebar Help Card */
+  .faq-sidebar {
+    position: sticky;
+    top: var(--s-6);
+  }
+  .faq-help-card {
+    background: var(--ink-card);
+    border: 1px solid rgba(201, 169, 135, 0.35);
+    border-radius: 8px;
+    padding: var(--s-6);
+    box-shadow: var(--shadow-md);
+  }
+  .faq-help-card .label {
+    display: block;
+    color: var(--bronze-gold);
+    margin-bottom: var(--s-2);
+  }
+  .help-card-title {
+    font-size: var(--step-2);
+    margin-bottom: var(--s-2);
+    color: var(--paper);
+  }
+  .help-card-desc {
+    font-size: var(--step--1);
+    color: rgba(250, 247, 242, 0.7);
+    line-height: 1.5;
+    margin-bottom: var(--s-5);
+  }
+  .help-card-contact {
+    background: var(--ink-surface);
+    border: 1px solid var(--ink-card-border);
+    border-radius: 6px;
+    padding: var(--s-4);
+    display: grid;
+    gap: var(--s-3);
+    margin-bottom: var(--s-5);
+  }
+  .help-contact-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: var(--step--1);
+  }
+  .help-contact-label {
+    color: rgba(250, 247, 242, 0.6);
+  }
+  .help-phone-link,
+  .help-email-link {
+    color: var(--bronze-gold);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .help-phone-link:hover,
+  .help-email-link:hover {
+    text-decoration: underline;
+    color: var(--bronze-bright);
+  }
+  .help-contact-val {
+    color: var(--paper);
+    font-weight: 500;
+  }
+  .faq-help-card :global(.btn) {
+    width: 100%;
   }
 
   /* ---- Other shop ---------------------------------------------------- */
