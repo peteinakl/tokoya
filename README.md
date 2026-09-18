@@ -25,7 +25,7 @@ npm run preview
 
 Node 20+. Deploy: connect GitHub repo `peteinakl/tokoya` to Cloudflare Pages:
 - **Framework preset**: `Astro`
-- **Root directory**: `tokoya-site`
+- **Root directory**: `/` (leave empty / default)
 - **Build command**: `npm run build`
 - **Build output directory**: `dist`
 
