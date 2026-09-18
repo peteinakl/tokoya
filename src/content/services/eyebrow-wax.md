@@ -4,7 +4,7 @@ group: waxing
 order: 3
 durationMin: 15
 price: 15
-summary: ""
+summary: "Tidy and arch shaping to clean up stray hairs between and around the brows."
 locations: ["ponsonby", "remuera"]
 hasPage: false
 ---

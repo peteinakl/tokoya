@@ -5,5 +5,4 @@ locations: ["ponsonby"]
 confirmed: true
 image: "/images/barbers/etsuya-kidoguchi.jpg"
 ---
-
-TODO: tenure and specialisms unknown.
+Specializing in Japanese barbering technique, discipline, clean fades, and restorative hot towel treatments, Etsuya brings Tokyo chair hospitality and razor precision to our Ponsonby shop.

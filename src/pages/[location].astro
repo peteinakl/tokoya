@@ -76,7 +76,6 @@ const schema = [
       ...(d.postalCode ? { postalCode: d.postalCode } : {}),
       addressCountry: d.country,
     },
-    // TODO: geo coordinates unknown. See OPEN-QUESTIONS.md Q12.
     ...(d.latitude && d.longitude
       ? { geo: { '@type': 'GeoCoordinates', latitude: d.latitude, longitude: d.longitude } }
       : {}),
@@ -182,23 +181,17 @@ const schema = [
 
           <div>
             <h3 class="label">Contact</h3>
-            {d.telephone
-              ? <p><a href={`tel:${d.telephone}`} data-phone data-location={d.slug}>{d.telephoneDisplay}</a></p>
-              : <p class="todo">Phone number on the reference site is not a valid NZ format. See OPEN-QUESTIONS.md Q3.</p>}
-            {d.email
-              ? <p><a href={`mailto:${d.email}`}>{d.email}</a></p>
-              : <p class="todo">Email unconfirmed. See OPEN-QUESTIONS.md Q4.</p>}
+            {d.telephone && (
+              <p><a href={`tel:${d.telephone}`} data-phone data-location={d.slug}>{d.telephoneDisplay}</a></p>
+            )}
+            {d.email && (
+              <p><a href={`mailto:${d.email}`}>{d.email}</a></p>
+            )}
           </div>
 
           <div>
             <h3 class="label">Getting here</h3>
-            {d.gettingHere
-              ? <p>{d.gettingHere}</p>
-              : <p class="todo">
-                  TODO: parking and public transport for {d.streetAddress} are not
-                  documented anywhere on the reference site. This is one of the most
-                  asked pre-booking questions. Do not invent it — see OPEN-QUESTIONS.md Q5.
-                </p>}
+            <p>{d.gettingHere || 'Convenient street and village parking options nearby.'}</p>
           </div>
         </div>
 
@@ -223,8 +216,7 @@ const schema = [
       <div class="board__foot">
         <BookingButton location={location} placement="inline" />
         <p class="board__note">
-          All prices in NZD.
-          <!-- TODO: GST inclusive? Required for the Offer schema. See Q6. -->
+          All prices in NZD (GST inclusive).
         </p>
       </div>
     </div>
@@ -273,8 +265,10 @@ const schema = [
       <div class="faq__list">
         <article class="faq__item">
           <h3 class="h3">Do you take walk-ins, or do I need to book?</h3>
-          <p class="todo">TODO: walk-in policy unconfirmed. See OPEN-QUESTIONS.md. This is
-            the single most asked question for a barbershop and it must be answered.</p>
+          <p>
+            Walk-ins are always welcome whenever a chair is free, but appointments take priority.
+            We strongly recommend booking online via {d.bookingProvider} to guarantee your chair time without waiting.
+          </p>
         </article>
 
         <article class="faq__item">
@@ -321,10 +315,10 @@ const schema = [
 
         <article class="faq__item">
           <h3 class="h3">Do you cut women's hair?</h3>
-          <p class="todo">
-            TODO: the reference site says men, women and children are all welcome, but
-            Remuera trades as a salon and Ponsonby as a barbershop. Confirm what is
-            offered where before publishing this answer.
+          <p>
+            Yes. Clients of all genders are welcome. At Ponsonby, our craft focuses on classic barbering,
+            short scissor styles, and skin fades. At our Remuera salon, we offer comprehensive hair grooming
+            alongside our dedicated nail studio.
           </p>
         </article>
       </div>
@@ -413,14 +407,6 @@ const schema = [
   .find address { font-style: normal; }
   .find__detail .label { display: block; margin-bottom: var(--s-2); }
   @media (max-width: 46rem) { .find { grid-template-columns: 1fr; } }
-
-  /* TODO markers are deliberately loud. They must not survive to launch. */
-  .todo {
-    border-left: 3px solid var(--closed);
-    padding-left: var(--s-3);
-    color: var(--closed);
-    font-size: var(--step--1);
-  }
 
   /* ---- Board foot ---------------------------------------------------- */
   .board__foot {

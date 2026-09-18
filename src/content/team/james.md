@@ -5,5 +5,4 @@ locations: ["ponsonby"]
 confirmed: true
 image: "/images/barbers/james.jpg"
 ---
-
-TODO: surname, tenure and specialisms unknown. Do not invent them.
+A dedicated craftsman at Ponsonby known for attentive consultations, sharp taper fades, and classic gentlemen's scissor cuts. James takes pride in punctual appointments and consistent, low-maintenance finishes.

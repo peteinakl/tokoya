@@ -5,7 +5,7 @@ order: 1
 durationMin: 20
 price: 20
 priceNote: ""
-summary: ""
+summary: "Quick nail clip, cuticle cleanup, and buff for clean, well-groomed hands."
 locations: ["remuera"]
 hasPage: false
 ---

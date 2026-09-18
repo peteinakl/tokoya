@@ -25,15 +25,11 @@ const year = new Date().getFullYear();
             {l.data.streetAddress}<br />
             {l.data.suburb}, {l.data.city}{l.data.postalCode ? ` ${l.data.postalCode}` : ''}
           </address>
-          {l.data.telephone ? (
+          {l.data.telephone && (
             <p><a href={`tel:${l.data.telephone}`} data-phone data-location={l.data.slug}>{l.data.telephoneDisplay}</a></p>
-          ) : (
-            <p class="ft__todo">Phone number unconfirmed — see OPEN-QUESTIONS.md Q3</p>
           )}
-          {l.data.email ? (
+          {l.data.email && (
             <p><a href={`mailto:${l.data.email}`}>{l.data.email}</a></p>
-          ) : (
-            <p class="ft__todo">Email unconfirmed — see OPEN-QUESTIONS.md Q4</p>
           )}
           <OpenNow hours={l.data.hours} />
           <p><a href={`/${l.data.slug}/`}>Visit {l.data.shortName}</a></p>
@@ -92,7 +88,6 @@ const year = new Date().getFullYear();
   .ft__loc address { font-style: normal; }
   .ft__loc > * + * { margin-top: var(--s-2); }
   .ft__loc .h3, .ft__nav .h3 { margin-bottom: var(--s-3); }
-  .ft__todo { color: var(--closed-ink); font-size: var(--step--1); }
 
   .ft__nav ul { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--s-2); }
   .ft__brands {

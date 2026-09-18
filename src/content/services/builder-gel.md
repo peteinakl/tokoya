@@ -5,7 +5,7 @@ order: 6
 durationMin: 45
 price: 80
 priceNote: ""
-summary: ""
+summary: "Reinforcing structure gel applied over natural nails to enhance strength and prevent breakage."
 locations: ["remuera"]
 hasPage: false
 ---
