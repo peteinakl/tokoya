@@ -23,15 +23,15 @@ const faqs = [
   },
   {
     q: "Can I choose or request a specific barber?",
-    a: "Yes. When reserving online or by phone, you can select your preferred craftsman. Explore our Barbers page to view our team's backgrounds, specialisms, and primary shop locations."
+    a: "Yes. When reserving online or by phone, you can select your preferred craftsman. Explore our <a href=\"/barbers/\">Barbers page</a> to view our team's backgrounds, specialisms, and primary shop locations."
   },
   {
     q: "Do you offer services for children and women?",
-    a: "Yes. We offer Child Haircuts ($35) for active kids and classic scissor styling for women. In addition, our 352 Remuera Road salon features a dedicated nail studio providing gel manicures, pedicures, builder gel, and nail art."
+    a: "Yes. We offer <a href=\"/services/child-haircut/\">Child Haircuts</a> ($35) for kids and classic scissor styling for women. In addition, our <a href=\"/remuera/\">352 Remuera Road salon</a> features a dedicated nail studio providing <a href=\"/services/gel-manicure/\">gel manicures</a>, pedicures, and nail care."
   },
   {
     q: "What products do you use and can I buy them in the shop?",
-    a: "We exclusively stock Layrite Deluxe, Uppercut Deluxe, Proraso Firenze, and Formidable. Every wax, pomade, shaving soap, and beard oil we use in the chair is available for purchase at our front counters."
+    a: "We exclusively stock <a href=\"/products/#layrite-deluxe\">Layrite Deluxe</a>, <a href=\"/products/#uppercut-deluxe\">Uppercut Deluxe</a>, <a href=\"/products/#proraso-firenze\">Proraso Firenze</a>, and <a href=\"/products/#formidable\">Formidable</a>. Every wax, pomade, shaving soap, and beard oil we use in the chair is available for purchase at our <a href=\"/ponsonby/\">Ponsonby</a> and <a href=\"/remuera/\">Remuera</a> front counters."
   },
   {
     q: "What does 'Tokoya' (床屋) mean?",
@@ -51,7 +51,7 @@ const schema = {
     name: f.q,
     acceptedAnswer: {
       '@type': 'Answer',
-      text: f.a,
+      text: f.a.replace(/<[^>]+>/g, ''),
     },
   })),
 };
@@ -87,7 +87,7 @@ const schema = {
                   <span class="faq-toggle-icon" aria-hidden="true">+</span>
                 </summary>
                 <div class="faq-item__answer">
-                  <p>{faq.a}</p>
+                  <p set:html={faq.a} />
                 </div>
               </details>
             ))}
@@ -220,6 +220,15 @@ const schema = {
     border-top: 1px solid rgba(201, 169, 135, 0.1);
     margin-top: 0.25rem;
     padding-top: var(--s-4);
+  }
+  .faq-item__answer a {
+    color: var(--bronze-gold);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.15s ease;
+  }
+  .faq-item__answer a:hover {
+    color: var(--cream);
   }
 
   /* Sidebar */

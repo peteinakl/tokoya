@@ -10,11 +10,17 @@ const remuera = locations.find((l) => l.data.slug === 'remuera')!;
 
 const brands = [
   {
+    id: 'layrite-deluxe',
     name: 'Layrite Deluxe',
     tagline: 'Holds like wax, washes out like gel',
     logo: '/images/brands/layrite.png',
     origin: 'California, USA',
     description: 'Created by a passionate barber who wanted a water-soluble pomade that delivered all-day hold without greasy buildup. Layrite provides clean, high-performance styling for classic pompadours, side parts, and textured crops.',
+    featuredServices: [
+      { title: 'Men’s Haircut', slug: 'mens-haircut' },
+      { title: 'Skin Fade', slug: 'skin-fade' },
+      { title: 'Scissor Cut', slug: 'scissor-cut' },
+    ],
     products: [
       { name: 'Original Pomade', desc: 'Medium hold, medium shine. Clean vanilla scent, washes out easily with water.' },
       { name: 'Superhold Pomade', desc: 'Heavy hold for coarse or curly hair that demands all-day control.' },
@@ -23,11 +29,17 @@ const brands = [
     ]
   },
   {
+    id: 'uppercut-deluxe',
     name: 'Uppercut Deluxe',
     tagline: 'Timeless style, modern edge',
     logo: '/images/brands/uppercut.png',
     origin: 'Gold Coast, Australia',
     description: 'Inspired by the timeless style of 1950s barbershops and spiritual founder Willy "Uppercut" O\'Shea. Engineered without the greasy chemical heaviness of traditional formulas.',
+    featuredServices: [
+      { title: 'Skin Fade', slug: 'skin-fade' },
+      { title: 'Buzz Cut', slug: 'buzz-cut' },
+      { title: 'Student Styled Haircut', slug: 'student-styled-haircut' },
+    ],
     products: [
       { name: 'Matt Pomade', desc: 'Medium hold with a dry matte finish. Perfect for natural, effortless texture.' },
       { name: 'Monster Hold', desc: 'Sweat-resistant, petroleum-based wax for maximum control and re-workability.' },
@@ -36,11 +48,16 @@ const brands = [
     ]
   },
   {
+    id: 'proraso-firenze',
     name: 'Proraso Firenze',
     tagline: 'Italian barbering excellence since 1948',
     logo: '/images/brands/proraso.png',
     origin: 'Florence, Italy',
     description: 'The benchmark of Italian wet shaving for four generations. Formulated with natural botanical ingredients, refreshing eucalyptus oil, menthol, and shea butter for the ultimate razor glide.',
+    featuredServices: [
+      { title: 'Hot Towel Shave', slug: 'hot-towel-shave' },
+      { title: 'Beard Trim & Shave', slug: 'beard-trim' },
+    ],
     products: [
       { name: 'Refreshing Pre-Shave Cream', desc: 'Softens the beard and protects sensitive skin before the blade touches.' },
       { name: 'Eucalyptus Shaving Cream', desc: 'Rich, thick lather infused with natural menthol for an invigorating shave.' },
@@ -49,11 +66,17 @@ const brands = [
     ]
   },
   {
+    id: 'formidable',
     name: 'Formidable',
     tagline: 'Artisan men’s grooming formulations',
     logo: '/images/brands/formidable.png',
     origin: 'New Zealand',
     description: 'Hand-crafted male grooming solutions made specifically for Australasian hair textures and conditions. High-performing pastes and balms with subtle, refined cedarwood notes.',
+    featuredServices: [
+      { title: 'Beard Trim & Shave', slug: 'beard-trim' },
+      { title: 'Quick Beard Trim', slug: 'quick-beard-trim' },
+      { title: 'Men’s Haircut', slug: 'mens-haircut' },
+    ],
     products: [
       { name: 'Matte Sculpting Paste', desc: 'Flexible medium-high hold with pliable reworkability throughout the day.' },
       { name: 'Sea Salt Texturizing Spray', desc: 'Infuses hair with natural beach-tumbled volume, separation, and body.' },
@@ -62,11 +85,45 @@ const brands = [
   }
 ];
 
+const SITE = 'https://www.tokoya.co.nz';
 const title = "Barbering & Hair Products Stocked | Tokoya Auckland";
 const description = "Authentic grooming products stocked at Tokoya Barber & Shop in Ponsonby and Remuera. Official stockists of Layrite, Uppercut Deluxe, Proraso, and Formidable.";
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Official Grooming Products Stocked at Tokoya',
+    itemListElement: brands.map((b, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': 'Product',
+        name: b.name,
+        description: b.description,
+        brand: { '@type': 'Brand', name: b.name },
+        image: `${SITE}${b.logo}`,
+        offers: {
+          '@type': 'AggregateOffer',
+          priceCurrency: 'NZD',
+          availability: 'https://schema.org/InStoreOnly',
+          seller: { '@id': `${SITE}/#organization` },
+        },
+      },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+      { '@type': 'ListItem', position: 2, name: 'Products', item: `${SITE}/products/` },
+    ],
+  },
+];
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} schema={schema}>
 
   <!-- Hero -->
   <section class="products-hero">
@@ -89,7 +146,7 @@ const description = "Authentic grooming products stocked at Tokoya Barber & Shop
 
       <div class="brands-stack">
         {brands.map((brand) => (
-          <article class="brand-showcase-card">
+          <article class="brand-showcase-card" id={brand.id}>
             <div class="brand-showcase-header">
               <div class="brand-logo-frame">
                 <img src={brand.logo} alt={brand.name} loading="lazy" />
@@ -99,6 +156,17 @@ const description = "Authentic grooming products stocked at Tokoya Barber & Shop
                 <h2 class="display brand-name">{brand.name}</h2>
                 <p class="brand-tagline text-gold font-medium">{brand.tagline}</p>
                 <p class="brand-description">{brand.description}</p>
+
+                <div class="brand-services-bar">
+                  <span class="brand-services-label">Applied in the chair for:</span>
+                  <div class="brand-services-tags">
+                    {brand.featuredServices.map((svc) => (
+                      <a href={`/services/${svc.slug}/`} class="brand-service-link">
+                        <span>{svc.title}</span> &rarr;
+                      </a>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -109,6 +177,19 @@ const description = "Authentic grooming products stocked at Tokoya Barber & Shop
                   <p class="product-item__desc">{item.desc}</p>
                 </div>
               ))}
+            </div>
+
+            <div class="brand-booking-footer">
+              <div class="brand-booking-note">
+                <p>
+                  <strong>Experience {brand.name} in your next appointment:</strong>
+                  Stocked and styled in chairs at both <a href="/ponsonby/" class="text-gold underline">Ponsonby</a> and <a href="/remuera/" class="text-gold underline">Remuera</a>.
+                </p>
+              </div>
+              <div class="brand-booking-ctas">
+                <BookingButton location={ponsonby} placement="card" />
+                <BookingButton location={remuera} placement="card" variant="ghost" />
+              </div>
             </div>
           </article>
         ))}
@@ -239,6 +320,45 @@ const description = "Authentic grooming products stocked at Tokoya Barber & Shop
     line-height: 1.6;
     margin-top: var(--s-2);
   }
+  .brand-services-bar {
+    margin-top: var(--s-3);
+    padding-top: var(--s-3);
+    border-top: 1px solid rgba(201, 169, 135, 0.15);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-2) var(--s-3);
+  }
+  .brand-services-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--bronze-gold);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .brand-services-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .brand-service-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: var(--step--1);
+    padding: 0.25rem 0.65rem;
+    background: var(--ink-surface);
+    border: 1px solid rgba(201, 169, 135, 0.3);
+    border-radius: 999px;
+    color: var(--paper);
+    text-decoration: none;
+    transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease;
+  }
+  .brand-service-link:hover {
+    border-color: var(--bronze-bright);
+    background: rgba(201, 169, 135, 0.15);
+    color: var(--bronze-bright);
+  }
 
   .brand-products-grid {
     display: grid;
@@ -261,6 +381,35 @@ const description = "Authentic grooming products stocked at Tokoya Barber & Shop
     font-size: var(--step--1);
     color: rgba(250, 247, 242, 0.7);
     line-height: 1.5;
+  }
+
+  .brand-booking-footer {
+    margin-top: var(--s-5);
+    padding-top: var(--s-5);
+    border-top: 1px solid var(--ink-card-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--s-4);
+    flex-wrap: wrap;
+  }
+  .brand-booking-note {
+    font-size: var(--step--1);
+    color: rgba(250, 247, 242, 0.75);
+    max-width: 48ch;
+  }
+  .brand-booking-note p {
+    margin: 0;
+  }
+  .brand-booking-note strong {
+    color: var(--paper);
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+  .brand-booking-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3);
   }
 
   /* Callout */

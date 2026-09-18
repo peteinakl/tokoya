@@ -13,7 +13,7 @@ A beard trim and shave is $45 and takes 30 minutes: the beard is shaped and
 the cheeks and neck are shaved clean around it.
 
 ### Sculpting & Razor Detailing
-Whether you have a full beard needing bulk reduction or closer designer stubble, your barber balances proportions using clipper guards and freehand scissor work. Cheeks and necklines are prepped with hot lather and carved clean with a straight razor to give strong, deliberate geometry that complements your jawline.
+Whether you have a full beard needing bulk reduction or closer designer stubble, your barber balances proportions using clipper guards and freehand scissor work. Cheeks and necklines are prepped with [Proraso hot lather](/products/#proraso-firenze) and carved clean with a straight razor to give strong, deliberate geometry that complements your jawline.
 
 ### Conditioning & Upkeep
-To finish, a light application of conditioning beard oil or nourishing balm is worked through to soften coarse bristles and hydrate the skin underneath. To maintain sharp edges and prevent stray wild hairs from throwing off your beard’s silhouette, schedule an upkeep appointment every 2 to 3 weeks.
+To finish, a light application of [Formidable Botanical Beard Oil](/products/#formidable) or nourishing balm is worked through to soften coarse bristles and hydrate the skin underneath. To maintain sharp edges and prevent stray wild hairs from throwing off your beard’s silhouette, schedule an upkeep appointment every 2 to 3 weeks at [Ponsonby](/ponsonby/) or [Remuera](/remuera/). Both grooming lines are available for purchase at our front counters.

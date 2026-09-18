@@ -138,7 +138,7 @@ const schema = [
        ========================================================== -->
   <section class="section on-deep" aria-labelledby="shops-head">
     <div class="wrap">
-      <SectionHead n="01" label="Choose Your Shop" title="Two shops, five minutes apart" id="shops-head" />
+      <SectionHead n="01" label="Choose Your Shop" title="Two convenient Auckland locations" id="shops-head" />
 
       <div class="shop-cards">
         <!-- Ponsonby Card -->
@@ -261,6 +261,15 @@ const schema = [
                 <p class="value-desc">Every cut, fade, and hot towel shave is executed with deliberate precision and genuine hospitality.</p>
               </div>
             </div>
+            <div class="value-item">
+              <span class="disc">03</span>
+              <div>
+                <h3 class="value-title">Curated professional apothecary</h3>
+                <p class="value-desc">
+                  Every haircut and shave ritual is finished with imported <a href="/products/#layrite-deluxe">Layrite</a>, <a href="/products/#uppercut-deluxe">Uppercut Deluxe</a>, <a href="/products/#proraso-firenze">Proraso Firenze</a>, and <a href="/products/#formidable">Formidable</a> grooming formulations. Also stocked for retail purchase across our <a href="/ponsonby/">Ponsonby</a> and <a href="/remuera/">Remuera</a> counters.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -327,6 +336,9 @@ const schema = [
   <section class="section on-ink" aria-labelledby="services-head">
     <div class="wrap">
       <SectionHead n="03" label="Signature Services" title="Upfront price & time, before you book" id="services-head" />
+      <p class="lede services-intro-lede">
+        Every cut and shave is finished with authentic <a href="/products/">professional grooming products</a>, styled to hold before you leave the chair.
+      </p>
 
       <ul class="service-cards">
         {featured.map((s) => (
@@ -605,6 +617,21 @@ const schema = [
     color: rgba(250, 247, 242, 0.75);
     font-size: var(--step--1);
     margin: 0;
+  }
+  .value-desc a,
+  .services-intro-lede a {
+    color: var(--bronze-gold);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.15s ease;
+  }
+  .value-desc a:hover,
+  .services-intro-lede a:hover {
+    color: var(--cream);
+  }
+  .services-intro-lede {
+    margin-block: calc(-1 * var(--s-3)) var(--s-6);
+    max-width: 65ch;
   }
   .craft-images {
     display: grid;

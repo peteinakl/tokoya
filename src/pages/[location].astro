@@ -89,6 +89,10 @@ const locationFaqs = [
       ? "Yes. Clients of all genders are welcome. At Ponsonby, our craft focuses on classic barbering, short scissor styles, and skin fades."
       : "Yes. Clients of all genders are welcome. At our Remuera salon, we offer comprehensive hair grooming alongside our dedicated nail studio.",
   },
+  {
+    q: `What grooming products do you use and stock at ${d.shortName}?`,
+    a: `We finish cuts and shaves with official <a href="/products/#layrite-deluxe">Layrite</a> pomades, <a href="/products/#uppercut-deluxe">Uppercut Deluxe</a> matte clays, <a href="/products/#proraso-firenze">Proraso</a> shave creams, and <a href="/products/#formidable">Formidable</a> beard oils. All formulations used in the chair are available for direct purchase at our ${d.shortName} counter or can be experienced during your next booked appointment.`,
+  },
 ];
 
 const schema = [
@@ -160,7 +164,7 @@ const schema = [
       name: f.q,
       acceptedAnswer: {
         '@type': 'Answer',
-        text: f.a,
+        text: f.a.replace(/<[^>]+>/g, ''),
       },
     })),
   },
@@ -265,7 +269,7 @@ const schema = [
       <div class="board__foot">
         <BookingButton location={location} placement="inline" />
         <p class="board__note">
-          All prices in NZD (GST inclusive).
+          All prices in NZD (GST inclusive). Cuts and shaves are finished with professional <a href="/products/">Layrite, Uppercut Deluxe, and Proraso styling products</a>, also available at our counter.
         </p>
       </div>
     </div>
@@ -321,7 +325,7 @@ const schema = [
                   <span class="faq-toggle-icon" aria-hidden="true">+</span>
                 </summary>
                 <div class="faq-item__answer">
-                  <p>{faq.a}</p>
+                  <p set:html={faq.a} />
                 </div>
               </details>
             ))}
@@ -573,6 +577,17 @@ const schema = [
   }
   .faq-item__answer p {
     margin: 0;
+  }
+  .faq-item__answer a,
+  .board__note a {
+    color: var(--bronze-gold);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.15s ease;
+  }
+  .faq-item__answer a:hover,
+  .board__note a:hover {
+    color: var(--cream);
   }
 
   /* FAQ Sidebar Help Card */

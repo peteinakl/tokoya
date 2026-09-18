@@ -19,4 +19,4 @@ between lengths.
 - **High Fade:** Begins high on the temples and crown, creating bold, athletic contrast that draws maximum focus to the styled hair on top.
 
 ### Technique & upkeep
-Each skin fade is executed using balding clippers and hypoallergenic foil shavers down to bare skin, followed by seamless guard blending and crisp outline detailing with a straight razor. Because bare-skin fades grow out noticeably within days, clients who want to maintain zero-gap sharpness typically rebook every 2 to 3 weeks.
+Each skin fade is executed using balding clippers and hypoallergenic foil shavers down to bare skin, followed by seamless guard blending and crisp outline detailing with a straight razor. The top is finished using high-hold [Layrite Cement Clay](/products/#layrite-deluxe) or [Uppercut Deluxe styling powder](/products/#uppercut-deluxe) for a clean matte texture. Because bare-skin fades grow out noticeably within days, clients who want to maintain zero-gap sharpness typically rebook every 2 to 3 weeks at [Ponsonby](/ponsonby/) or [Remuera](/remuera/).

@@ -93,7 +93,7 @@ const description = "The story of Tokoya Barber & Shop. Founded in 2015 by Kaise
             <p>
               We welcome men, women, and children, taking pride in creating a comfortable, family-oriented atmosphere where everyone walks out looking sharp.
             </p>
-            <div class="pt-4">
+            <div class="about-actions">
               <a href="/barbers/" class="btn btn--ghost">
                 <span>Meet Our Barbers</span> &rarr;
               </a>
@@ -119,9 +119,12 @@ const description = "The story of Tokoya Barber & Shop. Founded in 2015 by Kaise
               As part of our continued growth, Kaori and Roshan launched <strong>Tokoya Barber &amp; Salon</strong> at 352 Remuera Road.
             </p>
             <p>
-              This location expands upon our original Ponsonby barbershop concept by offering full master barbering alongside a dedicated, state-of-the-art <strong>nail salon for both men and women</strong>. From builder gel and manicures to classic skin fades, Remuera brings all your self-care into one seamless, luxurious experience.
+              This location expands upon our original Ponsonby barbershop concept by offering full master barbering alongside a dedicated <strong>nail salon for both men and women</strong>. From gel manicures and pedicures to skin fades and hot towel shaves, Remuera brings your grooming into one welcoming space.
             </p>
-            <div class="pt-4 flex flex-wrap gap-3">
+            <p>
+              Every cut and shave across both locations is finished with authentic <a href="/products/">imported grooming products</a> including Layrite, Uppercut Deluxe, and Proraso, which are also available for purchase at our counters.
+            </p>
+            <div class="about-actions">
               <BookingButton location={ponsonby} placement="card" />
               <BookingButton location={remuera} placement="card" variant="ghost" />
             </div>
@@ -196,6 +199,21 @@ const description = "The story of Tokoya Barber & Shop. Founded in 2015 by Kaise
     gap: var(--s-4);
     color: rgba(250, 247, 242, 0.88);
     font-size: var(--step-0);
+  }
+  .story-text a {
+    color: var(--bronze-gold);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.15s ease;
+  }
+  .story-text a:hover {
+    color: var(--cream);
+  }
+  .about-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+    margin-top: var(--s-4);
   }
 
   .about-image-card {

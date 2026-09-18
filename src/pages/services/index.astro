@@ -51,7 +51,7 @@ const schema = {
       </h1>
       <p class="lede services-hero__lede">
         Deliberate technique, meticulous hygiene, and zero guesswork.
-        Every service includes dedicated chair time, hot lather where needed, and clear upfront pricing.
+        Every haircut and shave is finished with authentic <a href="/products/">professional grooming products</a>, dedicated chair time, hot towels where needed, and clear upfront pricing.
       </p>
 
       <!-- Category Filter Pills -->
@@ -162,10 +162,13 @@ const schema = {
           </p>
           <div class="transparency-links">
             <a href="/prices/" class="btn btn--solid">
-              <span>View Compact Price Table</span>
+              <span>View Price Board</span>
+            </a>
+            <a href="/products/" class="btn btn--ghost">
+              <span>Grooming Products</span>
             </a>
             <a href="/contact/" class="btn btn--ghost">
-              <span>Cancellation Policy &amp; Terms</span>
+              <span>Cancellation Policy</span>
             </a>
           </div>
         </div>
@@ -210,6 +213,15 @@ const schema = {
   .services-hero__lede {
     max-width: 52ch;
     margin-bottom: var(--s-6);
+  }
+  .services-hero__lede a {
+    color: var(--bronze-gold);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.15s ease;
+  }
+  .services-hero__lede a:hover {
+    color: var(--cream);
   }
 
   /* Category nav pills */

@@ -43,8 +43,8 @@ const schema = {
     <div class="wrap">
       <SectionHead label="Grooming Menu" title="Every service, every price" />
       <p class="lede">
-        Transparent pricing across both shops. Nails and full waxing are hosted exclusively at our Remuera salon.
-        Every price includes the full dedicated chair time with zero surprises at the counter.
+        Transparent pricing across both shops. Nails and waxing are hosted exclusively at our Remuera salon.
+        Every service is finished with authentic <a href="/products/">professional styling products</a> (Layrite, Uppercut Deluxe, and Proraso), with full dedicated chair time and zero surprises at the counter.
       </p>
     </div>
   </section>
@@ -55,7 +55,12 @@ const schema = {
         <PriceList services={services} groups={['haircuts','shaves','waxing','nails']} />
       </div>
       <div class="foot">
-        {locations.map((l) => <BookingButton location={l} placement="inline" />)}
+        <div class="foot-actions">
+          {locations.map((l) => <BookingButton location={l} placement="inline" />)}
+        </div>
+        <p class="foot-note">
+          All prices in NZD (GST inclusive). Authentic pomades, clays, and shave balms are also available to purchase at our <a href="/ponsonby/">Ponsonby</a> and <a href="/remuera/">Remuera</a> counters.
+        </p>
       </div>
     </div>
   </section>
@@ -70,9 +75,33 @@ const schema = {
     box-shadow: var(--shadow-md);
   }
   .foot {
-    margin-top: var(--s-7); padding-top: var(--s-5);
+    margin-top: var(--s-7);
+    padding-top: var(--s-5);
     border-top: 1px solid var(--rule-ink);
-    display: flex; gap: var(--s-3); flex-wrap: wrap;
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-4);
+  }
+  .foot-actions {
+    display: flex;
+    gap: var(--s-3);
+    flex-wrap: wrap;
+  }
+  .foot-note {
+    font-size: var(--step--1);
+    color: var(--ink-60);
+    margin: 0;
+  }
+  .foot-note a,
+  .lede a {
+    color: var(--bronze-gold);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.15s ease;
+  }
+  .foot-note a:hover,
+  .lede a:hover {
+    color: var(--cream);
   }
 </style>
 
