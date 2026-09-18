@@ -131,37 +131,6 @@ const schema = {
             </div>
           </div>
 
-          <!-- In-Chair Apothecary -->
-          <div class="svc-products-card">
-            <span class="svc-products-badge">In-Chair Apothecary</span>
-            <h3 class="display svc-products-title">Grooming Products Applied In This Service</h3>
-            {d.group === 'haircuts' && (
-              <p class="svc-products-desc">
-                Your cut finishes with professional styling using our official collection of <a href="/products/#layrite-deluxe" class="text-gold underline">Layrite Deluxe</a> (Original Pomade, Superhold, Cement Clay) and <a href="/products/#uppercut-deluxe" class="text-gold underline">Uppercut Deluxe</a> (Matt Pomade, Styling Powder). Every product applied in the chair is available for purchase at our <a href="/ponsonby/" class="text-gold underline">Ponsonby</a> and <a href="/remuera/" class="text-gold underline">Remuera</a> counters.
-              </p>
-            )}
-            {d.group === 'shaves' && (
-              <p class="svc-products-desc">
-                Our straight razor shaves and beard detailing use genuine Italian <a href="/products/#proraso-firenze" class="text-gold underline">Proraso Firenze</a> (eucalyptus pre-shave cream and sandalwood aftershave balm) paired with New Zealand artisan <a href="/products/#formidable" class="text-gold underline">Formidable</a> botanical beard oils. Take the barbershop ritual home from our <a href="/ponsonby/" class="text-gold underline">Ponsonby</a> or <a href="/remuera/" class="text-gold underline">Remuera</a> shops.
-              </p>
-            )}
-            {d.group === 'waxing' && (
-              <p class="svc-products-desc">
-                Waxing services conclude with calming, alcohol-free botanical balms from <a href="/products/#proraso-firenze" class="text-gold underline">Proraso Firenze</a> to soothe delicate facial skin and prevent post-treatment redness.
-              </p>
-            )}
-            {d.group === 'nails' && (
-              <p class="svc-products-desc">
-                Our manicure and pedicure treatments utilize salon-grade gel formulas, strengthening builder gels, and nourishing cuticle oils at our dedicated nail studio in <a href="/remuera/" class="text-gold underline">Remuera</a>.
-              </p>
-            )}
-            <div class="svc-products-links">
-              <a href="/products/" class="svc-products-link">
-                <span>Explore The Grooming Apothecary</span> &rarr;
-              </a>
-            </div>
-          </div>
-
           <div class="standards-box">
             <h3 class="standards-title">The Tokoya Standard</h3>
             <ul class="standards-list">
@@ -394,55 +363,6 @@ const schema = {
   }
   .service-markdown li strong {
     color: var(--chalk);
-  }
-
-  .svc-products-card {
-    background: var(--ink-surface);
-    border: 1px solid rgba(201, 169, 135, 0.3);
-    border-radius: 8px;
-    padding: var(--s-5);
-    margin-bottom: var(--s-5);
-  }
-  .svc-products-badge {
-    display: inline-block;
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--bronze-bright);
-    background: rgba(201, 169, 135, 0.12);
-    border: 1px solid rgba(201, 169, 135, 0.25);
-    padding: 0.2rem 0.55rem;
-    border-radius: 4px;
-    margin-bottom: var(--s-3);
-  }
-  .svc-products-title {
-    font-size: var(--step-1);
-    color: var(--paper);
-    margin-bottom: var(--s-3);
-  }
-  .svc-products-desc {
-    font-size: var(--step--1);
-    line-height: 1.65;
-    color: rgba(250, 247, 242, 0.8);
-    margin-bottom: var(--s-4);
-  }
-  .svc-products-links {
-    display: flex;
-  }
-  .svc-products-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    font-size: var(--step--1);
-    font-weight: 500;
-    color: var(--bronze-gold);
-    text-decoration: none;
-    transition: color 150ms ease;
-  }
-  .svc-products-link:hover {
-    color: var(--bronze-bright);
-    text-decoration: underline;
   }
 
   .standards-box {
