@@ -106,7 +106,7 @@ Tokoya is an official stockist of imported professional grooming lines. All prod
 - Layrite Deluxe (USA): Original Pomade, Superhold Pomade, Cement Clay, Matte Cream.
 - Uppercut Deluxe (Australia): Matt Pomade, Monster Hold, Styling Powder, Deluxe Pomade.
 - Proraso Firenze (Italy): Eucalyptus and menthol pre-shave creams, refreshing shaving soaps, sandalwood aftershave balms, beard washes.
-- Formidable (New Zealand): Artisan matte sculpting paste, sea salt texturizing spray, organic botanical beard oil.
+- Formidable (New Zealand): Artisan matte sculpting paste, sea salt texturising spray, organic botanical beard oil.
 
 ## Appointment & Cancellation Terms
 
@@ -116,7 +116,7 @@ Tokoya is an official stockist of imported professional grooming lines. All prod
 
 ## Brand Identity & Meaning
 
-- 床屋 (Tokoya): Traditional Japanese noun for "barbershop", honoring the concept of grooming as a calm, respected ritual.
+- 床屋 (Tokoya): Traditional Japanese noun for "barbershop", honouring the concept of grooming as a calm, respected ritual.
 - Trademarked Emblem: Original line-art illustration designed and trademarked by artist Anna Doria, featuring a barber shaving a seated client inside a circular crest, supported by thinning shears bearing handwritten script and the kanji 床屋.
 
 ## Key Links

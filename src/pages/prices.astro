@@ -30,6 +30,12 @@ const schema = {
       itemOffered: { '@type': 'Service', name: s.data.title, serviceType: s.data.group },
       price: String(s.data.price),
       priceCurrency: 'NZD',
+      priceSpecification: {
+        '@type': 'UnitPriceSpecification',
+        price: String(s.data.price),
+        priceCurrency: 'NZD',
+        valueAddedTaxIncluded: true,
+      },
       availableAtOrFrom: s.data.locations.map((l) => ({ '@id': `${SITE}/${l}/#business` })),
     })),
 };
@@ -43,7 +49,7 @@ const schema = {
     <div class="wrap">
       <SectionHead label="Grooming Menu" title="Every service, every price" />
       <p class="lede">
-        Transparent pricing across both shops. Nails and waxing are hosted exclusively at our Remuera salon.
+        Transparent pricing across both shops (all prices in NZD, 15% GST inclusive). Nails and waxing are hosted exclusively at our Remuera salon.
         Every service is finished with authentic <a href="/products/">professional styling products</a> (Layrite, Uppercut Deluxe, and Proraso), with full dedicated chair time and zero surprises at the counter.
       </p>
     </div>
@@ -59,7 +65,7 @@ const schema = {
           {locations.map((l) => <BookingButton location={l} placement="inline" />)}
         </div>
         <p class="foot-note">
-          All prices in NZD (GST inclusive). Authentic pomades, clays, and shave balms are also available to purchase at our <a href="/ponsonby/">Ponsonby</a> and <a href="/remuera/">Remuera</a> counters.
+          All prices in NZD (15% GST inclusive). Authentic pomades, clays, and shave balms are also available to purchase at our <a href="/ponsonby/">Ponsonby</a> and <a href="/remuera/">Remuera</a> counters.
         </p>
       </div>
     </div>

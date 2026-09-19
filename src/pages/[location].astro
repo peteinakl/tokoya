@@ -136,6 +136,12 @@ const schema = [
         itemOffered: { '@type': 'Service', name: s.data.title, serviceType: s.data.group },
         price: String(s.data.price),
         priceCurrency: 'NZD',
+        priceSpecification: {
+          '@type': 'UnitPriceSpecification',
+          price: String(s.data.price),
+          priceCurrency: 'NZD',
+          valueAddedTaxIncluded: true,
+        },
       })),
     },
     potentialAction: {

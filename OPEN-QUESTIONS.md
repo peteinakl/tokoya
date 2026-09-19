@@ -13,7 +13,7 @@ Q9 is the only one that changes the shape of the build rather than a value in it
 | 3 | **Remuera phone number.** The site shows `+64 26 684 3107`. NZ mobile prefixes are 020, 021, 022, 027, 029. `26` is not valid. Probably `022 684 3107`, but do not guess a phone number. | Location page, footer, JSON-LD, GBP | `telephone: null` → visible red block |
 | 4 | Remuera email. Currently `tokoya.remuera@gmail.com`. A Gmail address weakens both the brand and NAP consistency. Recommend `remuera@tokoya.co.nz`. | Footer, contact page, JSON-LD | `email: null` |
 | 5 | **Parking and public transport** for 279 Ponsonby Road and 352 Remuera Road. No content exists anywhere. One of the most-asked pre-booking questions. | "Getting here" on both location pages | `gettingHere: null` → visible red block |
-| 6 | Are the listed prices GST-inclusive? | `Offer` schema, price board footnote | HTML comment on the board foot |
+| 6 | Are the listed prices GST-inclusive? | `Offer` schema, price board footnote | Confirmed GST-inclusive (15% NZ GST); implemented in `Offer` schema (`valueAddedTaxIncluded: true`) and price board copy |
 | 7 | Children's haircuts: minimum age, and whether the $35 child rate has an upper age limit. | `/services/child-haircut/`, FAQ | TODO in `services/child-haircut.md` |
 | 8 | Payment methods and gift vouchers. Eftpos, cash, cards, any surcharge, whether vouchers are sold. | `/faq/` | Not yet written |
 | 9 | **Kitomba service IDs, and Fresha service and staff IDs.** Obtainable from each booking system's admin. | `lib/booking.ts`, every `BookingButton` | `null` → every link falls back to the booking home |

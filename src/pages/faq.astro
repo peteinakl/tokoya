@@ -5,10 +5,24 @@ import SectionHead from '../components/SectionHead.astro';
 import BookingButton from '../components/BookingButton.astro';
 import { getCollection } from 'astro:content';
 import heroStation from '../assets/images/hero/hero-station.png';
+import { formatTime } from '../lib/hours';
 
 const locations = await getCollection('locations');
 const ponsonby = locations.find((l) => l.data.slug === 'ponsonby')!;
 const remuera = locations.find((l) => l.data.slug === 'remuera')!;
+
+const ponsonbySun = ponsonby.data.hours.find((h) => h.day === 'Sunday');
+const remueraSun = remuera.data.hours.find((h) => h.day === 'Sunday');
+const ponsonbySunHours = ponsonbySun && !ponsonbySun.closed && ponsonbySun.opens && ponsonbySun.closes
+  ? `${formatTime(ponsonbySun.opens)} – ${formatTime(ponsonbySun.closes)}`
+  : null;
+const remueraSunHours = remueraSun && !remueraSun.closed && remueraSun.opens && remueraSun.closes
+  ? `${formatTime(remueraSun.opens)} – ${formatTime(remueraSun.closes)}`
+  : null;
+
+const sundayHoursDisplay = (ponsonbySunHours && remueraSunHours && ponsonbySunHours === remueraSunHours)
+  ? `from ${ponsonbySunHours}`
+  : `(Ponsonby: ${ponsonbySunHours ?? 'closed'}, Remuera: ${remueraSunHours ?? 'closed'})`;
 
 const faqs = [
   {
@@ -25,7 +39,7 @@ const faqs = [
   },
   {
     q: "Is Tokoya open on Sundays?",
-    a: "Yes! Both our Ponsonby and Remuera locations are open on Sundays from <strong>9:00 AM to 4:00 PM</strong>. Sunday chair reservations fill fast, so we recommend booking ahead."
+    a: `Yes! Both our Ponsonby and Remuera locations are open on Sundays ${sundayHoursDisplay}, and reservations fill quickly so we recommend booking ahead.`
   },
   {
     q: "What is your cancellation policy?",

@@ -61,6 +61,12 @@ const schema = {
     '@type': 'Offer',
     price: String(d.price),
     priceCurrency: 'NZD',
+    priceSpecification: {
+      '@type': 'UnitPriceSpecification',
+      price: String(d.price),
+      priceCurrency: 'NZD',
+      valueAddedTaxIncluded: true,
+    },
     availability: 'https://schema.org/InStock',
     availableAtOrFrom: d.locations.map((loc) => ({
       '@id': `${SITE}/${loc}/#business`,
@@ -145,7 +151,7 @@ const schema = {
               <li>
                 <span class="check-icon">&#10003;</span>
                 <div>
-                  <strong>Immaculate Hygiene:</strong> Every blade is fresh, every comb and clipper guard sterilized between clients.
+                  <strong>Immaculate Hygiene:</strong> Every blade is fresh, every comb and clipper guard sterilised between clients.
                 </div>
               </li>
               <li>

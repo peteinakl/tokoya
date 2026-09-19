@@ -57,7 +57,7 @@ export const GET: APIRoute = async () => {
 
   const content = `# Tokoya Barber & Shop: Full Knowledge Base & Machine-Readable Corpus
 
-> Comprehensive reference documentation for Tokoya Barber & Shop (床屋) in Auckland, New Zealand. This document is dynamically compiled from verified content collections and optimized for consumption by Large Language Models, AI Search Engines (Google AI Overviews, SearchGPT, Perplexity), and retrieval-augmented systems.
+> Comprehensive reference documentation for Tokoya Barber & Shop (床屋) in Auckland, New Zealand. This document is dynamically compiled from verified content collections and optimised for consumption by Large Language Models, AI Search Engines (Google AI Overviews, SearchGPT, Perplexity), and retrieval-augmented systems.
 
 ## Entity Overview
 
@@ -111,7 +111,7 @@ ${teamSection}
 
 ## Grooming Services, Pricing & Durations (NZD, GST Inclusive)
 
-All prices include dedicated chair time, personalized consultation, and styling finish.
+All prices include dedicated chair time, personalised consultation, and styling finish.
 
 ### Haircuts
 ${renderServiceSection(haircuts)}
