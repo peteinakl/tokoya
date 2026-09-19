@@ -1,8 +1,14 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHead from '../components/SectionHead.astro';
 import BookingButton from '../components/BookingButton.astro';
 import { getCollection } from 'astro:content';
+import heroStation from '../assets/images/hero/hero-station.png';
+import layriteLogo from '../assets/images/brands/layrite.png';
+import uppercutLogo from '../assets/images/brands/uppercut.png';
+import prorasoLogo from '../assets/images/brands/proraso.png';
+import formidableLogo from '../assets/images/brands/formidable.png';
 
 const locations = await getCollection('locations');
 const ponsonby = locations.find((l) => l.data.slug === 'ponsonby')!;
@@ -13,7 +19,7 @@ const brands = [
     id: 'layrite-deluxe',
     name: 'Layrite Deluxe',
     tagline: 'Holds like wax, washes out like gel',
-    logo: '/images/brands/layrite.png',
+    logo: layriteLogo,
     origin: 'California, USA',
     description: 'Created by a passionate barber who wanted a water-soluble pomade that delivered all-day hold without greasy buildup. Layrite provides clean, high-performance styling for classic pompadours, side parts, and textured crops.',
     featuredServices: [
@@ -32,7 +38,7 @@ const brands = [
     id: 'uppercut-deluxe',
     name: 'Uppercut Deluxe',
     tagline: 'Timeless style, modern edge',
-    logo: '/images/brands/uppercut.png',
+    logo: uppercutLogo,
     origin: 'Gold Coast, Australia',
     description: 'Inspired by the timeless style of 1950s barbershops and spiritual founder Willy "Uppercut" O\'Shea. Engineered without the greasy chemical heaviness of traditional formulas.',
     featuredServices: [
@@ -51,7 +57,7 @@ const brands = [
     id: 'proraso-firenze',
     name: 'Proraso Firenze',
     tagline: 'Italian barbering excellence since 1948',
-    logo: '/images/brands/proraso.png',
+    logo: prorasoLogo,
     origin: 'Florence, Italy',
     description: 'The benchmark of Italian wet shaving for four generations. Formulated with natural botanical ingredients, refreshing eucalyptus oil, menthol, and shea butter for the ultimate razor glide.',
     featuredServices: [
@@ -69,7 +75,7 @@ const brands = [
     id: 'formidable',
     name: 'Formidable',
     tagline: 'Artisan men’s grooming formulations',
-    logo: '/images/brands/formidable.png',
+    logo: formidableLogo,
     origin: 'New Zealand',
     description: 'Hand-crafted male grooming solutions made specifically for Australasian hair textures and conditions. High-performing pastes and balms with subtle, refined cedarwood notes.',
     featuredServices: [
@@ -86,7 +92,7 @@ const brands = [
 ];
 
 const SITE = 'https://www.tokoya.co.nz';
-const title = "Barbering & Hair Products Stocked | Tokoya Auckland";
+const title = "Barbering & Hair Products Stocked | Tokoya Barber & Shop";
 const description = "Authentic grooming products stocked at Tokoya Barber & Shop in Ponsonby and Remuera. Official stockists of Layrite, Uppercut Deluxe, Proraso, and Formidable.";
 
 const schema = [
@@ -127,7 +133,7 @@ const schema = [
 
   <!-- Hero -->
   <section class="products-hero">
-    <div class="products-hero__bg" style="background-image: url('/images/hero/hero-station.png');"></div>
+    <Image src={heroStation} alt="" class="products-hero__bg" format="avif" loading="eager" fetchpriority="high" width={1400} height={600} />
     <div class="products-hero__overlay"></div>
     <div class="wrap products-hero__content">
       <span class="label">Official Stockists &middot; In-Store Collection</span>
@@ -149,7 +155,7 @@ const schema = [
           <article class="brand-showcase-card" id={brand.id}>
             <div class="brand-showcase-header">
               <div class="brand-logo-frame">
-                <img src={brand.logo} alt={brand.name} loading="lazy" />
+                <Image src={brand.logo} alt={brand.name} width={200} height={100} format="avif" loading="lazy" />
               </div>
               <div class="brand-meta">
                 <span class="brand-origin">{brand.origin}</span>
@@ -230,8 +236,10 @@ const schema = [
   .products-hero__bg {
     position: absolute;
     inset: 0;
-    background-size: cover;
-    background-position: center;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
     z-index: 1;
   }
   .products-hero__overlay {
@@ -265,7 +273,6 @@ const schema = [
     border: 1px solid var(--ink-card-border);
     border-radius: 8px;
     padding: var(--s-6);
-    box-shadow: var(--shadow-md);
   }
   .brand-showcase-header {
     display: grid;

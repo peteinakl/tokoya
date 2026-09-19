@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHead from '../components/SectionHead.astro';
 import BookingButton from '../components/BookingButton.astro';
@@ -7,12 +8,15 @@ import OpenNow from '../components/OpenNow.astro';
 import OpeningHours from '../components/OpeningHours.astro';
 import LazyMap from '../components/LazyMap.astro';
 import { openDaysSummary } from '../lib/hours';
+import heroChair from '../assets/images/hero/hero-chair.png';
+import ponsonbyInterior from '../assets/images/shops/ponsonby-interior.png';
+import remueraSalon from '../assets/images/shops/remuera-salon.png';
 
 const locations = await getCollection('locations');
 const ponsonby = locations.find((l) => l.data.slug === 'ponsonby')!;
 const remuera = locations.find((l) => l.data.slug === 'remuera')!;
 
-const title = "Contact & Locations | Tokoya Barber & Shop Auckland";
+const title = "Contact & Locations | Tokoya Barber & Shop";
 const description = "Find Tokoya Barber & Shop at 279 Ponsonby Road and Tokoya Barber & Salon at 352 Remuera Road. Opening hours, phone numbers, interactive maps, and booking links.";
 
 const SITE = 'https://www.tokoya.co.nz';
@@ -68,7 +72,7 @@ const schema = [
 
   <!-- Hero Banner -->
   <section class="contact-hero">
-    <div class="contact-hero__bg" style="background-image: url('/images/hero/hero-chair.png');"></div>
+    <Image src={heroChair} alt="" class="contact-hero__bg" format="avif" loading="eager" fetchpriority="high" width={1400} height={600} />
     <div class="contact-hero__overlay"></div>
     <div class="wrap contact-hero__content">
       <span class="label">Two Auckland Locations &middot; Ponsonby &amp; Remuera</span>
@@ -90,7 +94,7 @@ const schema = [
         <!-- Ponsonby Card -->
         <article class="shop-contact-card">
           <div class="shop-contact-card__media">
-            <img src="/images/shops/ponsonby-interior.png" alt="Tokoya Ponsonby interior" loading="lazy" />
+            <Image src={ponsonbyInterior} alt="Tokoya Ponsonby interior" format="avif" width={580} height={360} loading="lazy" />
             <div class="shop-media-badge">
               <OpenNow hours={ponsonby.data.hours} />
               <span class="shop-suburb-tag">Ponsonby</span>
@@ -159,7 +163,7 @@ const schema = [
         <!-- Remuera Card -->
         <article class="shop-contact-card">
           <div class="shop-contact-card__media">
-            <img src="/images/shops/remuera-salon.png" alt="Tokoya Remuera salon" loading="lazy" />
+            <Image src={remueraSalon} alt="Tokoya Remuera salon" format="avif" width={580} height={360} loading="lazy" />
             <div class="shop-media-badge">
               <OpenNow hours={remuera.data.hours} />
               <span class="shop-suburb-tag">Remuera</span>
@@ -251,7 +255,7 @@ const schema = [
         <div class="enquiry-header">
           <SectionHead label="Enquiries" title="Send A Message" id="enquiry-head" />
           <p class="lede">
-            Have a question about services, styling for events, or specialized nail treatments?
+            Have a question about services, styling for events, or specialised nail treatments?
             Send us a message and our management team will reply promptly.
           </p>
         </div>
@@ -315,8 +319,10 @@ const schema = [
   .contact-hero__bg {
     position: absolute;
     inset: 0;
-    background-size: cover;
-    background-position: center;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
     z-index: 1;
   }
   .contact-hero__overlay {
@@ -351,7 +357,6 @@ const schema = [
     border: 1px solid var(--ink-card-border);
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: var(--shadow-md);
     display: flex;
     flex-direction: column;
   }
@@ -483,7 +488,6 @@ const schema = [
     border: 1px solid rgba(201, 169, 135, 0.35);
     border-radius: 8px;
     padding: var(--s-7);
-    box-shadow: var(--shadow-md);
   }
   .policy-title {
     font-size: var(--step-3);
@@ -516,7 +520,6 @@ const schema = [
     border: 1px solid var(--ink-card-border);
     border-radius: 8px;
     padding: var(--s-7);
-    box-shadow: var(--shadow-md);
   }
   .enquiry-header {
     margin-bottom: var(--s-6);

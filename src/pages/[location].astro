@@ -12,6 +12,7 @@
  * extract. Marketing copy comes after the facts, not before them.
  */
 import { getCollection, type CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BookingButton from '../components/BookingButton.astro';
 import OpenNow from '../components/OpenNow.astro';
@@ -22,6 +23,8 @@ import LazyMap from '../components/LazyMap.astro';
 import StickyBookBar from '../components/StickyBookBar.astro';
 import { toSchema, openDaysSummary, formatTime } from '../lib/hours';
 import { atLocation, priceFrom } from '../lib/prices';
+import ponsonbyInterior from '../assets/images/shops/ponsonby-interior.png';
+import remueraSalon from '../assets/images/shops/remuera-salon.png';
 
 export async function getStaticPaths() {
   const locations = await getCollection('locations');
@@ -41,7 +44,7 @@ const team = (await getCollection('team')).filter(
 );
 
 const isPonsonby = d.slug === 'ponsonby';
-const heroBg = isPonsonby ? '/images/shops/ponsonby-interior.png' : '/images/shops/remuera-salon.png';
+const heroBg = isPonsonby ? ponsonbyInterior : remueraSalon;
 const mapQuery = `${d.streetAddress}, ${d.suburb}, ${d.city}`;
 const daysSummary = openDaysSummary(d.hours);
 
@@ -178,7 +181,7 @@ const schema = [
        state about this shop is in the first 60 words, in sentences.
        ========================================================== -->
   <section class="lead on-ink">
-    <div class="lead__bg" style={`background-image: url('${heroBg}');`}></div>
+    <Image src={heroBg} alt="" class="lead__bg" format="avif" loading="eager" fetchpriority="high" width={1400} height={600} />
     <div class="lead__overlay"></div>
     <div class="wrap lead__grid">
       <div class="lead__copy">
@@ -187,8 +190,7 @@ const schema = [
 
         <p class="lede">
           {d.name} is a barbershop at {d.streetAddress}, {d.suburb}.
-          {daysSummary}. Haircuts start at ${haircutFrom}
-          {d.offersNails && ', and the Remuera shop has a dedicated nail salon for men and women'}.
+          {daysSummary}. Haircuts start at ${haircutFrom}{d.offersNails ? ', and the Remuera shop has a dedicated nail salon for men and women' : ''}.
           Book online{d.telephoneDisplay ? ` or call ${d.telephoneDisplay}` : ''}.
         </p>
 
@@ -288,7 +290,7 @@ const schema = [
               <a href={`/barbers/${t.slug}/`} class="team__link" aria-label={`View ${t.data.name}'s profile`}>
                 <div class="team__portrait">
                   {t.data.image
-                    ? <img src={t.data.image} width="320" height="400" alt={`${t.data.name} at ${d.name}`} loading="lazy" />
+                    ? <Image src={t.data.image} width={320} height={400} alt={`${t.data.name} at ${d.name}`} format="avif" loading="lazy" />
                     : <span class="team__placeholder" aria-hidden="true">{t.data.name.charAt(0)}</span>}
                 </div>
                 <h3 class="h3">{t.data.name}</h3>
@@ -396,10 +398,11 @@ const schema = [
   .lead__bg {
     position: absolute;
     inset: 0;
-    background-size: cover;
-    background-position: center;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
     z-index: 1;
-    transform: scale(1.02);
   }
   .lead__overlay {
     position: absolute;
@@ -431,7 +434,6 @@ const schema = [
     border: 1px solid var(--ink-card-border);
     border-radius: 8px;
     padding: var(--s-6);
-    box-shadow: var(--shadow-md);
   }
   .lead__card .label { display: block; margin-bottom: var(--s-4); color: var(--bronze-gold); }
 
@@ -472,10 +474,9 @@ const schema = [
     border: 1px solid var(--ink-card-border);
     border-radius: 8px;
     padding: var(--s-4);
-    transition: transform 200ms ease, border-color 200ms ease;
+    transition: border-color 140ms ease;
   }
   .team__item:hover {
-    transform: translateY(-4px);
     border-color: var(--bronze-bright);
   }
   .team__portrait {
@@ -485,8 +486,7 @@ const schema = [
     display: grid; place-items: center; overflow: hidden;
     margin-bottom: var(--s-2);
   }
-  .team__portrait img { width: 100%; height: 100%; object-fit: cover; transition: transform 300ms ease; }
-  .team__item:hover .team__portrait img { transform: scale(1.05); }
+  .team__portrait img { width: 100%; height: 100%; object-fit: cover; }
   .team__placeholder { font-family: var(--font-display); font-size: 3rem; color: var(--ink-40); }
   .team__role { color: rgba(250, 247, 242, 0.65); font-size: var(--step--1); }
   .team__link {
@@ -528,11 +528,10 @@ const schema = [
     border: 1px solid var(--ink-card-border);
     border-radius: 8px;
     overflow: hidden;
-    transition: border-color 150ms ease, box-shadow 150ms ease;
+    transition: border-color 150ms ease;
   }
   .faq-item[open] {
     border-color: rgba(201, 169, 135, 0.45);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
   }
   .faq-item__question {
     padding: var(--s-4) var(--s-5);
@@ -600,7 +599,6 @@ const schema = [
     border: 1px solid rgba(201, 169, 135, 0.35);
     border-radius: 8px;
     padding: var(--s-6);
-    box-shadow: var(--shadow-md);
   }
   .faq-help-card .label {
     display: block;

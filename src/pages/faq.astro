@@ -1,8 +1,10 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHead from '../components/SectionHead.astro';
 import BookingButton from '../components/BookingButton.astro';
 import { getCollection } from 'astro:content';
+import heroStation from '../assets/images/hero/hero-station.png';
 
 const locations = await getCollection('locations');
 const ponsonby = locations.find((l) => l.data.slug === 'ponsonby')!;
@@ -10,37 +12,41 @@ const remuera = locations.find((l) => l.data.slug === 'remuera')!;
 
 const faqs = [
   {
-    q: "Do you take walk-ins or do I need to book in advance?",
-    a: "We welcome walk-ins whenever a chair is free, but appointments always take priority. To guarantee your time and avoid waiting, we strongly recommend booking online through Kitomba (Ponsonby) or Fresha (Remuera)."
+    q: "Do I need to book an appointment, or can I just walk in?",
+    a: "We strongly recommend booking online via <a href='https://apps.kitomba.com/bookings/toyokabarber'>Kitomba (Ponsonby)</a> or <a href='https://www.fresha.com/book-now/tokoya-barber-and-salon-itn6p8by/all-offer'>Fresha (Remuera)</a> to secure your chair time. We do accept walk-ins when a chair is available, but wait times can vary during peak hours and weekends."
   },
   {
-    q: "Are you open on Sundays?",
-    a: "Yes. Both locations open on Sundays from 9:00 AM to 4:00 PM. Ponsonby operates seven days a week, while Remuera opens Wednesday through Sunday. Sunday appointments fill up quickly, so early booking is advised."
+    q: "What is the difference between the Ponsonby and Remuera locations?",
+    a: "<strong>Ponsonby</strong> (279 Ponsonby Road) is our original classic barbershop open 7 days a week, dedicated to men’s grooming, skin fades, beard sculpting, and hot towel shaves. <strong>Remuera</strong> (352 Remuera Road) offers full barbering services alongside a <strong>dedicated nail salon</strong> catering to both men and women, including gel manicures, pedicures, and nail art."
   },
   {
-    q: "What is your cancellation and late policy?",
-    a: "We charge 50% of the booked service if you cancel within 90 minutes of your appointment. For unnotified no-shows, 100% of the service is charged. If no-shows happen more than twice, we cannot accept future bookings. If you are running late, please call the shop immediately."
+    q: "What products do you use in the chair?",
+    a: "We use exclusively premium imported grooming lines: <strong>Layrite Deluxe</strong> pomades and matte clays (USA), <strong>Uppercut Deluxe</strong> styling products (Australia), and authentic <strong>Proraso Firenze</strong> pre-shave creams, shaving soaps, and aftershaves (Italy). All products applied during your service are available for purchase at our shop counters."
   },
   {
-    q: "Can I choose or request a specific barber?",
-    a: "Yes. When reserving online or by phone, you can select your preferred craftsman. Explore our <a href=\"/barbers/\">Barbers page</a> to view our team's backgrounds, specialisms, and primary shop locations."
+    q: "Is Tokoya open on Sundays?",
+    a: "Yes! Both our Ponsonby and Remuera locations are open on Sundays from <strong>9:00 AM to 4:00 PM</strong>. Sunday chair reservations fill fast, so we recommend booking ahead."
   },
   {
-    q: "Do you offer services for children and women?",
-    a: "Yes. We offer <a href=\"/services/child-haircut/\">Child Haircuts</a> ($35) for kids and classic scissor styling for women. In addition, our <a href=\"/remuera/\">352 Remuera Road salon</a> features a dedicated nail studio providing <a href=\"/services/gel-manicure/\">gel manicures</a>, pedicures, and nail care."
+    q: "What is your cancellation policy?",
+    a: "We understand plans change. We ask for at least <strong>90 minutes notice</strong> for cancellations or rescheduling. Cancellations within 90 minutes incur a 50% fee. Unnotified no-shows incur a 100% cancellation charge. More than two consecutive no-shows will result in suspension of online booking privileges."
   },
   {
-    q: "What products do you use and can I buy them in the shop?",
-    a: "We exclusively stock <a href=\"/products/#layrite-deluxe\">Layrite Deluxe</a>, <a href=\"/products/#uppercut-deluxe\">Uppercut Deluxe</a>, <a href=\"/products/#proraso-firenze\">Proraso Firenze</a>, and <a href=\"/products/#formidable\">Formidable</a>. Every wax, pomade, shaving soap, and beard oil we use in the chair is available for purchase at our <a href=\"/ponsonby/\">Ponsonby</a> and <a href=\"/remuera/\">Remuera</a> front counters."
+    q: "Do you offer haircuts for children and seniors?",
+    a: "Yes. We welcome clients of all ages. We offer a <strong>Child Haircut ($35, 30 min)</strong> for school-aged clients and a <strong>Student / Senior Haircut ($45, 30 min)</strong> for high school students and seniors aged 65 and over."
   },
   {
-    q: "What does 'Tokoya' (床屋) mean?",
-    a: "Tokoya is the traditional Japanese word for 'barbershop'. Founded in 2015 by master barber Kaisei Sarai, the name symbolizes Japanese discipline, punctuality, and the concept of grooming as a calm, respected ritual."
+    q: "What is the meaning of the name 'Tokoya'?",
+    a: "<strong>Tokoya (床屋)</strong> is the traditional Japanese noun for 'barbershop'. It represents a space of calm, meticulous hygiene, unhurried attention to detail, and deep respect for the ritual of grooming."
+  },
+  {
+    q: "Can I get a beard trim and hot towel shave together?",
+    a: "Absolutely. We offer our signature <strong>Hot Towel Shave ($65, 45 min)</strong>, as well as a combined <strong>Beard Trim & Shave ($45, 30 min)</strong> which shapes the beard with shears and clippers before defining the cheeks and neckline with a straight razor."
   }
 ];
 
-const title = "Frequently Asked Questions | Tokoya Barber & Shop Auckland";
-const description = "Answers to common questions about Tokoya Barber & Shop in Ponsonby and Remuera. Walk-ins, Sunday hours, cancellation policies, and nail services.";
+const title = "Frequently Asked Questions | Tokoya Barber & Shop";
+const description = "Answers to common questions about booking, opening hours, walk-ins, Sunday chairs, nail care in Remuera, and cancellation policies at Tokoya Barber & Shop.";
 
 const SITE = 'https://www.tokoya.co.nz';
 const schema = {
@@ -61,7 +67,7 @@ const schema = {
 
   <!-- Hero -->
   <section class="faq-hero">
-    <div class="faq-hero__bg" style="background-image: url('/images/hero/hero-station.png');"></div>
+    <Image src={heroStation} alt="" class="faq-hero__bg" format="avif" loading="eager" fetchpriority="high" width={1400} height={600} />
     <div class="faq-hero__overlay"></div>
     <div class="wrap faq-hero__content">
       <span class="label">Answers &middot; What To Expect</span>
@@ -135,8 +141,10 @@ const schema = {
   .faq-hero__bg {
     position: absolute;
     inset: 0;
-    background-size: cover;
-    background-position: center;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
     z-index: 1;
   }
   .faq-hero__overlay {
@@ -237,7 +245,6 @@ const schema = {
     border: 1px solid rgba(201, 169, 135, 0.35);
     border-radius: 8px;
     padding: var(--s-6);
-    box-shadow: var(--shadow-md);
   }
   .cta-box-title {
     font-size: var(--step-2);

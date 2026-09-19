@@ -54,12 +54,12 @@ const services = defineCollection({
 
 const team = defineCollection({
   type: 'content',
-  schema: z.object({
+  schema: ({ image }) => z.object({
     name: z.string(),
     title: z.string(),
     locations: z.array(z.enum(['ponsonby','remuera'])),
     confirmed: z.boolean(),        // false = do not publish a page. See Q10.
-    image: z.string().nullable(),
+    image: image().nullable(),
     freshaStaffId: z.string().nullable().default(null),
   }),
 });

@@ -81,4 +81,5 @@ media relations job, not a web job, and it is the part most web projects drop.
 - [ ] Verify every redirect in `public/_redirects` against the old sitemaps.
 - [ ] Submit `sitemap-index.xml` in Search Console and Bing Webmaster Tools.
 - [ ] Confirm `booking_click` fires from every control in GA4 DebugView.
+- [ ] Remove `X-Robots-Tag: noindex` from `public/_headers` once `www.tokoya.co.nz` points to Cloudflare Pages.
 - [ ] Resolve every item in `OPEN-QUESTIONS.md`. No `.todo` block may remain.

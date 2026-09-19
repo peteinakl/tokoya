@@ -1,6 +1,12 @@
 ---
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 import OpenNow from './OpenNow.astro';
+import layriteLogo from '../assets/images/brands/layrite.png';
+import uppercutLogo from '../assets/images/brands/uppercut.png';
+import prorasoLogo from '../assets/images/brands/proraso.png';
+import formidableLogo from '../assets/images/brands/formidable.png';
+
 const ORDER = ['ponsonby', 'remuera'];
 const locations = (await getCollection('locations')).sort(
   (a, b) => ORDER.indexOf(a.data.slug) - ORDER.indexOf(b.data.slug)
@@ -58,10 +64,10 @@ const year = new Date().getFullYear();
     <div class="ft__brands">
       <p class="label">Official Stockists</p>
       <div class="ft__brand-grid">
-        <a href="/products/#layrite-deluxe" class="ft__brand-item" aria-label="Layrite Deluxe products"><img src="/images/brands/layrite.png" alt="Layrite Deluxe" width="120" height="80" loading="lazy" /></a>
-        <a href="/products/#uppercut-deluxe" class="ft__brand-item" aria-label="Uppercut Deluxe products"><img src="/images/brands/uppercut.png" alt="Uppercut Deluxe" width="120" height="80" loading="lazy" /></a>
-        <a href="/products/#proraso-firenze" class="ft__brand-item" aria-label="Proraso Firenze products"><img src="/images/brands/proraso.png" alt="Proraso Firenze" width="120" height="80" loading="lazy" /></a>
-        <a href="/products/#formidable" class="ft__brand-item" aria-label="Formidable products"><img src="/images/brands/formidable.png" alt="Formidable" width="120" height="80" loading="lazy" /></a>
+        <a href="/products/#layrite-deluxe" class="ft__brand-item" aria-label="Layrite Deluxe products"><Image src={layriteLogo} alt="Layrite Deluxe" width={120} height={80} format="avif" loading="lazy" /></a>
+        <a href="/products/#uppercut-deluxe" class="ft__brand-item" aria-label="Uppercut Deluxe products"><Image src={uppercutLogo} alt="Uppercut Deluxe" width={120} height={80} format="avif" loading="lazy" /></a>
+        <a href="/products/#proraso-firenze" class="ft__brand-item" aria-label="Proraso Firenze products"><Image src={prorasoLogo} alt="Proraso Firenze" width={120} height={80} format="avif" loading="lazy" /></a>
+        <a href="/products/#formidable" class="ft__brand-item" aria-label="Formidable products"><Image src={formidableLogo} alt="Formidable" width={120} height={80} format="avif" loading="lazy" /></a>
       </div>
     </div>
 

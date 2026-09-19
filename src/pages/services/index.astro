@@ -1,9 +1,11 @@
 ---
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SectionHead from '../../components/SectionHead.astro';
 import BookingButton from '../../components/BookingButton.astro';
 import { GROUP_LABELS, formatPrice, formatDuration, byGroup } from '../../lib/prices';
+import heroStation from '../../assets/images/hero/hero-station.png';
 
 const allServices = await getCollection('services');
 const locations = await getCollection('locations');
@@ -12,7 +14,7 @@ const remuera = locations.find((l) => l.data.slug === 'remuera')!;
 
 const groups = ['haircuts', 'shaves', 'waxing', 'nails'] as const;
 
-const title = "Services & Grooming Menu | Tokoya Barber & Shop Auckland";
+const title = "Services & Grooming Menu | Tokoya Barber & Shop";
 const description = "Complete service menu for Tokoya in Ponsonby and Remuera. Men's haircuts from $30, skin fades $55, hot towel shaves $65, and full nail salon treatments in Remuera.";
 
 const SITE = 'https://www.tokoya.co.nz';
@@ -42,7 +44,7 @@ const schema = {
 
   <!-- Hero Banner -->
   <section class="services-hero">
-    <div class="services-hero__bg" style="background-image: url('/images/hero/hero-station.png');"></div>
+    <Image src={heroStation} alt="" class="services-hero__bg" format="avif" loading="eager" fetchpriority="high" width={1400} height={600} />
     <div class="services-hero__overlay"></div>
     <div class="wrap services-hero__content">
       <span class="label">Craft &amp; Discipline &middot; Ponsonby &amp; Remuera</span>
@@ -190,8 +192,10 @@ const schema = {
   .services-hero__bg {
     position: absolute;
     inset: 0;
-    background-size: cover;
-    background-position: center;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
     z-index: 1;
   }
   .services-hero__overlay {
@@ -251,7 +255,6 @@ const schema = {
     background: var(--bronze-gold);
     color: var(--ink);
     border-color: var(--bronze-gold);
-    transform: translateY(-1px);
   }
   .badge-mini {
     font-size: 0.65rem;
@@ -311,13 +314,10 @@ const schema = {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
-    box-shadow: var(--shadow-sm);
+    transition: border-color 200ms ease;
   }
   .service-item-card:hover {
-    transform: translateY(-3px);
     border-color: var(--bronze-gold);
-    box-shadow: var(--shadow-md);
   }
 
   .service-item-card__header {
@@ -414,7 +414,6 @@ const schema = {
     border: 1px solid rgba(201, 169, 135, 0.3);
     border-radius: 8px;
     padding: var(--s-7);
-    box-shadow: var(--shadow-md);
   }
   .transparency-title {
     font-size: var(--step-3);

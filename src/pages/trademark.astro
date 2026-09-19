@@ -1,8 +1,11 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHead from '../components/SectionHead.astro';
 import BookingButton from '../components/BookingButton.astro';
 import { getCollection } from 'astro:content';
+import heroStation from '../assets/images/hero/hero-station.png';
+import annaDoria from '../assets/images/brand/anna-doria.png';
 
 const ORDER = ['ponsonby', 'remuera'];
 const locations = (await getCollection('locations')).sort(
@@ -12,14 +15,14 @@ const ponsonby = locations.find((l) => l.data.slug === 'ponsonby')!;
 const remuera = locations.find((l) => l.data.slug === 'remuera')!;
 
 const title = "The Tokoya Insignia & Trademark | Designed by Anna Doria";
-const description = "The artwork, symbolism, and philosophy behind the trademarked Tokoya emblem, designed by artist Anna Doria for Tokoya Barber & Shop Auckland.";
+const description = "The artwork, symbolism, and philosophy behind the trademarked Tokoya emblem, designed by artist Anna Doria for Tokoya Barber & Shop.";
 ---
 
 <BaseLayout title={title} description={description}>
 
   <!-- Hero Section -->
   <section class="tm-hero">
-    <div class="tm-hero__bg" style="background-image: url('/images/hero/hero-station.png');"></div>
+    <Image src={heroStation} alt="" class="tm-hero__bg" format="avif" loading="eager" fetchpriority="high" width={1400} height={600} />
     <div class="tm-hero__overlay"></div>
     <div class="wrap tm-hero__content">
       <span class="label">Brand Heritage &middot; Intellectual Property</span>
@@ -99,11 +102,12 @@ const description = "The artwork, symbolism, and philosophy behind the trademark
         <div class="artist-showcase">
           <div class="artist-card">
             <div class="artist-card__frame">
-              <img
-                src="/images/brand/anna-doria.png"
+              <Image
+                src={annaDoria}
                 alt="Artist Anna Doria, designer of the trademarked Tokoya logo"
-                width="600"
-                height="400"
+                width={600}
+                height={400}
+                format="avif"
                 loading="lazy"
               />
             </div>
@@ -170,8 +174,10 @@ const description = "The artwork, symbolism, and philosophy behind the trademark
   .tm-hero__bg {
     position: absolute;
     inset: 0;
-    background-size: cover;
-    background-position: center;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
     z-index: 1;
   }
   .tm-hero__overlay {
@@ -248,7 +254,6 @@ const description = "The artwork, symbolism, and philosophy behind the trademark
     flex-direction: column;
     align-items: center;
     text-align: center;
-    box-shadow: var(--shadow-lg);
     max-width: 380px;
     width: 100%;
   }
@@ -256,10 +261,6 @@ const description = "The artwork, symbolism, and philosophy behind the trademark
     width: 190px;
     height: auto;
     filter: invert(1) brightness(1.2);
-    transition: transform 300ms ease;
-  }
-  .emblem-card:hover img {
-    transform: scale(1.05);
   }
   .emblem-card__meta {
     margin-top: var(--s-5);
@@ -290,7 +291,6 @@ const description = "The artwork, symbolism, and philosophy behind the trademark
     border: 1px solid rgba(201, 169, 135, 0.25);
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: var(--shadow-lg);
     max-width: 440px;
     width: 100%;
   }
@@ -305,10 +305,6 @@ const description = "The artwork, symbolism, and philosophy behind the trademark
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform 400ms ease;
-  }
-  .artist-card:hover .artist-card__frame img {
-    transform: scale(1.03);
   }
   .artist-card__meta {
     padding: var(--s-5);

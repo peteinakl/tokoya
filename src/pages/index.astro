@@ -12,6 +12,7 @@
  *   - One curved shape on the site: the disc, lifted from the logo.
  *   - Rules and ground changes separate content. No shadows anywhere.
  */
+import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BookingButton from '../components/BookingButton.astro';
@@ -19,6 +20,12 @@ import OpenNow from '../components/OpenNow.astro';
 import SectionHead from '../components/SectionHead.astro';
 import { toSchema, openDaysSummary } from '../lib/hours';
 import { atLocation, priceFrom, formatPrice, formatDuration } from '../lib/prices';
+import heroChair from '../assets/images/hero/hero-chair.png';
+import ponsonbyInterior from '../assets/images/shops/ponsonby-interior.png';
+import remueraSalon from '../assets/images/shops/remuera-salon.png';
+import scissorsClippers from '../assets/images/craft/scissors-clippers.png';
+import barberChairTools from '../assets/images/craft/barber-chair-tools.png';
+import heroStation from '../assets/images/hero/hero-station.png';
 
 const ORDER = ['ponsonby', 'remuera'];
 const locations = (await getCollection('locations')).sort(
@@ -102,7 +109,7 @@ const schema = [
        HERO: Atmospheric full-bleed image with dark vignette overlay
        ========================================================== -->
   <section class="hero-cinematic">
-    <div class="hero-cinematic__bg" style="background-image: url('/images/hero/hero-chair.png');"></div>
+    <Image src={heroChair} alt="" class="hero-cinematic__bg" format="avif" loading="eager" fetchpriority="high" width={1400} height={700} />
     <div class="hero-cinematic__overlay"></div>
     <div class="wrap hero-cinematic__content">
       <div class="hero-cinematic__badge">
@@ -144,7 +151,7 @@ const schema = [
         <!-- Ponsonby Card -->
         <article class="shop-card">
           <div class="shop-card__image-wrap">
-            <img src="/images/shops/ponsonby-interior.png" alt="Tokoya Ponsonby interior" class="shop-card__img" loading="lazy" />
+            <Image src={ponsonbyInterior} alt="Tokoya Ponsonby interior" class="shop-card__img" format="avif" width={580} height={360} loading="lazy" />
             <div class="shop-card__img-overlay"></div>
             <div class="shop-card__badge-top">
               <OpenNow hours={ponsonby.data.hours} />
@@ -188,7 +195,7 @@ const schema = [
         <!-- Remuera Card -->
         <article class="shop-card">
           <div class="shop-card__image-wrap">
-            <img src="/images/shops/remuera-salon.png" alt="Tokoya Remuera salon" class="shop-card__img" loading="lazy" />
+            <Image src={remueraSalon} alt="Tokoya Remuera salon" class="shop-card__img" format="avif" width={580} height={360} loading="lazy" />
             <div class="shop-card__img-overlay"></div>
             <div class="shop-card__badge-top">
               <OpenNow hours={remuera.data.hours} />
@@ -275,10 +282,10 @@ const schema = [
 
         <div class="craft-images">
           <div class="craft-img-card">
-            <img src="/images/craft/scissors-clippers.png" alt="Barbering precision tools" loading="lazy" />
+            <Image src={scissorsClippers} alt="Barbering precision tools" width={480} height={320} format="avif" loading="lazy" />
           </div>
           <div class="craft-img-card craft-img-card--offset">
-            <img src="/images/craft/barber-chair-tools.png" alt="Classic barber chair and grooming station" loading="lazy" />
+            <Image src={barberChairTools} alt="Classic barber chair and grooming station" width={480} height={320} format="avif" loading="lazy" />
           </div>
         </div>
       </div>
@@ -298,7 +305,7 @@ const schema = [
             <a href={`/barbers/${t.slug}/`} class="barber-card__link" aria-label={`View profile and book chair with ${t.data.name}`}>
               <div class="barber-card__photo">
                 {t.data.image ? (
-                  <img src={t.data.image} width="340" height="420" alt={`${t.data.name}, barber at Tokoya`} loading="lazy" />
+                  <Image src={t.data.image} width={340} height={420} alt={`${t.data.name}, barber at Tokoya`} format="avif" loading="lazy" />
                 ) : (
                   <div class="barber-card__placeholder">{t.data.name.charAt(0)}</div>
                 )}
@@ -378,7 +385,7 @@ const schema = [
        BOTTOM CALL TO ACTION: Atmospheric Station Backdrop
        ========================================================== -->
   <section class="bottom-cta">
-    <div class="bottom-cta__bg" style="background-image: url('/images/hero/hero-station.png');"></div>
+    <Image src={heroStation} alt="" class="bottom-cta__bg" format="avif" loading="lazy" width={1400} height={600} />
     <div class="bottom-cta__overlay"></div>
     <div class="wrap bottom-cta__content">
       <p class="label">Ready for your visit?</p>
@@ -408,9 +415,10 @@ const schema = [
   .hero-cinematic__bg {
     position: absolute;
     inset: 0;
-    background-size: cover;
-    background-position: center 35%;
-    transform: scale(1.03);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 35%;
     z-index: 1;
   }
   .hero-cinematic__overlay {
@@ -490,13 +498,10 @@ const schema = [
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    box-shadow: var(--shadow-md);
-    transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+    transition: border-color 140ms ease;
   }
   .shop-card:hover {
-    transform: translateY(-4px);
     border-color: var(--ink-card-border-hover);
-    box-shadow: var(--shadow-lg), var(--shadow-glow);
   }
   .shop-card__image-wrap {
     position: relative;
@@ -507,10 +512,6 @@ const schema = [
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 400ms ease;
-  }
-  .shop-card:hover .shop-card__img {
-    transform: scale(1.05);
   }
   .shop-card__img-overlay {
     position: absolute;
@@ -643,7 +644,6 @@ const schema = [
     border-radius: 8px;
     overflow: hidden;
     border: 1px solid var(--ink-card-border);
-    box-shadow: var(--shadow-md);
   }
   .craft-img-card img {
     width: 100%;
@@ -668,13 +668,10 @@ const schema = [
     border: 1px solid var(--ink-card-border);
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: var(--shadow-sm);
-    transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
+    transition: border-color 140ms ease;
   }
   .barber-card:hover {
-    transform: translateY(-4px);
     border-color: var(--bronze-bright);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
   }
   .barber-card__link {
     display: flex;
@@ -697,10 +694,6 @@ const schema = [
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 300ms ease;
-  }
-  .barber-card:hover .barber-card__photo img {
-    transform: scale(1.06);
   }
   .barber-card__gradient {
     position: absolute;
@@ -786,10 +779,9 @@ const schema = [
     display: flex;
     flex-direction: column;
     gap: var(--s-3);
-    transition: transform 180ms ease, border-color 180ms ease;
+    transition: border-color 140ms ease;
   }
   .service-card:hover {
-    transform: translateY(-2px);
     border-color: var(--bronze-bright);
   }
   .service-card__top {
@@ -867,8 +859,10 @@ const schema = [
   .bottom-cta__bg {
     position: absolute;
     inset: 0;
-    background-size: cover;
-    background-position: center;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
     z-index: 1;
   }
   .bottom-cta__overlay {

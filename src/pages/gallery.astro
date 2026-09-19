@@ -1,37 +1,38 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHead from '../components/SectionHead.astro';
 import BookingButton from '../components/BookingButton.astro';
 import { getCollection } from 'astro:content';
+import heroCraft from '../assets/images/hero/hero-craft.png';
+import heroChair from '../assets/images/hero/hero-chair.png';
+import heroStation from '../assets/images/hero/hero-station.png';
+import ponsonbyInterior from '../assets/images/shops/ponsonby-interior.png';
+import remueraSalon from '../assets/images/shops/remuera-salon.png';
+import ponsonbyChairs from '../assets/images/shops/ponsonby-chairs.png';
+import scissorsClippers from '../assets/images/craft/scissors-clippers.png';
+import barberChairTools from '../assets/images/craft/barber-chair-tools.png';
 
 const locations = await getCollection('locations');
 const ponsonby = locations.find((l) => l.data.slug === 'ponsonby')!;
 const remuera = locations.find((l) => l.data.slug === 'remuera')!;
+const team = (await getCollection('team')).filter((t) => t.data.confirmed);
 
 const shopImages = [
-  { src: '/images/shops/ponsonby-interior.png', title: 'Ponsonby Barber Stations', desc: 'Custom timber stations, warm vintage lighting, and classic barber chairs on Ponsonby Road.' },
-  { src: '/images/shops/remuera-salon.png', title: 'Remuera Barber & Nail Salon', desc: 'Our dual-craft salon at 352 Remuera Road, designed for haircuts, beard grooming, and specialized nail treatments.' },
-  { src: '/images/shops/ponsonby-chairs.png', title: 'The Ponsonby Chair Lineup', desc: 'Punctual, spotless chair arrangement where clients experience unhurried Japanese hospitality.' },
-  { src: '/images/hero/hero-chair.png', title: 'Traditional Reclining Barber Chair', desc: 'Heavyweight ergonomic chairs engineered for precise hot towel shaves and beard sculpting.' }
+  { img: ponsonbyInterior, title: 'Ponsonby Barber Stations', desc: 'Custom timber stations, warm vintage lighting, and classic barber chairs on Ponsonby Road.' },
+  { img: remueraSalon, title: 'Remuera Barber & Nail Salon', desc: 'Our dual-craft salon at 352 Remuera Road, designed for haircuts, beard grooming, and specialised nail treatments.' },
+  { img: ponsonbyChairs, title: 'The Ponsonby Chair Lineup', desc: 'Punctual, spotless chair arrangement where clients experience unhurried Japanese hospitality.' },
+  { img: heroChair, title: 'Traditional Reclining Barber Chair', desc: 'Heavyweight ergonomic chairs engineered for precise hot towel shaves and beard sculpting.' }
 ];
 
 const craftImages = [
-  { src: '/images/craft/scissors-clippers.png', title: 'Precision Clipper & Shear Work', desc: 'Sterilized shears and high-torque detailing clippers prepared before each appointment.' },
-  { src: '/images/craft/barber-chair-tools.png', title: 'The Barbering Station', desc: 'Straight razors, hot lather warmers, and imported styling balms kept at hand.' },
-  { src: '/images/hero/hero-craft.png', title: 'The Art of the Scissor Cut', desc: 'Attentive, millimeter-accurate hand scissor work tailored to each client’s facial geometry.' },
-  { src: '/images/hero/hero-station.png', title: 'Apothecary & Product Shelf', desc: 'Stocked with official Layrite, Uppercut Deluxe, and Proraso wet shaving formulations.' }
+  { img: scissorsClippers, title: 'Precision Clipper & Shear Work', desc: 'Sterilized shears and high-torque detailing clippers prepared before each appointment.' },
+  { img: barberChairTools, title: 'The Barbering Station', desc: 'Straight razors, hot lather warmers, and imported styling balms kept at hand.' },
+  { img: heroCraft, title: 'The Art of the Scissor Cut', desc: 'Attentive, millimeter-accurate hand scissor work tailored to each client’s facial geometry.' },
+  { img: heroStation, title: 'Apothecary & Product Shelf', desc: 'Stocked with official Layrite, Uppercut Deluxe, and Proraso wet shaving formulations.' }
 ];
 
-const teamPhotos = [
-  { src: '/images/barbers/kris-torcato.jpg', name: 'Kris Torcato', title: 'Senior Barber', loc: 'Ponsonby' },
-  { src: '/images/barbers/jojo-parido.jpg', name: 'Jojo Parido', title: 'Senior Barber', loc: 'Remuera' },
-  { src: '/images/barbers/kim-duong.jpg', name: 'Kim Duong', title: 'Senior Barber', loc: 'Remuera' },
-  { src: '/images/barbers/justin-park.jpg', name: 'Justin Park', title: 'Barber & Stylist', loc: 'Ponsonby & Remuera' },
-  { src: '/images/barbers/james.jpg', name: 'James', title: 'Master Craftsman', loc: 'Ponsonby' },
-  { src: '/images/barbers/etsuya-kidoguchi.jpg', name: 'Etsuya Kidoguchi', title: 'Master Barber', loc: 'Ponsonby' }
-];
-
-const title = "Gallery & Craft Portfolio | Tokoya Barber & Shop Auckland";
+const title = "Gallery & Craft Portfolio | Tokoya Barber & Shop";
 const description = "Explore the photography and craft of Tokoya Barber & Shop. View our Ponsonby and Remuera interiors, precision barbering tools, and master craftsmen.";
 ---
 
@@ -39,7 +40,7 @@ const description = "Explore the photography and craft of Tokoya Barber & Shop. 
 
   <!-- Hero -->
   <section class="gallery-hero">
-    <div class="gallery-hero__bg" style="background-image: url('/images/hero/hero-craft.png');"></div>
+    <Image src={heroCraft} alt="" class="gallery-hero__bg" format="avif" loading="eager" fetchpriority="high" width={1400} height={600} />
     <div class="gallery-hero__overlay"></div>
     <div class="wrap gallery-hero__content">
       <span class="label">Atmosphere &middot; Detail &middot; Discipline</span>
@@ -59,7 +60,7 @@ const description = "Explore the photography and craft of Tokoya Barber & Shop. 
         {shopImages.map((img) => (
           <figure class="gallery-card">
             <div class="gallery-card__img-wrap">
-              <img src={img.src} alt={img.title} loading="lazy" />
+              <Image src={img.img} alt={img.title} width={600} height={400} format="avif" loading="lazy" />
             </div>
             <figcaption class="gallery-card__caption">
               <h3 class="gallery-card__title">{img.title}</h3>
@@ -79,7 +80,7 @@ const description = "Explore the photography and craft of Tokoya Barber & Shop. 
         {craftImages.map((img) => (
           <figure class="gallery-card">
             <div class="gallery-card__img-wrap">
-              <img src={img.src} alt={img.title} loading="lazy" />
+              <Image src={img.img} alt={img.title} width={600} height={400} format="avif" loading="lazy" />
             </div>
             <figcaption class="gallery-card__caption">
               <h3 class="gallery-card__title">{img.title}</h3>
@@ -96,15 +97,19 @@ const description = "Explore the photography and craft of Tokoya Barber & Shop. 
     <div class="wrap">
       <SectionHead label="Behind The Shears" title="The Tokoya Barbers" />
       <div class="barbers-photo-grid">
-        {teamPhotos.map((barber) => (
+        {team.map((barber) => (
           <div class="barber-portrait-card">
             <div class="portrait-img-box">
-              <img src={barber.src} alt={barber.name} loading="lazy" />
-              <span class="portrait-loc-tag">{barber.loc}</span>
+              {barber.data.image ? (
+                <Image src={barber.data.image} alt={barber.data.name} width={340} height={420} format="avif" loading="lazy" />
+              ) : (
+                <div class="barber-placeholder">{barber.data.name.charAt(0)}</div>
+              )}
+              <span class="portrait-loc-tag">{barber.data.locations.includes('ponsonby') ? 'Ponsonby' : 'Remuera'}</span>
             </div>
             <div class="portrait-meta">
-              <h3 class="portrait-name font-anton">{barber.name}</h3>
-              <p class="portrait-title text-gold text-sm">{barber.title}</p>
+              <h3 class="portrait-name font-anton">{barber.data.name}</h3>
+              <p class="portrait-title text-gold text-sm">{barber.data.title}</p>
             </div>
           </div>
         ))}
@@ -132,8 +137,10 @@ const description = "Explore the photography and craft of Tokoya Barber & Shop. 
   .gallery-hero__bg {
     position: absolute;
     inset: 0;
-    background-size: cover;
-    background-position: center;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
     z-index: 1;
   }
   .gallery-hero__overlay {
@@ -171,11 +178,9 @@ const description = "Explore the photography and craft of Tokoya Barber & Shop. 
     margin: 0;
     display: flex;
     flex-direction: column;
-    box-shadow: var(--shadow-sm);
-    transition: transform 200ms ease, border-color 200ms ease;
+    transition: border-color 140ms ease;
   }
   .gallery-card:hover {
-    transform: translateY(-3px);
     border-color: var(--bronze-gold);
   }
   .gallery-card__img-wrap {
@@ -187,10 +192,6 @@ const description = "Explore the photography and craft of Tokoya Barber & Shop. 
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 300ms ease;
-  }
-  .gallery-card:hover .gallery-card__img-wrap img {
-    transform: scale(1.04);
   }
   .gallery-card__caption {
     padding: var(--s-4);

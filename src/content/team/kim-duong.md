@@ -3,6 +3,7 @@ name: "Kim Duong"
 title: "Senior Barber"
 locations: ["remuera"]
 confirmed: true
-image: "/images/barbers/kim-duong.jpg"
+image: "../../assets/images/barbers/kim-duong.jpg"
 ---
-With 8 years of master barbering experience honed in Vietnam, Kim brings international technique, clean taper fades, and traditional straight-razor skill to our Remuera chair. He specializes in fashion-forward styles, neat outlines, and meticulous clipper work.
+
+Hi! I'm Kim, Senior Barber with 8 years of experience in Vietnam, and 3 years in New Zealand. I love and am passionate about unique and fashionable hairstyles.

@@ -1,8 +1,13 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHead from '../components/SectionHead.astro';
 import BookingButton from '../components/BookingButton.astro';
 import { getCollection } from 'astro:content';
+import heroStation from '../assets/images/hero/hero-station.png';
+import barberChairTools from '../assets/images/craft/barber-chair-tools.png';
+import scissorsClippers from '../assets/images/craft/scissors-clippers.png';
+import remueraSalon from '../assets/images/shops/remuera-salon.png';
 
 const ORDER = ['ponsonby', 'remuera'];
 const locations = (await getCollection('locations')).sort(
@@ -11,7 +16,7 @@ const locations = (await getCollection('locations')).sort(
 const ponsonby = locations.find((l) => l.data.slug === 'ponsonby')!;
 const remuera = locations.find((l) => l.data.slug === 'remuera')!;
 
-const title = "About Us & Heritage | Tokoya Barber & Shop Auckland";
+const title = "About Us & Heritage | Tokoya Barber & Shop";
 const description = "The story of Tokoya Barber & Shop. Founded in 2015 by Kaisei Sarai, blending Japanese barbering discipline with Western technique in Ponsonby and Remuera.";
 ---
 
@@ -19,7 +24,7 @@ const description = "The story of Tokoya Barber & Shop. Founded in 2015 by Kaise
 
   <!-- Hero Banner -->
   <section class="about-hero">
-    <div class="about-hero__bg" style="background-image: url('/images/hero/hero-station.png');"></div>
+    <Image src={heroStation} alt="" class="about-hero__bg" format="avif" loading="eager" fetchpriority="high" width={1400} height={600} />
     <div class="about-hero__overlay"></div>
     <div class="wrap about-hero__content">
       <span class="label">Our Heritage &middot; 床屋</span>
@@ -52,7 +57,7 @@ const description = "The story of Tokoya Barber & Shop. Founded in 2015 by Kaise
         </div>
 
         <div class="about-image-card">
-          <img src="/images/craft/barber-chair-tools.png" alt="Tokoya classic chair" loading="lazy" />
+          <Image src={barberChairTools} alt="Tokoya classic chair" format="avif" width={600} height={450} loading="lazy" />
         </div>
       </div>
     </div>
@@ -102,7 +107,7 @@ const description = "The story of Tokoya Barber & Shop. Founded in 2015 by Kaise
         </div>
 
         <div class="about-image-card">
-          <img src="/images/craft/scissors-clippers.png" alt="Precision barbering shears" loading="lazy" />
+          <Image src={scissorsClippers} alt="Precision barbering shears" format="avif" width={600} height={450} loading="lazy" />
         </div>
       </div>
     </div>
@@ -132,7 +137,7 @@ const description = "The story of Tokoya Barber & Shop. Founded in 2015 by Kaise
         </div>
 
         <div class="about-image-card">
-          <img src="/images/shops/remuera-salon.png" alt="Tokoya Remuera Barber & Salon" loading="lazy" />
+          <Image src={remueraSalon} alt="Tokoya Remuera Barber & Salon" format="avif" width={600} height={450} loading="lazy" />
         </div>
       </div>
     </div>
@@ -152,8 +157,10 @@ const description = "The story of Tokoya Barber & Shop. Founded in 2015 by Kaise
   .about-hero__bg {
     position: absolute;
     inset: 0;
-    background-size: cover;
-    background-position: center;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
     z-index: 1;
   }
   .about-hero__overlay {
@@ -179,7 +186,7 @@ const description = "The story of Tokoya Barber & Shop. Founded in 2015 by Kaise
   .about-grid {
     display: grid;
     grid-template-columns: 1.2fr 1fr;
-    gap: var(--s-7);
+    gap: var(--s-8);
     align-items: center;
   }
   .about-grid--reverse {
@@ -192,27 +199,14 @@ const description = "The story of Tokoya Barber & Shop. Founded in 2015 by Kaise
     order: 1;
   }
 
-  .story-text {
-    margin-top: var(--s-5);
-    display: flex;
-    flex-direction: column;
-    gap: var(--s-4);
-    font-size: var(--step-0);
-  }
   .story-text p {
-    color: rgba(250, 247, 242, 0.9);
-    line-height: 1.7;
-    margin: 0;
-  }
-  .story-text .lede {
-    color: var(--paper);
-    font-size: var(--step-1);
-    line-height: 1.5;
-    font-weight: 400;
+    font-size: var(--step-0);
+    line-height: 1.65;
+    color: rgba(250, 247, 242, 0.85);
+    margin-bottom: var(--s-4);
   }
   .story-text strong {
-    color: #ffffff;
-    font-weight: 600;
+    color: var(--paper);
   }
   .story-text a {
     color: var(--bronze-gold);
@@ -234,7 +228,6 @@ const description = "The story of Tokoya Barber & Shop. Founded in 2015 by Kaise
     border-radius: 8px;
     overflow: hidden;
     border: 1px solid var(--ink-card-border);
-    box-shadow: var(--shadow-md);
   }
   .about-image-card img {
     width: 100%;
@@ -251,7 +244,6 @@ const description = "The story of Tokoya Barber & Shop. Founded in 2015 by Kaise
     border: 1px solid var(--ink-card-border);
     border-radius: 12px;
     padding: var(--s-7);
-    box-shadow: var(--shadow-lg);
   }
   .kanji-display {
     font-family: var(--font-display);

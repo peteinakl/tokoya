@@ -1,8 +1,10 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SectionHead from '../../components/SectionHead.astro';
 import BookingButton from '../../components/BookingButton.astro';
 import { getCollection } from 'astro:content';
+import heroCraft from '../../assets/images/hero/hero-craft.png';
 
 const team = (await getCollection('team')).filter((t) => t.data.confirmed);
 const locations = await getCollection('locations');
@@ -10,25 +12,15 @@ const locations = await getCollection('locations');
 const ponsonby = locations.find((l) => l.data.slug === 'ponsonby')!;
 const remuera = locations.find((l) => l.data.slug === 'remuera')!;
 
-// Bios harvested from the live site
-const bios: Record<string, string> = {
-  "Kris Torcato": "With over two decades of experience in the barbering industry, Kris is passionate about delivering exceptional grooming that enhances each client's personal style.",
-  "Jojo Parido": "Shaping & styling hair for a living is what Jojo loves and cares deeply about, bringing high-detail fades and precision scissors to Remuera.",
-  "Kim Duong": "With 8 years of master barbering experience in Vietnam, Kim is passionate about modern, fashion-forward cuts and traditional razor techniques.",
-  "Justin Park": "Originally from South Korea with a background as a tattoo artist, Justin brings meticulous geometric precision and sharp attention to detail behind the chair.",
-  "James": "A dedicated craftsman at Ponsonby known for attentive consultations, sharp taper fades, and classic gentlemen's scissor cuts.",
-  "Etsuya Kidoguchi": "Specializing in Japanese barbering technique, discipline, clean fades, and restorative hot towel beard treatments."
-};
-
-const title = "Our Barbers & Master Craftsmen | Tokoya Auckland";
-const description = "Meet the team of master barbers at Tokoya Barber & Shop in Ponsonby and Remuera. Meet Kris Torcato, Jojo Parido, Kim Duong, Justin Park, James, and Etsuya Kidoguchi.";
+const title = "Our Barbers & Master Craftsmen | Tokoya Barber & Shop";
+const description = "Meet the team of master barbers at Tokoya Barber & Shop in Ponsonby and Remuera. Meet Etsuya Kidoguchi, James, Jojo Parido, and Kim Duong.";
 ---
 
 <BaseLayout title={title} description={description}>
 
   <!-- Hero Banner -->
   <section class="barbers-hero">
-    <div class="barbers-hero__bg" style="background-image: url('/images/hero/hero-craft.png');"></div>
+    <Image src={heroCraft} alt="" class="barbers-hero__bg" format="avif" loading="eager" fetchpriority="high" width={1400} height={600} />
     <div class="barbers-hero__overlay"></div>
     <div class="wrap barbers-hero__content">
       <span class="label">Master Craftsmen &middot; The Chair</span>
@@ -49,14 +41,18 @@ const description = "Meet the team of master barbers at Tokoya Barber & Shop in 
 
       <div class="barbers-grid">
         {team.map((b) => {
-          const bio = bios[b.data.name] || "Passionate about traditional Japanese discipline, contemporary scissor craft, and punctual chair hospitality.";
+          const bio = b.body.trim();
           const primaryLoc = b.data.locations.includes('ponsonby') ? ponsonby : remuera;
           return (
             <article class="barber-detail-card">
               <div class="barber-detail-card__photo-col">
                 <div class="barber-photo-frame">
                   <a href={`/barbers/${b.slug}/`} class="barber-photo-link" aria-label={`View profile and book with ${b.data.name}`}>
-                    <img src={b.data.image} alt={`${b.data.name}, ${b.data.title}`} loading="lazy" />
+                    {b.data.image ? (
+                      <Image src={b.data.image} alt={`${b.data.name}, ${b.data.title}`} width={280} height={350} format="avif" loading="lazy" />
+                    ) : (
+                      <div class="barber-placeholder">{b.data.name.charAt(0)}</div>
+                    )}
                   </a>
                   <div class="barber-photo-tags">
                     {b.data.locations.map((loc) => (
@@ -108,8 +104,10 @@ const description = "Meet the team of master barbers at Tokoya Barber & Shop in 
   .barbers-hero__bg {
     position: absolute;
     inset: 0;
-    background-size: cover;
-    background-position: center;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
     z-index: 1;
   }
   .barbers-hero__overlay {
@@ -155,11 +153,9 @@ const description = "Meet the team of master barbers at Tokoya Barber & Shop in 
     overflow: hidden;
     display: grid;
     grid-template-columns: 140px 1fr;
-    box-shadow: var(--shadow-md);
-    transition: transform 200ms ease, border-color 200ms ease;
+    transition: border-color 140ms ease;
   }
   .barber-detail-card:hover {
-    transform: translateY(-3px);
     border-color: var(--bronze-bright);
   }
 
@@ -182,10 +178,6 @@ const description = "Meet the team of master barbers at Tokoya Barber & Shop in 
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 300ms ease;
-  }
-  .barber-detail-card:hover .barber-photo-frame img {
-    transform: scale(1.05);
   }
 
   .barber-photo-tags {
